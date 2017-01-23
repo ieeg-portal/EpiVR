@@ -1,0 +1,1 @@
+{"PATIENTS": {"HUP065": {"OUTCOME": "1.2", "ICTAL_CLIPS": [], "RESECTION_IMAGE":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_RES_SEG_AVG.nii.gz","ELECTRODE_LABELS":"~/gdrive/aim1/results/HUP065_T1_19991230_electrode_labels.csv"}}}
