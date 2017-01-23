@@ -3,7 +3,6 @@ channels: !!python/tuple
 - !!python/unicode
   'defaults'
 dependencies:
-- appnope=0.1.0
 - apptools=4.4.0
 - backports=1.0
 - backports_abc=0.5
@@ -54,7 +53,6 @@ dependencies:
 - pyqt=4.11.4
 - python=2.7.13
 - python-dateutil=2.6.0
-- python.app=1.2
 - pytz=2016.10
 - pyzmq=16.0.2
 - qt=4.8.7

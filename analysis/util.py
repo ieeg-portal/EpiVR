@@ -8,7 +8,7 @@ import json
 
 import nibabel as nib
 import numpy as np
-import scipy as sp
+from scipy.ndimage import morphology
 
 with open('../data/DATA.json') as json_data_file:
     data = json.load(json_data_file)
@@ -47,15 +47,15 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
         lines = open(os.path.expanduser(data['PATIENTS'][PATIENT_ID]['ELECTRODE_LABELS']),'r').readlines()
         for line in lines:
             electrode_id = int(line.split(',')[0])
-            X = int(line.split(',')[1])
-            Y = int(line.split(',')[2])
-            Z = int(line.split(',')[3])
+            X = int(float(line.split(',')[1]))
+            Y = int(float(line.split(',')[2]))
+            Z = int(float(line.split(',')[3]))
             electrode_label = line.split(',')[4]
-            ele[X-radius:X+radius,Y-radius:Y+radius,Z-radius,Z+radius] = electrode_id
+            ele[max(X-radius,0):min(X+radius,ele.shape[0]),max(Y-radius,0):min(Y+radius,ele.shape[1]),max(Z-radius,0):min(Z+radius,ele.shape[2])] = electrode_id
 
             # Keep filling in electrodes dictionary
-            ele[electrode_id] = electrode_label
-    except TypeError:
+            electrodes[electrode_id] = electrode_label
+    except ValueError:
         print 'The electrode labels is incorrectly formatted. Make sure X,Y,Z are the second, third and forth columns. ' \
               'And make sure all coordinates are floating point values.'
         raise
@@ -65,9 +65,9 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
 
     # Erode/Dilate the resection image appropriately
     if(dilate_radius > 0):
-        resection_data = sp.ndimage.morphology.binary_dilation(resection_data,iterations=np.abs(dilate_radius))
+        resection_data = morphology.binary_dilation(resection_data,iterations=np.abs(dilate_radius))
     elif(dilate_radius < 0):
-        resection_data = sp.ndimage.morphology.binary_erosion(resection_data,iterations=np.abs(dilate_radius))
+        resection_data = morphology.binary_erosion(resection_data,iterations=np.abs(dilate_radius))
 
     # Apply the resection image mask and determine which electrodes are still present
     ele_masked = np.multiply(ele, resection_data)
