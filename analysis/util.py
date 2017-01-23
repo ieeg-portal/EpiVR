@@ -33,8 +33,9 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
         resection_data[resection_data < 0.8]  = 0
         resection_affine = resection_nii.get_affine()
     except KeyError:
-        print 'The PATIENT ID %s is not configured in the DATA JSON config file. '%(PATIENT_ID) \
-              'Please use a PATIENT ID that is included in the study.'
+        assert isinstance(PATIENT_ID, str)
+        print 'The PATIENT ID %s is not configured in the DATA JSON config file. ' \
+              'Please use a PATIENT ID that is included in the study.' % PATIENT_ID
         raise
 
     # Load electrode labels and generate electrode image

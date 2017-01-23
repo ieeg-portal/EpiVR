@@ -20,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="util.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/analysis/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="45" column="89" selection-start-line="45" selection-start-column="89" selection-end-line="45" selection-end-column="89" />
+            <state relative-caret-position="265">
+              <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
               <folding>
                 <element signature="e#79#88#0" expanded="true" />
               </folding>
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analysis.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="analysis.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/analysis/analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+            <state relative-caret-position="270">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
                 <element signature="e#97#106#0" expanded="true" />
               </folding>
@@ -67,8 +67,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/VRAnalysis/util.py" />
-        <option value="$PROJECT_DIR$/analysis/util.py" />
         <option value="$PROJECT_DIR$/analysis/analysis.py" />
+        <option value="$PROJECT_DIR$/analysis/util.py" />
       </list>
     </option>
   </component>
@@ -370,22 +370,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/util.py">
+    <entry file="file://$PROJECT_DIR$/analysis/analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="45" column="89" selection-start-line="45" selection-start-column="89" selection-end-line="45" selection-end-column="89" />
+        <state relative-caret-position="270">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
-            <element signature="e#79#88#0" expanded="true" />
+            <element signature="e#97#106#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/analysis/analysis.py">
+    <entry file="file://$PROJECT_DIR$/analysis/util.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+        <state relative-caret-position="265">
+          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
           <folding>
-            <element signature="e#97#106#0" expanded="true" />
+            <element signature="e#79#88#0" expanded="true" />
           </folding>
         </state>
       </provider>
