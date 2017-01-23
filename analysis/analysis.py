@@ -13,6 +13,6 @@ import json
 if __name__ == '__main__':
     try:
         PATIENT_ID = sys.argv[1]
-        get_resected_electrodes(PATIENT_ID)
+        print get_resected_electrodes(PATIENT_ID)
     except Exception:
         raise
