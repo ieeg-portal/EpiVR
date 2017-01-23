@@ -13,6 +13,7 @@ from scipy.ndimage import morphology
 with open('../data/DATA.json') as json_data_file:
     data = json.load(json_data_file)
 
+
 def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
     '''
     Utility function to compute and output labels of all resected electrodes.
@@ -30,7 +31,7 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
         resection_data = resection_nii.get_data()
         # Threshold and binarize the resection mask
         resection_data[resection_data >= 0.8] = 1
-        resection_data[resection_data < 0.8]  = 0
+        resection_data[resection_data < 0.8] = 0
         resection_affine = resection_nii.get_affine()
     except KeyError:
         assert isinstance(PATIENT_ID, str)
@@ -41,39 +42,40 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
     # Load electrode labels and generate electrode image
     electrodes = {}
     ele = np.zeros(resection_data.shape)
-    radius = 2 # Radius of electrodes
+    radius = 2  # Radius of electrodes
     try:
         # Generate electrode image
-        lines = open(os.path.expanduser(data['PATIENTS'][PATIENT_ID]['ELECTRODE_LABELS']),'r').readlines()
+        lines = open(os.path.expanduser(data['PATIENTS'][PATIENT_ID]['ELECTRODE_LABELS']), 'r').readlines()
         for line in lines:
             electrode_id = int(line.split(',')[0])
             X = int(float(line.split(',')[1]))
             Y = int(float(line.split(',')[2]))
             Z = int(float(line.split(',')[3]))
             electrode_label = line.split(',')[4]
-            ele[max(X-radius,0):min(X+radius,ele.shape[0]),max(Y-radius,0):min(Y+radius,ele.shape[1]),max(Z-radius,0):min(Z+radius,ele.shape[2])] = electrode_id
+            ele[max(X - radius, 0):min(X + radius, ele.shape[0]), max(Y - radius, 0):min(Y + radius, ele.shape[1]),
+            max(Z - radius, 0):min(Z + radius, ele.shape[2])] = electrode_id
 
             # Keep filling in electrodes dictionary
             electrodes[electrode_id] = electrode_label
     except ValueError:
-        print 'The electrode labels is incorrectly formatted. Make sure X,Y,Z are the second, third and forth columns. ' \
-              'And make sure all coordinates are floating point values.'
+        print 'The electrode labels is incorrectly formatted. ' \
+              'Make sure X, Y, Z are the second, third and forth columns ' \
+              'and make sure all coordinates are floating point values.'
         raise
     except KeyError:
-        print 'Make sure the data config file has the patient %s and their ELECTRODE_LABELS file path is set.'%PATIENT_ID
+        print 'Make sure the data config file has the patient %s and their ELECTRODE_LABELS file path is set.' % PATIENT_ID
         raise
 
     # Erode/Dilate the resection image appropriately
-    if(dilate_radius > 0):
-        resection_data = morphology.binary_dilation(resection_data,iterations=np.abs(dilate_radius))
-    elif(dilate_radius < 0):
-        resection_data = morphology.binary_erosion(resection_data,iterations=np.abs(dilate_radius))
+    if dilate_radius > 0:
+        resection_data = morphology.binary_dilation(resection_data, iterations=np.abs(dilate_radius))
+    elif dilate_radius < 0:
+        resection_data = morphology.binary_erosion(resection_data, iterations=np.abs(dilate_radius))
 
     # Apply the resection image mask and determine which electrodes are still present
     ele_masked = np.multiply(ele, resection_data)
-    resected_electrode_ids = np.unique(ele_masked[ele_masked>0])
+    resected_electrode_ids = np.unique(ele_masked[ele_masked > 0])
     for resected_electrode_id in resected_electrode_ids:
-        resected_electrodes.append((resected_electrode_id,electrodes[resected_electrode_id]))
+        resected_electrodes.append((resected_electrode_id, electrodes[resected_electrode_id]))
 
     return resected_electrodes
-
