@@ -7,17 +7,15 @@ import sys
 from util import *
 
 if __name__ == '__main__':
+    # Get arguments
+    PATIENT_ID = sys.argv[1]
     try:
-        PATIENT_ID = sys.argv[1]
-        dilate_radius = 1
-        if dilate_radius > 0:
-            suffix = 'dilate_{0:d}'.format(dilate_radius)
-        elif dilate_radius < 0:
-            suffix = 'erode_{0:d}'.format(dilate_radius)
-        else:
-            suffix = '0'
-        open('../data/%s_resected_electrodes_%s.csv' % (PATIENT_ID, suffix), 'w').write(
-            '\n'.join(map(lambda x: str(x[0]) + ',' + str(x[1]),
-                          get_resected_electrodes(PATIENT_ID, dilate_radius))))
-    except Exception:
+        dilate_radius = int(sys.argv[2])
+    except IndexError:
+        dilate_radius = 0
+    except TypeError:
+        print 'Please enter an integer for dilation/erosion radius.'
         raise
+
+    # Write to CSV file
+    write_resected_electrodes(PATIENT_ID,dilate_radius)

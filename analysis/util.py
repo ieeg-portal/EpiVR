@@ -13,6 +13,7 @@ from scipy.ndimage import morphology
 with open('../data/DATA.json') as json_data_file:
     data = json.load(json_data_file)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
     '''
@@ -76,6 +77,27 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
     ele_masked = np.multiply(ele, resection_data)
     resected_electrode_ids = np.unique(ele_masked[ele_masked > 0])
     for resected_electrode_id in resected_electrode_ids:
-        resected_electrodes.append((resected_electrode_id, electrodes[resected_electrode_id]))
+        resected_electrodes.append((str(int(resected_electrode_id)), electrodes[resected_electrode_id]))
 
     return resected_electrodes
+
+def write_resected_electrodes(PATIENT_ID, dilate_radius=0):
+    '''
+    Utility function to write resected electrode labels to CSV.
+    :param PATIENT_ID: Patient ID (str)
+    :param dilate_radius: Amount of dilation/erosion to apply to resection image.
+    :return: None
+    '''
+
+    # Create suffix for output filename
+    if dilate_radius > 0:
+        suffix = 'dilate_{}'.format(dilate_radius)
+    elif dilate_radius < 0:
+        suffix = 'erode_{}'.format(dilate_radius)
+    else:
+        suffix = '0'
+
+    # Write to CSV file
+    open(os.path.join(BASE_DIR,'data/%s_resected_electrodes_%s.csv' % (PATIENT_ID, suffix)), 'w').write(
+        '\n'.join(map(lambda x: ','.join(x),
+                      get_resected_electrodes(PATIENT_ID, dilate_radius))))
