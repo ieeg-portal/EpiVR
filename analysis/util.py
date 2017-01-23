@@ -93,7 +93,7 @@ def write_resected_electrodes(patient_id, dilate_radius=0):
     :param dilate_radius: Amount of dilation/erosion to apply to resection image.
     :return: None
     '''
-
+    return 1
     # Create suffix for output filename
     if dilate_radius > 0:
         suffix = 'dilate_{}'.format(dilate_radius)
@@ -103,7 +103,7 @@ def write_resected_electrodes(patient_id, dilate_radius=0):
         suffix = '0'
 
     # Check if already created
-    comp_dir = data["COMP_DIR"]
+    comp_dir = os.path.expanduser(data["COMP_DIR"])
     if os.path.isfile(os.path.join(comp_dir, patient_id, 'aim1/%s_resected_electrodes_%s.csv' % (patient_id, suffix))):
         return
 
