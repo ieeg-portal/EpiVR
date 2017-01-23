@@ -1,2 +1,39 @@
-{"PATIENTS": {"HUP065": {"OUTCOME": "1.2", "ICTAL_CLIPS": [], 
-"RESECTION_IMAGE":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_RES_SEG_AVG.nii.gz","ELECTRODE_LABELS":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_electrode_labels.csv"}}}
+{
+  "DATA_DIR":"~/gdrive/3T_Subjects",
+  "COMP_DIR":"~/gdrive/aim1/results",
+  "PATIENTS":
+  {"HUP065":
+    {
+      "Outcome": "1.2",
+      "Sex":"M",
+      "AgeOnset":"2",
+      "AgeSurgery":"36",
+      "SeizureOnset":"RTL",
+      "Events":{
+        "Ictal":
+        {
+          "1":
+          {
+            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-1.mat",
+            "SeizureType":"CPS+GTC",
+            "Duration":"750"
+          },
+          "2":
+          {
+            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-2.mat",
+            "SeizureType":"CPS+GTC",
+            "Duration":"750"
+          },
+          "3":
+          {
+            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-3.mat",
+            "SeizureType":"CPS+GTC",
+            "Duration":"750"
+          }
+        }
+      },
+      "RESECTION_IMAGE":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_RES_SEG_AVG.nii.gz",
+      "ELECTRODE_LABELS":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_electrode_labels.csv"
+    }
+  }
+}
