@@ -17,7 +17,7 @@ if __name__ == '__main__':
         else:
             suffix = '0'
         open('../data/%s_resected_electrodes_%s.csv' % (PATIENT_ID, suffix), 'w').write(
-            '\n'.join(map(lambda x: ','.join(x),
+            '\n'.join(map(lambda x: str(x[0]) + ',' + str(x[1]),
                           get_resected_electrodes(PATIENT_ID, dilate_radius))))
     except Exception:
         raise
