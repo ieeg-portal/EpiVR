@@ -43,7 +43,7 @@ def get_resected_electrodes(PATIENT_ID, dilate_radius=0):
     radius = 2 # Radius of electrodes
     try:
         # Generate electrode image
-        lines = open(data['PATIENTS'][PATIENT_ID]['ELECTRODE_LABELS'],'r').readlines()
+        lines = open(os.path.expanduser(data['PATIENTS'][PATIENT_ID]['ELECTRODE_LABELS']),'r').readlines()
         for line in lines:
             electrode_id = int(line.split(',')[0])
             X = int(line.split(',')[1])
