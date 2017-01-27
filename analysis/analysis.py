@@ -4,27 +4,32 @@ Analysis main script to build Virtual Resection application pipeline.
 '''
 
 import sys
+
 from util import *
 
 if __name__ == '__main__':
     # Get arguments
     try:
         patient_id = sys.argv[1]
-        dilate_radius = int(sys.argv[2])
+        dilate_radius = int(sys.argv[2]) # voxels
+        epoch_length = int(sys.argv[3]) # seconds
     except IndexError:
         dilate_radius = 0
+        epoch_length = 1
     except TypeError:
-        print 'Please enter an appropriate PATIENT_ID and an integer for dilation/erosion radius as inputs.'
+        print 'Please enter an appropriate PATIENT_ID and integers for dilation/erosion radius and epoch length as inputs.'
         raise
 
-    # Generate list of resected electrodes and write to CSV file
-    write_resected_electrodes(patient_id, dilate_radius)
+    # Compute multi band connectivity and store adjacency matricies
+    # computed_file_idx = compute_multiband_connectivity(patient_id, epoch_length)
 
-    # Load resected electrodes
-    # Load electrodes to ignore
-    # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
-    # For each clip, broken up in to epochs of length epoch_length
-        # Compute multiband connectivity
-        # Compute util.region_control == cres(t)
-        # Save with appropriate name
-    # Load
+    # Compute virtual resection to get c_{res}(t)
+    # unique_idx = virtual_resection(patient_id, dilate_radius, data)
+
+    # Compute null models for virtual resection to get c_{null}(t)
+    # for unique_id, event_type, event_id in unique_idx:
+    #     null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_radius, data)
+
+    # Generate figures for result
+    unique_id = 'b50a1916-d49f-4b05-b879-d22ad266f474'
+    plot_experiment(patient_id,unique_id)

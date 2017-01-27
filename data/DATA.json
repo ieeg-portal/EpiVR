@@ -1,6 +1,6 @@
 {
   "DATA_DIR":"~/gdrive/3T_Subjects",
-  "COMP_DIR":"~/gdrive/aim1/results",
+  "COMP_DIR":"~/gdrive/aim3/results",
   "PATIENTS":
   {"HUP065":
     {
@@ -14,26 +14,27 @@
         {
           "1":
           {
-            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-1.mat",
+            "FILE":"HUP065-ictal-block-1.mat",
             "SeizureType":"CPS+GTC",
             "Duration":"750"
           },
           "2":
           {
-            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-2.mat",
+            "FILE":"HUP065-ictal-block-2.mat",
             "SeizureType":"CPS+GTC",
             "Duration":"750"
           },
           "3":
           {
-            "FILE":"~/gdrive/3T_Subjects/HUP065/eeg/HUP065-ictal-block-3.mat",
+            "FILE":"HUP065-ictal-block-3.mat",
             "SeizureType":"CPS+GTC",
             "Duration":"750"
           }
         }
       },
       "RESECTION_IMAGE":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_RES_SEG_AVG.nii.gz",
-      "ELECTRODE_LABELS":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_electrode_labels.csv"
+      "ELECTRODE_LABELS":"~/gdrive/aim1/results/HUP065/aim1/HUP065_T1_19991230_electrode_labels.csv",
+      "IGNORE_ELECTRODES":["RAT1","RAT2","RAT3","RAT4","RPO3","RPO4","RPO5","RPO6","RST1","RST2","RST3","RST4","RST5","RST6","X1","X2","EKG1","EKG2"]
     }
   }
 }

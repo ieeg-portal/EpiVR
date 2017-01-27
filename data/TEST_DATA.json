@@ -1,0 +1,34 @@
+{
+  "DATA_DIR":"~/gdrive/aim3/data",
+  "COMP_DIR":"~/gdrive/aim3/results",
+  "PATIENTS":
+  {"TEST1":
+    {
+      "Outcome": "1.2",
+      "Sex":"F",
+      "AgeOnset":"-1",
+      "AgeSurgery":"-1",
+      "SeizureOnset":"RTL",
+      "Events":{
+        "Ictal":
+        {
+          "1":
+          {
+            "FILE":"TEST1-ictal-block-1.mat",
+            "SeizureType":"SPS",
+            "Duration":"10"
+          },
+          "2":
+          {
+            "FILE":"TEST1-ictal-block-1.mat",
+            "SeizureType":"SPS",
+            "Duration":"10"
+          }
+        }
+      },
+      "RESECTION_IMAGE":"~/gdrive/aim3/results/TEST1/aim1/TEST1_RES_SEG_AVG.nii.gz",
+      "ELECTRODE_LABELS":"~/gdrive/aim3/results/TEST1/aim1/TEST1_electrode_labels.csv",
+      "IGNORE_ELECTRODES":["E5","E15"]
+    }
+  }
+}
