@@ -1,6 +1,8 @@
 import unittest
 
 from util import *
+from util_connectivity import *
+from util_virtual_resection import *
 
 with open('../data/TEST_DATA.json') as json_data_file:
     data = json.load(json_data_file)
@@ -71,6 +73,28 @@ class NullVirtualResectionTest(unittest.TestCase):
         # Run virtual resection on all files
         for unique_id, event_type, event_id in unique_idx:
             null_virtual_resection('TEST1', unique_id, event_type, event_id, 0,data)
+        self.assertTrue(True)
+
+class PlotVirtualResectionTest(unittest.TestCase):
+    '''
+    This unit test generates the plot figures.
+    '''
+
+    def test(self):
+        comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),'TEST1','aim3')
+        unique_idx = []
+        for fn in os.listdir(comp_dir):
+            try:
+                print fn
+                match = re.match(r'[A-Za-z0-9]+.([A-Za-z]+).([0-9]+).cres.([0-9a-zA-Z-]+).npz',fn)
+                unique_idx.append((match.group(3),match.group(1),match.group(2)))
+            except AttributeError:
+                continue
+
+        # Plot virtual resection results on all files
+        print unique_idx
+        for unique_id, event_type, event_id in unique_idx:
+            plot_experiment('TEST1', unique_id, data=data)
         self.assertTrue(True)
 
 if __name__ == '__main__':
