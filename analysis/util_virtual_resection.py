@@ -2,7 +2,6 @@
 '''
 Utility module to compute virtual resection.
 '''
-
 from util import *
 
 np.random.seed(sum(map(ord, "aesthetics")))
@@ -13,7 +12,7 @@ with open('../data/DATA.json') as json_data_file:
 warnings.filterwarnings('ignore')
 
 ## VIRTUAL RESECTION METHODS
-def get_resected_electrodes(patient_id, dilate_radius=0, data=data):
+def get_resected_electrodes(patient_id, dilate_radius=0, data=data, labels_dict=None):
     """
     Utility function to compute and output labels of all resected electrodes.
     Parameters
@@ -38,8 +37,8 @@ def get_resected_electrodes(patient_id, dilate_radius=0, data=data):
         resection_nii = nib.load(os.path.expanduser(data['PATIENTS'][patient_id]['RESECTION_IMAGE']))
         resection_data = resection_nii.get_data()
         # Threshold and binarize the resection mask
-        resection_data[resection_data >= 0.8] = 1
-        resection_data[resection_data < 0.8] = 0
+        resection_data[resection_data > 0.2] = 1
+        resection_data[resection_data <= 0.2] = 0
         resection_affine = resection_nii.get_affine()
     except KeyError:
         assert isinstance(patient_id, str)
@@ -49,7 +48,8 @@ def get_resected_electrodes(patient_id, dilate_radius=0, data=data):
 
     # Load electrode labels and generate electrode image
     electrodes = {}
-    ele = np.zeros(resection_data.shape)
+    ele = {}
+    # ele = np.zeros(resection_data.shape)
     radius = 2  # Radius of electrodes
     try:
         # Generate electrode image
@@ -60,8 +60,9 @@ def get_resected_electrodes(patient_id, dilate_radius=0, data=data):
             Y = int(float(line.split(',')[2]))
             Z = int(float(line.split(',')[3]))
             electrode_label = line.split(',')[4]
-            ele[max(X - radius, 0):min(X + radius, ele.shape[0]), max(Y - radius, 0):min(Y + radius, ele.shape[1]),
-            max(Z - radius, 0):min(Z + radius, ele.shape[2])] = electrode_id
+            ele[electrode_id] = [X,Y,Z]
+            # ele[max(X - radius, 0):min(X + radius, ele.shape[0]), max(Y - radius, 0):min(Y + radius, ele.shape[1]),
+            # max(Z - radius, 0):min(Z + radius, ele.shape[2])] = electrode_id
 
             # Keep filling in electrodes dictionary
             electrodes[electrode_id] = electrode_label.replace('\n','')
@@ -74,21 +75,81 @@ def get_resected_electrodes(patient_id, dilate_radius=0, data=data):
         print 'Make sure the data config file has the patient %s and their ELECTRODE_LABELS file path is set.' % patient_id
         raise
 
-    # Erode/Dilate the resection image appropriately
-    if dilate_radius > 0:
-        resection_data = morphology.binary_dilation(resection_data, iterations=np.abs(dilate_radius))
-    elif dilate_radius < 0:
-        resection_data = morphology.binary_erosion(resection_data, iterations=np.abs(dilate_radius))
+    # Compute coordinates of resection zone
+    hull = np.array(np.where(resection_data)).T
 
-    # Apply the resection image mask and determine which electrodes are still present
-    ele_masked = np.multiply(ele, resection_data)
-    resected_electrode_ids = np.unique(ele_masked[ele_masked > 0])
-    for resected_electrode_id in resected_electrode_ids:
-        resected_electrodes.append((str(int(resected_electrode_id)), electrodes[resected_electrode_id]))
+    # Determine which points are in the resection zone
+    resected_electrode_ids = np.array(ele.keys())[in_hull(np.array(ele.values()), hull)]
+
+    # Determine IDs that are included in the network
+    network_node_labels = labels_dict.keys()
+    resected_node_labels = map(lambda x: electrodes[x], resected_electrode_ids)
+
+    clean_resected_node_labels = []
+    for resected_node_label in resected_node_labels:
+        if resected_node_label not in network_node_labels:
+            continue
+        else:
+            clean_resected_node_labels.append(resected_node_label)
+
+    resected_node_ids = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
+
+    network_resection_fraction = len(resected_node_ids)/np.float(len(network_node_labels))
+    resection_fraction = network_resection_fraction
+
+    # Erode/Dilate the resection image appropriately
+    dilate_radius = dilate_radius/100.0
+    if dilate_radius > 0:
+        while resection_fraction < network_resection_fraction + dilate_radius:
+            resection_data = morphology.binary_dilation(resection_data, iterations=1)
+            # Compute coordinates of resection zone
+            hull = np.array(np.where(resection_data)).T
+
+            # Determine which points are in the resection zone
+            resected_electrode_ids = np.array(ele.keys())[in_hull(np.array(ele.values()), hull)]
+            # Determine IDs that are included in the network
+            resected_node_labels = map(lambda x: electrodes[x], resected_electrode_ids)
+
+            clean_resected_node_labels = []
+            for resected_node_label in resected_node_labels:
+                if resected_node_label not in network_node_labels:
+                    continue
+                else:
+                    clean_resected_node_labels.append(resected_node_label)
+
+            resected_node_ids = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
+
+            resection_fraction = len(resected_node_ids)/np.float(len(network_node_labels))
+            print resection_fraction, resected_node_ids, clean_resected_node_labels
+
+    elif dilate_radius < 0:
+        while resection_fraction > max(network_resection_fraction + dilate_radius,0):
+            resection_data = morphology.binary_erosion(resection_data, iterations=1)
+            # Compute coordinates of resection zone
+            hull = np.array(np.where(resection_data)).T
+
+            # Determine which points are in the resection zone
+            resected_electrode_ids = np.array(ele.keys())[in_hull(np.array(ele.values()), hull)]
+            # Determine IDs that are included in the network
+            resected_node_labels = map(lambda x: electrodes[x], resected_electrode_ids)
+
+            clean_resected_node_labels = []
+            for resected_node_label in resected_node_labels:
+                if resected_node_label not in network_node_labels:
+                    continue
+                else:
+                    clean_resected_node_labels.append(resected_node_label)
+
+            resected_node_ids = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
+
+            resection_fraction = len(resected_node_ids)/np.float(len(network_node_labels))
+            print resection_fraction, resected_node_ids, clean_resected_node_labels
+
+    resected_electrodes = zip(map(lambda x: str(x),resected_node_ids),clean_resected_node_labels)
 
     return resected_electrodes
 
-def write_resected_electrodes(patient_id, dilate_radius=0, data=data):
+def write_resected_electrodes(patient_id, dilate_radius=0, data=data, labels_dict=None):
     """
     Utility function to write resected electrode labels to CSV.
     Parameters
@@ -121,11 +182,41 @@ def write_resected_electrodes(patient_id, dilate_radius=0, data=data):
     # Write to CSV file
     open(os.path.join(comp_dir, patient_id, 'aim1/%s_resected_electrodes_%s.csv' % (patient_id, suffix)), 'w').write(
         '\n'.join(map(lambda x: ','.join(x),
-                      get_resected_electrodes(patient_id, dilate_radius, data))))
+                      get_resected_electrodes(patient_id, dilate_radius, data, labels_dict))))
 
     return os.path.join(comp_dir, patient_id, 'aim1/%s_resected_electrodes_%s.csv' % (patient_id, suffix))
 
-def region_control(adj, node_list):
+def base_synchronizability(adj):
+    """
+    Function for computing base synchronizability of the entire network
+    Parameters
+    ----------
+        adj: ndarray, shape (N, N)
+            Undirected, symmetric adjacency matrix with N nodes
+
+    Returns
+    -------
+        base_sync: float
+            Base synchronizability of the network
+    """
+
+    # Standard param checks
+    errors.check_type(adj, np.ndarray)
+    errors.check_dims(adj, 2)
+    if not (adj == adj.T).all():
+        raise Exception('Adjacency matrix is not undirected and symmetric.')
+    if(np.isnan(adj).any()):
+        return np.nan
+
+    # Get data attributes
+    n_node = adj.shape[0]
+
+    # Get the original synchronizability
+    base_sync = synchronizability(adj)
+
+    return base_sync
+
+def region_control(adj, node_list, base_sync=None):
     """
     Function for computing control centrality of a subregion, aka resection zone (change in synchronizability)
     Parameters
@@ -135,6 +226,9 @@ def region_control(adj, node_list):
 
         node_list: list
             List of node indices to simultaneously remove from the network
+
+        base_sync: ndarray
+            Base synchronization
     Returns
     -------
         control_vec: ndarray, shape (N,)
@@ -146,12 +240,15 @@ def region_control(adj, node_list):
     errors.check_dims(adj, 2)
     if not (adj == adj.T).all():
         raise Exception('Adjacency matrix is not undirected and symmetric.')
+    if(np.isnan(adj).any()):
+        return np.nan
 
     # Get data attributes
     n_node = adj.shape[0]
 
     # Get the original synchronizability
-    base_sync = synchronizability(adj)
+    if(base_sync == None):
+        base_sync = synchronizability(adj)
 
     adj_lesion = lesion.node_lesion(adj, node_list)
     lesion_sync = synchronizability(adj_lesion)
@@ -172,7 +269,7 @@ def _null_region_control(job):
             Control centrality based on delta_sync for each of N variates
     """
 
-    epochs, all_adj_alphatheta, all_adj_beta, all_adj_lowgamma, all_adj_highgamma, all_adj_broadband_CC, resected_node_idx = job
+    epochs, all_adj_alphatheta, all_adj_beta, all_adj_lowgamma, all_adj_highgamma, all_adj_broadband_CC, base_sync_alphatheta, base_sync_beta, base_sync_lowgamma, base_sync_highgamma, base_sync_broadband_CC, resected_node_idx, non_resected_node_idx = job
 
     # Perform resection of network
     control_centrality_alphatheta = np.zeros((epochs,))
@@ -182,13 +279,42 @@ def _null_region_control(job):
     control_centrality_broadband_CC = np.zeros((epochs,))
 
     for epoch in range(epochs):
-        control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],resected_node_idx)
-        control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],resected_node_idx)
-        control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],resected_node_idx)
-        control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],resected_node_idx)
-        control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],resected_node_idx)
+        control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],resected_node_idx,base_sync=base_sync_alphatheta[epoch])
+        control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],resected_node_idx,base_sync=base_sync_beta[epoch])
+        control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],resected_node_idx,base_sync=base_sync_lowgamma[epoch])
+        control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],resected_node_idx,base_sync=base_sync_highgamma[epoch])
+        control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],resected_node_idx,base_sync=base_sync_broadband_CC[epoch])
 
-    return (control_centrality_alphatheta, control_centrality_beta, control_centrality_lowgamma, control_centrality_highgamma, control_centrality_broadband_CC, resected_node_idx)
+    # Perform resection of non-ROZ network
+    non_control_centrality_alphatheta = np.zeros((epochs,))
+    non_control_centrality_beta = np.zeros((epochs,))
+    non_control_centrality_lowgamma = np.zeros((epochs,))
+    non_control_centrality_highgamma = np.zeros((epochs,))
+    non_control_centrality_broadband_CC = np.zeros((epochs,))
+
+    for epoch in range(epochs):
+        if(np.isnan(all_adj_alphatheta[:,:,epoch]).any()):
+            non_control_centrality_alphatheta[epoch] = np.nan
+        else:
+            non_control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],non_resected_node_idx)
+        if(np.isnan(all_adj_beta[:,:,epoch]).any()):
+            non_control_centrality_beta[epoch] = np.nan
+        else:
+            non_control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],non_resected_node_idx)
+        if(np.isnan(all_adj_lowgamma[:,:,epoch]).any()):
+            non_control_centrality_lowgamma[epoch] = np.nan
+        else:
+            non_control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],non_resected_node_idx)
+        if(np.isnan(all_adj_highgamma[:,:,epoch]).any()):
+            non_control_centrality_highgamma[epoch] = np.nan
+        else:
+            non_control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],non_resected_node_idx)
+        if(np.isnan(all_adj_broadband_CC[:,:,epoch]).any()):
+            non_control_centrality_broadband_CC[epoch] = np.nan
+        else:
+            non_control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],non_resected_node_idx)
+
+    return (control_centrality_alphatheta, control_centrality_beta, control_centrality_lowgamma, control_centrality_highgamma, control_centrality_broadband_CC, resected_node_idx, non_control_centrality_alphatheta, non_control_centrality_beta, non_control_centrality_lowgamma, non_control_centrality_highgamma, non_control_centrality_broadband_CC, non_resected_node_idx )
 
 def virtual_resection(patient_id, dilate_radius=0, data=data):
     """
@@ -227,13 +353,6 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
         if(ignored_node_label not in labels):
             labels.append(ignored_node_label)
 
-    # Generate list of resected electrodes and write to CSV file
-    resected_electrodes_fn = write_resected_electrodes(patient_id, dilate_radius, data)
-
-    # Load resected electrodes
-    resected_nodes = map(lambda x: int(x.split(',')[0]), open(resected_electrodes_fn,'r').readlines())
-    resected_node_labels = map(lambda x: x.split(',')[1].replace('\n',''), open(resected_electrodes_fn,'r').readlines())
-
     # Create output UUID codx
     unique_idx = []
 
@@ -241,6 +360,12 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
     for event_type, events in data['PATIENTS'][patient_id]['Events'].items():
         unique_id = str(uuid.uuid4())
         for event_id in events.keys():
+            try:
+                if(events[event_id]['STATUS'] == 'ALL_DROPOUT'):
+                        continue # unusable clip
+            except KeyError:
+                pass
+
             fn = os.path.join(data_dir, patient_id, 'eeg', events[event_id]['FILE'])
             channels = []
 
@@ -255,7 +380,7 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
                     channels.append(row_data)
             Fs = int(Fs[0][0])
             channels = channels[0]
-            evData = scipy.stats.zscore(evData,axis=1)
+            # evData = scipy.stats.zscore(evData,axis=1)
             T = evData.shape[0]
 
             # Correspond lable names
@@ -270,6 +395,27 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
             # Recorrespond label names
             labels_dict = correspond_label_names(channels, labels)
 
+            # Generate list of resected electrodes and write to CSV file
+            try:
+                if(dilate_radius == 0):
+                    resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+                elif(dilate_radius > 0):
+                    resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+                    for fringe_node_label in data['PATIENTS'][patient_id]['RESECTED_FRINGE_ELECTRODES']:
+                        resected_node_labels.append(fringe_node_label)
+                else:
+                    return []
+            except Exception:
+                resected_electrodes_fn = write_resected_electrodes(patient_id, dilate_radius, data, labels_dict)
+
+                # Load resected electrodes
+                try:
+                    resected_nodes = map(lambda x: int(x.split(',')[0]), open(resected_electrodes_fn,'r').readlines())
+                    resected_node_labels = map(lambda x: x.split(',')[1].replace('\n',''), open(resected_electrodes_fn,'r').readlines())
+                except IndexError:
+                    print 'ERROR! Resected electrodes %s does not have any electrodes. Skipping'%(resected_electrodes_fn)
+                    return []
+
             # Map the resected electrodes to channels
             clean_resected_node_labels = []
             for resected_node_label in resected_node_labels:
@@ -280,6 +426,16 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
             resected_node_idx = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
             for ii,node_id in enumerate(resected_node_idx):
                 print 'Virtually resecting node label: %s because label %s is in the resection zone'%(channels[node_id],resected_node_labels[ii])
+
+            # Map the NON-resected electrodes to channels
+            all_node_idx = map(lambda x: labels_dict[x][0], labels_dict.keys())
+            non_resected_node_idx = []
+            for idx in all_node_idx:
+                if(idx in resected_node_idx):
+                    continue
+                else:
+                    non_resected_node_idx.append(idx)
+            # non_resected_node_idx = np.array(non_resected_node_idx)
 
             # For each clip, load up adjacency matrices
             adj_file = np.load(os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.multiband.npz'%(patient_id,event_type,event_id)))
@@ -306,24 +462,98 @@ def virtual_resection(patient_id, dilate_radius=0, data=data):
             control_centrality_broadband_CC = np.zeros((epochs,))
 
             for epoch in range(epochs):
-                control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],resected_node_idx)
-                control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],resected_node_idx)
-                control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],resected_node_idx)
-                control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],resected_node_idx)
-                control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],resected_node_idx)
+                if(np.isnan(all_adj_alphatheta[:,:,epoch]).any()):
+                    control_centrality_alphatheta[epoch] = np.nan
+                else:
+                    control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],resected_node_idx)
+                if(np.isnan(all_adj_beta[:,:,epoch]).any()):
+                    control_centrality_beta[epoch] = np.nan
+                else:
+                    control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],resected_node_idx)
+                if(np.isnan(all_adj_lowgamma[:,:,epoch]).any()):
+                    control_centrality_lowgamma[epoch] = np.nan
+                else:
+                    control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],resected_node_idx)
+                if(np.isnan(all_adj_highgamma[:,:,epoch]).any()):
+                    control_centrality_highgamma[epoch] = np.nan
+                else:
+                    control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],resected_node_idx)
+                if(np.isnan(all_adj_broadband_CC[:,:,epoch]).any()):
+                    control_centrality_broadband_CC[epoch] = np.nan
+                else:
+                    control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],resected_node_idx)
+
+            # Perform resection of non-ROZ network
+            non_control_centrality_alphatheta = np.zeros((epochs,))
+            non_control_centrality_beta = np.zeros((epochs,))
+            non_control_centrality_lowgamma = np.zeros((epochs,))
+            non_control_centrality_highgamma = np.zeros((epochs,))
+            non_control_centrality_broadband_CC = np.zeros((epochs,))
+
+            for epoch in range(epochs):
+                if(np.isnan(all_adj_alphatheta[:,:,epoch]).any()):
+                    non_control_centrality_alphatheta[epoch] = np.nan
+                else:
+                    non_control_centrality_alphatheta[epoch] = region_control(all_adj_alphatheta[:,:,epoch],non_resected_node_idx)
+                if(np.isnan(all_adj_beta[:,:,epoch]).any()):
+                    non_control_centrality_beta[epoch] = np.nan
+                else:
+                    non_control_centrality_beta[epoch] = region_control(all_adj_beta[:,:,epoch],non_resected_node_idx)
+                if(np.isnan(all_adj_lowgamma[:,:,epoch]).any()):
+                    non_control_centrality_lowgamma[epoch] = np.nan
+                else:
+                    non_control_centrality_lowgamma[epoch] = region_control(all_adj_lowgamma[:,:,epoch],non_resected_node_idx)
+                if(np.isnan(all_adj_highgamma[:,:,epoch]).any()):
+                    non_control_centrality_highgamma[epoch] = np.nan
+                else:
+                    non_control_centrality_highgamma[epoch] = region_control(all_adj_highgamma[:,:,epoch],non_resected_node_idx)
+                if(np.isnan(all_adj_broadband_CC[:,:,epoch]).any()):
+                    non_control_centrality_broadband_CC[epoch] = np.nan
+                else:
+                    non_control_centrality_broadband_CC[epoch] = region_control(all_adj_broadband_CC[:,:,epoch],non_resected_node_idx)
+
+            # Compute base synchronizability of network
+            base_sync_alphatheta = np.zeros((epochs,))
+            base_sync_beta = np.zeros((epochs,))
+            base_sync_lowgamma = np.zeros((epochs,))
+            base_sync_highgamma = np.zeros((epochs,))
+            base_sync_broadband_CC = np.zeros((epochs,))
+
+            for epoch in range(epochs):
+                if(np.isnan(all_adj_alphatheta[:,:,epoch]).any()):
+                    base_sync_alphatheta[epoch] = np.nan
+                else:
+                    base_sync_alphatheta[epoch] = base_synchronizability(all_adj_alphatheta[:,:,epoch])
+                if(np.isnan(all_adj_beta[:,:,epoch]).any()):
+                    base_sync_beta[epoch] = np.nan
+                else:
+                    base_sync_beta[epoch] = base_synchronizability(all_adj_beta[:,:,epoch])
+                if(np.isnan(all_adj_lowgamma[:,:,epoch]).any()):
+                    base_sync_lowgamma[epoch] = np.nan
+                else:
+                    base_sync_lowgamma[epoch] = base_synchronizability(all_adj_lowgamma[:,:,epoch])
+                if(np.isnan(all_adj_highgamma[:,:,epoch]).any()):
+                    base_sync_highgamma[epoch] = np.nan
+                else:
+                    base_sync_highgamma[epoch] = base_synchronizability(all_adj_highgamma[:,:,epoch])
+                if(np.isnan(all_adj_broadband_CC[:,:,epoch]).any()):
+                    base_sync_broadband_CC[epoch] = np.nan
+                else:
+                    base_sync_broadband_CC[epoch] = base_synchronizability(all_adj_broadband_CC[:,:,epoch])
 
             # Save with appropriate name
             print 'Writing c_res(t) matrices for patient %s event %s %s'%(patient_id,event_type,event_id)
             cres_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.cres.%s.npz'%(patient_id,event_type,event_id,unique_id))
-            np.savez(open(cres_fn,'w'), control_centrality_alphatheta=control_centrality_alphatheta, control_centrality_beta=control_centrality_beta, control_centrality_lowgamma=control_centrality_lowgamma, control_centrality_highgamma=control_centrality_highgamma, control_centrality_broadband_CC=control_centrality_broadband_CC)
+            np.savez(open(cres_fn,'w'), control_centrality_alphatheta=control_centrality_alphatheta, control_centrality_beta=control_centrality_beta, control_centrality_lowgamma=control_centrality_lowgamma, control_centrality_highgamma=control_centrality_highgamma, control_centrality_broadband_CC=control_centrality_broadband_CC, non_control_centrality_alphatheta=non_control_centrality_alphatheta, non_control_centrality_beta=non_control_centrality_beta, non_control_centrality_lowgamma=non_control_centrality_lowgamma, non_control_centrality_highgamma=non_control_centrality_highgamma, non_control_centrality_broadband_CC=non_control_centrality_broadband_CC, base_sync_alphatheta=base_sync_alphatheta, base_sync_beta=base_sync_beta, base_sync_lowgamma=base_sync_lowgamma, base_sync_highgamma=base_sync_highgamma, base_sync_broadband_CC=base_sync_broadband_CC)
             pipeline_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.cres.%s.pipedef.json'%(patient_id,event_type,event_id,unique_id))
-            pipedef = {'fconn':'multiband+broadband', 'epoch_length':epoch_length, 'dilate_radius':dilate_radius}
+            timestamp = datetime.datetime.now()
+            pipedef = {'fconn':'multiband+broadband', 'epoch_length':epoch_length, 'dilate_radius':dilate_radius, 'time_stamp':timestamp.strftime('%Y-%m-%d %H:%M:%S')}
             with open(pipeline_fn, 'w') as fp:
                 json.dump(pipedef, fp)
             unique_idx.append((unique_id,event_type,event_id))
     return unique_idx
 
-def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_radius=0, data=data):
+def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_radius=0, data=data, starting_null_id=0):
     """
     Function for computing c_null(t).
     Parameters
@@ -348,9 +578,6 @@ def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_r
             Saves all adjacency matrices in different bands as npz files in comp_dir.
     """
 
-    n_proc = 40
-    pool = Pool(n_proc)
-
     # Generate list of cartoon map labels
     labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
         data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
@@ -365,13 +592,6 @@ def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_r
     for ignored_node_label in ignored_node_labels:
         if(ignored_node_label not in labels):
             labels.append(ignored_node_label)
-
-    # Generate list of resected electrodes and write to CSV file
-    resected_electrodes_fn = write_resected_electrodes(patient_id, dilate_radius, data)
-
-    # Load resected electrodes
-    resected_nodes = map(lambda x: int(x.split(',')[0]), open(resected_electrodes_fn,'r').readlines())
-    resected_node_labels = map(lambda x: x.split(',')[1].replace('\n',''), open(resected_electrodes_fn,'r').readlines())
 
     # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
     fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events'][event_type][event_id]['FILE'])
@@ -388,7 +608,7 @@ def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_r
             channels.append(row_data)
     Fs = int(Fs[0][0])
     channels = channels[0]
-    evData = scipy.stats.zscore(evData,axis=1)
+    # evData = scipy.stats.zscore(evData,axis=1)
     T = evData.shape[0]
 
     # Correspond lable names
@@ -402,6 +622,27 @@ def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_r
 
     # Recorrespond label names
     labels_dict = correspond_label_names(channels, labels)
+
+    # Generate list of resected electrodes and write to CSV file
+    try:
+        if(dilate_radius == 0):
+            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+        elif(dilate_radius > 0):
+            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+            for fringe_node_label in data['PATIENTS'][patient_id]['RESECTED_FRINGE_ELECTRODES']:
+                resected_node_labels.append(fringe_node_label)
+        else:
+            return
+    except Exception:
+        resected_electrodes_fn = write_resected_electrodes(patient_id, dilate_radius, data, labels_dict)
+
+        # Load resected electrodes
+        try:
+            resected_nodes = map(lambda x: int(x.split(',')[0]), open(resected_electrodes_fn,'r').readlines())
+            resected_node_labels = map(lambda x: x.split(',')[1].replace('\n',''), open(resected_electrodes_fn,'r').readlines())
+        except IndexError:
+            print 'ERROR! Resected electrodes %s does not have any electrodes. Skipping'%(resected_electrodes_fn)
+            return
 
     # Map the resected electrodes to channels
     clean_resected_node_labels = []
@@ -432,18 +673,63 @@ def null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_r
     assert all_adj_highgamma.shape[2] == epochs
     assert all_adj_broadband_CC.shape[2] == epochs
 
-    # Create parallel jobs for computation
-    jobs = []
-    for perm_iter in range(1000):
-        permuted_resected_node_idx = list(np.random.choice(np.arange(len(channels)), len(resected_node_idx)))
-        jobs.append((epochs, all_adj_alphatheta, all_adj_beta, all_adj_lowgamma, all_adj_highgamma, all_adj_broadband_CC, permuted_resected_node_idx))
+    # Create parallel jobs for base sync computation
+    # Each job will be a different adjacency matrix
 
+    # Compute base synchronizability of network
+    base_sync_alphatheta = np.zeros((epochs,))
+    base_sync_beta = np.zeros((epochs,))
+    base_sync_lowgamma = np.zeros((epochs,))
+    base_sync_highgamma = np.zeros((epochs,))
+    base_sync_broadband_CC = np.zeros((epochs,))
+
+    for epoch in range(epochs):
+        if(np.isnan(all_adj_alphatheta[:,:,epoch]).any()):
+            base_sync_alphatheta[epoch] = np.nan
+        else:
+            base_sync_alphatheta[epoch] = base_synchronizability(all_adj_alphatheta[:,:,epoch])
+        if(np.isnan(all_adj_beta[:,:,epoch]).any()):
+            base_sync_beta[epoch] = np.nan
+        else:
+            base_sync_beta[epoch] = base_synchronizability(all_adj_beta[:,:,epoch])
+        if(np.isnan(all_adj_lowgamma[:,:,epoch]).any()):
+            base_sync_lowgamma[epoch] = np.nan
+        else:
+            base_sync_lowgamma[epoch] = base_synchronizability(all_adj_lowgamma[:,:,epoch])
+        if(np.isnan(all_adj_highgamma[:,:,epoch]).any()):
+            base_sync_highgamma[epoch] = np.nan
+        else:
+            base_sync_highgamma[epoch] = base_synchronizability(all_adj_highgamma[:,:,epoch])
+        if(np.isnan(all_adj_broadband_CC[:,:,epoch]).any()):
+            base_sync_broadband_CC[epoch] = np.nan
+        else:
+            base_sync_broadband_CC[epoch] = base_synchronizability(all_adj_broadband_CC[:,:,epoch])
+
+    # Create parallel jobs for region control computation
+    jobs = []
+    for perm_iter in range(starting_null_id, 100):
+        permuted_resected_node_idx = list(np.random.choice(np.arange(len(channels)), len(resected_node_idx), replace=False))
+        # Map the NON-resected electrodes to channels
+        all_node_idx = map(lambda x: labels_dict[x][0], labels_dict.keys())
+        permuted_non_resected_node_idx = []
+        for idx in all_node_idx:
+            if(idx in permuted_resected_node_idx):
+                continue
+            else:
+                permuted_non_resected_node_idx.append(idx)
+        jobs.append((epochs, all_adj_alphatheta, all_adj_beta, all_adj_lowgamma, all_adj_highgamma, all_adj_broadband_CC, base_sync_alphatheta, base_sync_beta, base_sync_lowgamma, base_sync_highgamma, base_sync_broadband_CC, permuted_resected_node_idx, permuted_non_resected_node_idx))
+
+    n_proc = 60
+    pool = Pool(n_proc)
     return_list = pool.map(_null_region_control,jobs)
 
     # Save with appropriate name
     for ii,result in enumerate(return_list):
         print 'Writing c_null(t) matrices for patient %s event %s %s'%(patient_id,event_type,event_id)
-        control_centrality_alphatheta, control_centrality_beta, control_centrality_lowgamma, control_centrality_highgamma, control_centrality_broadband_CC, permuted_resected_node_idx = result
-        cres_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.cnull.%i.%s.npz'%(patient_id,event_type,event_id,ii+1,unique_id))
+        control_centrality_alphatheta, control_centrality_beta, control_centrality_lowgamma, control_centrality_highgamma, control_centrality_broadband_CC, permuted_resected_node_idx, non_control_centrality_alphatheta, non_control_centrality_beta, non_control_centrality_lowgamma, non_control_centrality_highgamma, non_control_centrality_broadband_CC, permuted_non_resected_node_idx = result
+        cres_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.cnull.%i.%s.npz'%(patient_id,event_type,event_id,ii+starting_null_id+1,unique_id))
         np.savez(open(cres_fn,'w'), control_centrality_alphatheta=control_centrality_alphatheta, control_centrality_beta=control_centrality_beta, control_centrality_lowgamma=control_centrality_lowgamma, control_centrality_highgamma=control_centrality_highgamma, control_centrality_broadband_CC
-            =control_centrality_broadband_CC, permuted_resected_node_idx=permuted_resected_node_idx)
+            =control_centrality_broadband_CC, permuted_resected_node_idx=permuted_resected_node_idx, non_control_centrality_alphatheta=non_control_centrality_alphatheta, non_control_centrality_beta=non_control_centrality_beta, non_control_centrality_lowgamma=non_control_centrality_lowgamma, non_control_centrality_highgamma=non_control_centrality_highgamma, non_control_centrality_broadband_CC
+            =non_control_centrality_broadband_CC, permuted_non_resected_node_idx=permuted_non_resected_node_idx, base_sync_alphatheta=base_sync_alphatheta, base_sync_beta=base_sync_beta, base_sync_lowgamma=base_sync_lowgamma, base_sync_highgamma=base_sync_highgamma, base_sync_broadband_CC=base_sync_broadband_CC)
+    # pool.join()
+    # pool.close()

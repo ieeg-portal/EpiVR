@@ -31,12 +31,34 @@ def _helper_compute_multiband_connectivity(job):
 
     # Get clip
     data_clip = evData[epoch*epoch_length*Fs:(epoch+1)*epoch_length*Fs,:]
+    N = data_clip.shape[1]
 
     # Compute multiband connectivity
-    adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = multiband_conn(data_clip, Fs)
+    data_mean = np.mean(data_clip,axis=0)
+    eps = 0.001
+    for n1 in range(N):
+        for n2 in range(N):
+            if(n1 == n2):
+                continue
+            if(np.abs(data_mean[n1] - data_mean[n2]) < eps):
+                adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+                adj_broadband_CC = np.nan*np.ones((N,N))
+                return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC)
+
+    if(np.isnan(data_clip).any()):
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+    elif (data_mean==0).any():
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+    else:
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = multiband_conn(data_clip, Fs)
 
     # Compute broadband connectivity
-    adj_broadband_CC = broadband_conn(data_clip, Fs)
+    if(np.isnan(data_clip).any()):
+        adj_broadband_CC = np.nan*np.ones((N,N))
+    elif (np.mean(data_clip,axis=0)==0).any():
+        adj_broadband_CC = np.nan*np.ones((N,N))
+    else:
+        adj_broadband_CC = broadband_conn(data_clip, Fs)
 
     return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC)
 
@@ -59,9 +81,6 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             Saves all adjacency matrices in different bands as npz files in comp_dir.
     """
 
-    n_proc = 40
-    pool = Pool(n_proc)
-
     # Generate list of cartoon map labels
     labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
         data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
@@ -78,8 +97,14 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             labels.append(ignored_node_label)
 
     # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
+    n_proc = 10
+    pool = Pool(n_proc)
     for event_type, events in data['PATIENTS'][patient_id]['Events'].items():
         for event_id in events.keys():
+            print 'Computing multiband connectivity for clip %s'%event_id
+            if(os.path.isfile('%s/%s/aim3/%s.Ictal.%s.multiband.npz'%(comp_dir,patient_id,patient_id,event_id))):
+                continue
+
             fn = os.path.join(data_dir, patient_id, 'eeg', events[event_id]['FILE'])
             channels = []
 
@@ -94,7 +119,7 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
                     channels.append(row_data)
             Fs = int(Fs[0][0])
             channels = channels[0]
-            evData = scipy.stats.zscore(evData,axis=1)
+            # evData = scipy.stats.zscore(evData,axis=1)
             T = evData.shape[0]
 
             # Correspond lable names
@@ -114,24 +139,44 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             all_adj_highgamma = np.zeros((evData.shape[1],evData.shape[1],epochs))
             all_adj_broadband_CC = np.zeros((evData.shape[1],evData.shape[1],epochs))
 
+            # Get smaller window if ictal clip has dropout issues
+            try:
+                if(events[event_id]['STATUS'] == 'ALL_DROPOUT'):
+                    continue # unusable clip
+                elif(events[event_id]['STATUS'] == 'DROPOUT'):
+                    start_epoch = 240
+                    end_epoch = 360-1
+                elif(events[event_id]['STATUS'] == 'LATE_DROPOUT'):
+                    start_epoch = 0
+                    end_epoch = 600-1
+                else:
+                    start_epoch = 0
+                    end_epoch = epochs-1
+            except Exception:
+                start_epoch = 0
+                end_epoch = epochs-1
+
             # Create parallel jobs for each block
             jobs = []
-            for epoch in range(epochs):
+            for epoch in range(start_epoch,end_epoch+1):
                 jobs.append((epoch, epoch_length, Fs, evData))
 
             return_list = pool.map(_helper_compute_multiband_connectivity, jobs)
 
             # Process results from Pool
             return_list = sorted(return_list, key=lambda x: x[0])
-            for epoch in range(epochs):
-                assert return_list[epoch][0] == epoch
-                all_adj_alphatheta[:,:,epoch] = return_list[epoch][1]
-                all_adj_beta[:,:,epoch] = return_list[epoch][2]
-                all_adj_lowgamma[:,:,epoch] = return_list[epoch][3]
-                all_adj_highgamma[:,:,epoch] = return_list[epoch][4]
-                all_adj_broadband_CC[:,:,epoch] = return_list[epoch][5]
+            for epoch in range(start_epoch,end_epoch+1):
+                assert return_list[epoch-start_epoch][0] == epoch
+                all_adj_alphatheta[:,:,epoch] = return_list[epoch-start_epoch][1]
+                all_adj_beta[:,:,epoch] = return_list[epoch-start_epoch][2]
+                all_adj_lowgamma[:,:,epoch] = return_list[epoch-start_epoch][3]
+                all_adj_highgamma[:,:,epoch] = return_list[epoch-start_epoch][4]
+                all_adj_broadband_CC[:,:,epoch] = return_list[epoch-start_epoch][5]
 
             # Save with appropriate name
             print 'Writing adjacency matrices for patient %s event %s %s'%(patient_id,event_type,event_id)
             adj_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.multiband.npz'%(patient_id,event_type,event_id))
             np.savez(open(adj_fn,'w'), all_adj_alphatheta=all_adj_alphatheta, all_adj_beta=all_adj_beta, all_adj_lowgamma=all_adj_lowgamma, all_adj_highgamma=all_adj_highgamma, epoch_length=epoch_length, all_adj_broadband_CC=all_adj_broadband_CC)
+    # pool.close()
+    # pool.join()
+
