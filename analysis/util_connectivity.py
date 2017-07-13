@@ -28,6 +28,7 @@ def _helper_compute_multiband_connectivity(job):
     """
     # Get job details
     epoch,epoch_length,Fs,evData = job
+    print epoch
 
     # Get clip
     data_clip = evData[epoch*epoch_length*Fs:(epoch+1)*epoch_length*Fs,:]
@@ -35,12 +36,12 @@ def _helper_compute_multiband_connectivity(job):
 
     # Compute multiband connectivity
     data_mean = np.mean(data_clip,axis=0)
-    eps = 0.001
+    eps = 0
     for n1 in range(N):
         for n2 in range(N):
             if(n1 == n2):
                 continue
-            if(np.abs(data_mean[n1] - data_mean[n2]) < eps):
+            if (data_clip[:,n1]==data_clip[:,n2]).all():
                 adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
                 adj_broadband_CC = np.nan*np.ones((N,N))
                 return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC)
@@ -109,6 +110,8 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             channels = []
 
             # Get channels, ECoG Data, Fsx
+            if(not(os.path.isfile(fn))):
+                continue
             with h5py.File(fn) as f:
                 evData = f['evData'].value
                 Fs = f['Fs'].value
@@ -143,12 +146,12 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             try:
                 if(events[event_id]['STATUS'] == 'ALL_DROPOUT'):
                     continue # unusable clip
-                elif(events[event_id]['STATUS'] == 'DROPOUT'):
-                    start_epoch = 240
-                    end_epoch = 360-1
-                elif(events[event_id]['STATUS'] == 'LATE_DROPOUT'):
-                    start_epoch = 0
-                    end_epoch = 600-1
+                # elif(events[event_id]['STATUS'] == 'DROPOUT'):
+                #     start_epoch = 240
+                #     end_epoch = 360-1
+                # elif(events[event_id]['STATUS'] == 'LATE_DROPOUT'):
+                #     start_epoch = 0
+                #     end_epoch = 600-1
                 else:
                     start_epoch = 0
                     end_epoch = epochs-1

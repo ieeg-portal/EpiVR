@@ -1,10 +1,12 @@
-#!/usr/bin/python
 '''
 Utility module to plot results from the Virtual Resection project.
 '''
 
 from util import *
 from Echobase.Statistics.FDA.fda import *
+from Echobase.Common import errors
+from Echobase.Sigproc import reref, prewhiten, filters
+# from rsrch_vresect_validation.setup import *
 
 np.random.seed(sum(map(ord, "aesthetics")))
 
@@ -12,6 +14,104 @@ with open('../data/DATA.json') as json_data_file:
     data = json.load(json_data_file)
 
 warnings.filterwarnings('ignore')
+
+def plot_eeg(fig_fn, patient_id, event_type, event_id, data=data, sep=0.75, lw=0.5):
+    # Generate list of cartoon map labels
+    labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+        data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+        ),'r').readlines())
+
+    # Get path
+    comp_dir = os.path.expanduser(data['COMP_DIR'])
+    data_dir = os.path.expanduser(data['DATA_DIR'])
+
+    # Load ignored node labels
+    ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+    for ignored_node_label in ignored_node_labels:
+        if(ignored_node_label not in labels):
+            labels.append(ignored_node_label)
+
+
+    events = data['PATIENTS'][patient_id]['Events'][event_type]
+    fn = os.path.join(data_dir, patient_id, 'eeg', events[event_id]['FILE'])
+    channels = []
+    # Get channels, ECoG Data, Fsx
+    with h5py.File(fn) as f:
+        evData = f['evData'].value
+        Fs = f['Fs'].value
+        for column in f['channels']:
+            row_data = []
+            for row_number in range(len(column)):
+                row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+            channels.append(row_data)
+    Fs = int(Fs[0][0])
+    channels = channels[0]
+
+    T = evData.shape[0]
+
+    # Correspond lable names
+    labels = correspond_label_names(channels, labels)
+
+    # Load electrodes to ignore
+    ignored_node_idx = map(lambda x: labels[x][0],ignored_node_labels)
+    for ii,node_id in enumerate(ignored_node_idx):
+        print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+    evData = np.delete(evData, ignored_node_idx, axis=1)
+
+        # Parameter set
+    param = {}
+    param['Notch_60Hz'] = {'wpass': [58.0, 62.0],
+                           'wstop': [59.0, 61.0],
+                           'gpass': 0.1,
+                           'gstop': 60.0}
+    param['HPF_5Hz'] = {'wpass': [5.0],
+                        'wstop': [4.0],
+                        'gpass': 0.1,
+                        'gstop': 60.0}
+    param['LPF_115Hz'] = {'wpass': [115.0],
+                          'wstop': [120.0],
+                          'gpass': 0.1,
+                          'gstop': 60.0}
+    param['LPF_50Hz'] = {'wpass': [50.0],
+                          'wstop': [55.0],
+                          'gpass': 0.1,
+                          'gstop': 60.0}
+    param['XCorr'] = {'tau': 0.25}
+
+    # Build pipeline
+    data_hat = reref.common_avg_ref(evData)
+    data_hat = prewhiten.ar_one(data_hat)
+    data_hat = filters.elliptic(data_hat, Fs, **param['Notch_60Hz'])
+    data_hat = filters.elliptic(data_hat, Fs, **param['HPF_5Hz'])
+    if(Fs > 230):
+        data_hat = filters.elliptic(data_hat, Fs, **param['LPF_115Hz'])
+    else:
+        data_hat = filters.elliptic(data_hat, Fs, **param['LPF_50Hz'])
+
+    num_channels = data_hat.shape[1]
+
+    ev_min = np.min(data_hat[:])
+    ev_max = np.max(data_hat[:])
+    ev_range = ev_max-ev_min
+
+    ev_iter = 0
+    plt.figure(1,dpi=1200)
+    for channel in range(num_channels):
+        plt.plot(np.linspace(-T/(2*Fs),T/(2*Fs),data_hat.shape[0]),data_hat[:,channel]+sep*ev_iter*ev_range, color='k', linewidth=lw)
+        ev_iter += 1
+        plt.hold(True)
+    plt.grid(True)
+    frame1 = plt.gcf()
+    frame1.axes[0].get_yaxis().set_visible(False)
+    plt.xlim([-T/(2*Fs),T/(2*Fs)])
+    plt.ylim([ev_min,ev_max+sep*ev_iter*ev_range])
+
+    plt.xlabel('Time (s)')
+    plt.ylabel('EEG (uV)')
+
+    # plt.show()
+    plt.savefig(fig_fn,bbox_inches='tight')
+
 
 def plot_experiment(patient_id, unique_id, data=data):
     '''
@@ -618,7 +718,7 @@ def gather_results(dilate_radius, fconn = 'highgamma'):
             for fn in os.listdir(comp_dir):
                 if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
                     clip_id = fn.split('.')[2]
-                    seizure_type = data['PATIENTS'][patient_id]['EVENTS']['Ictal'][clip_id]['SeizureType']
+                    seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
                     if('CPS' not in seizure_type):
                         continue
                     results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
@@ -626,6 +726,54 @@ def gather_results(dilate_radius, fconn = 'highgamma'):
             continue
 
     return results
+
+def gather_sync_results(dilate_radius, fconn = 'highgamma'):
+    '''
+    Utility function to output a dictionary of all results.
+
+    Parameters
+    ----------
+        fconn: str,
+            Connectivity metric
+    Returns
+    -------
+        results: dict,
+            Results that contain as key patient id, and has as value another dictionary with cres for given dilation radius in each clip.
+    '''
+    # All cres
+    results = {}
+
+    for patient_id in os.listdir(os.path.expanduser(data['COMP_DIR'])):
+        if(patient_id == 'TEST1'):
+            continue
+
+        comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
+
+        # Find pipedef file
+        for fn in os.listdir(comp_dir):
+            if('pipedef' in fn):
+                # Open pipedef
+                pipedef = json.load(open('%s/%s'%(comp_dir,fn),'r'))
+                # determine if correction dilation
+                if(np.float(pipedef['dilate_radius']) == np.float(dilate_radius)):
+                    unique_id = fn.split('.')[4]
+                    results[patient_id] = {}
+                    break
+
+        # Open all cres
+        try:
+            for fn in os.listdir(comp_dir):
+                if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
+                    clip_id = fn.split('.')[2]
+                    seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
+                    if('CPS' not in seizure_type):
+                        continue
+                    results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['base_sync_%s'%fconn]
+        except:
+            continue
+
+    return results
+
 
 def gather_adj_results(fconn = 'highgamma'):
     '''
@@ -1280,3 +1428,641 @@ def run_all_FDA_test(dilate_radius, fconn):
     g = all_good_data.shape[1]
     b = all_poor_data.shape[1]
     print curve_test(np.hstack((all_good_data,all_poor_data)),np.arange(0,g),np.arange(g,g+b))
+
+
+def gather_nodal_results(fconn = 'highgamma'):
+    '''
+    Utility function to output a dictionary of all node virtual resection results.
+
+    Parameters
+    ----------
+        fconn: str,
+            Connectivity metric
+
+    Returns
+    -------
+        results: dict,
+            Results that contain as key patient id, and has as value another dictionary with nodal cres in each clip.
+    '''
+    # All cres
+    results = {}
+
+    for patient_id in os.listdir(os.path.expanduser(data['COMP_DIR'])):
+        if(patient_id == 'TEST1'):
+            continue
+
+        comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
+
+        # Open all adj
+        try:
+            for fn in os.listdir(comp_dir):
+                if('noderes' in fn):
+                    if(patient_id not in results.keys()):
+                        results[patient_id] = {}
+                    print fn
+                    clip_id = fn.split('.')[2]
+                    seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
+                    if('CPS' not in seizure_type):
+                        continue
+                    results[patient_id][fn.split('.')[2]] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
+        except:
+            continue
+
+    return results
+
+
+def gather_null_nodal_results(fconn = 'highgamma'):
+    '''
+    Utility function to output a dictionary of all node virtual resection results.
+
+    Parameters
+    ----------
+        fconn: str,
+            Connectivity metric
+
+    Returns
+    -------
+        results: dict,
+            Results that contain as key patient id, and has as value another dictionary with nodal cres in each clip.
+    '''
+    # All cres
+    results = {}
+
+    for patient_id in os.listdir(os.path.expanduser(data['COMP_DIR'])):
+        if(patient_id == 'TEST1'):
+            continue
+
+        comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
+
+        # Open all adj
+        try:
+            for fn in os.listdir(comp_dir):
+                if('nodenull' in fn):
+                    if(patient_id not in results.keys()):
+                        results[patient_id] = {}
+                    print fn
+                    clip_id = fn.split('.')[2]
+                    seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
+                    if('CPS' not in seizure_type):
+                        continue
+                    if clip_id not in results[patient_id].keys():
+                        results[patient_id][clip_id] = []
+                    results[patient_id][clip_id].append(np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn])
+        except:
+            continue
+
+    for patient_id, events in results.items():
+        for clip_id, clip_data in events.items():
+            results[patient_id][clip_id] = np.array(clip_data)
+    return results
+
+def plot_CC_variability(fig_fn,nodal_control_centrality, null_nodal_control_centrality=None):
+    '''
+    Utility function to plot control centrality variability.
+
+    Parameters
+    ----------
+        fig_fn: str,
+            Full path filename to save figure
+
+        nodal_control_centrality: nadarray,
+            Control centrality of shape N x T where N is the number of nodes, and T are the total time epochs.
+
+        null_nodal_control_centrality: ndarray,
+            Control centrality null models of shape P x N x T where P is the number of null permutations, N is the number of nodes, and T are the total time epochs.
+
+    Returns
+    -------
+        None
+    '''
+
+    nodal_sem = scipy.stats.sem(nodal_control_centrality, axis=1)
+    nodal_mean = np.mean(nodal_control_centrality, axis=1)
+
+    plt.figure(dpi=1200)
+    plt.errorbar(np.arange(len(nodal_mean))+1,nodal_mean[np.argsort(nodal_mean)],yerr=nodal_sem[np.argsort(nodal_mean)],fmt='--')
+
+    if null_nodal_control_centrality is not None:
+        null_nodal_low = np.percentile(null_nodal_control_centrality.flatten(),2.5)
+        null_nodal_high = np.percentile(null_nodal_control_centrality.flatten(),97.5)
+        null_nodal_mean = np.mean(null_nodal_control_centrality.flatten())
+
+        ax = plt.gca()
+        ax.fill_between(np.arange(len(nodal_mean))+1,null_nodal_low,null_nodal_high, facecolor='gray',alpha=0.5)
+
+    # plt.show()
+    plt.savefig(fig_fn,bbox_inches='tight')
+
+
+def plot_all_CC_variability():
+    '''
+    Utility function to plot all control centrality variability.
+
+    Parameters
+    ----------
+        None
+
+    Returns
+    -------
+        None
+    '''
+
+    comp_dir = os.path.expanduser(data['COMP_DIR'])
+
+    for fconn in ['highgamma','broadband_CC']:
+        all_nodal_control_centrality = gather_nodal_results(fconn)
+        all_null_nodal_control_centrality = gather_null_nodal_results(fconn
+                )
+        for patient_id, events in all_nodal_control_centrality.items():
+            for clip_id, nodal_control_centrality in all_nodal_control_centrality[patient_id].items():
+                try:
+                    # Get null
+                    null_nodal_control_centrality = all_null_nodal_control_centrality[patient_id][clip_id]
+                except KeyError:
+                    null_nodal_control_centrality = None
+
+                # Get pre-seizure and seizure epoch
+                pre_nodal_control_centrality = nodal_control_centrality[:,:nodal_control_centrality.shape[1]/2]
+                post_nodal_control_centrality = nodal_control_centrality[:,nodal_control_centrality.shape[1]/2:]
+
+                if null_nodal_control_centrality is not None:
+                    pre_null_nodal_control_centrality = null_nodal_control_centrality[:,:,:nodal_control_centrality.shape[1]/2]
+                    post_null_nodal_control_centrality = null_nodal_control_centrality[:,:,nodal_control_centrality.shape[1]/2:]
+                else:
+                    pre_null_nodal_control_centrality = None
+                    post_null_nodal_control_centrality = None
+
+                print pre_nodal_control_centrality.shape, post_nodal_control_centrality.shape
+                if null_nodal_control_centrality is not None:
+                    print pre_null_nodal_control_centrality.shape, post_null_nodal_control_centrality.shape
+
+                fig_fn = '%s/../fig/%s.Ictal.%s.%s.preseizure.variability.png'%(comp_dir,patient_id,clip_id,fconn)
+                plot_CC_variability(fig_fn, pre_nodal_control_centrality, pre_null_nodal_control_centrality)
+
+                fig_fn = '%s/../fig/%s.Ictal.%s.%s.seizure.variability.png'%(comp_dir,patient_id,clip_id,fconn)
+                plot_CC_variability(fig_fn, post_nodal_control_centrality, post_null_nodal_control_centrality)
+
+
+def write_hub_coord_csv(ele_csv_fn, patient_id, clip_idx, clip_idx_label, epoch='post', fconn='highgamma'):
+    '''
+    Utility function to write csv file given electrode locations all node-based control centrality variability.
+
+    Parameters
+    ----------
+        ele_csv_fn: str,
+            Full path filename to load soz electrode labels and locations
+
+        patient_id: str,
+            Patient ID
+
+        clip_idx: nd.array or list,
+            List of clip IDs that belong to the same seizure type
+
+    Returns
+    -------
+        None
+    '''
+
+    # Load event
+    for clip_id in clip_idx:
+        event = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]
+        # Generate list of cartoon map labels
+        labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+            data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+            ),'r').readlines())
+
+        # Get path
+        comp_dir = os.path.expanduser(data['COMP_DIR'])
+        data_dir = os.path.expanduser(data['DATA_DIR'])
+
+        # Load ignored node labels
+        ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+        for ignored_node_label in ignored_node_labels:
+            if(ignored_node_label not in labels):
+                labels.append(ignored_node_label)
+
+
+        # Load channels from
+        fn = os.path.join(data_dir, patient_id, 'eeg', event['FILE'])
+        channels = []
+
+        # Get channels, ECoG Data, Fsx
+        with h5py.File(fn) as f:
+            evData = f['evData'].value
+            Fs = f['Fs'].value
+            for column in f['channels']:
+                row_data = []
+                for row_number in range(len(column)):
+                    row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+                channels.append(row_data)
+        Fs = int(Fs[0][0])
+        channels = channels[0]
+        # evData = scipy.stats.zscore(evData,axis=1)
+        T = evData.shape[0]
+
+        # Correspond lable names
+        labels = correspond_label_names(channels, labels)
+
+        # Load electrodes to ignore
+        ignored_node_idx = map(lambda x: labels[x][0],ignored_node_labels)
+        for ii,node_id in enumerate(ignored_node_idx):
+            print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+        # Create final list of ordered cartoon electrode labels
+        labels = np.array(sorted(labels.keys(), key=lambda x: labels[x][0]))
+        labels = np.delete(labels, ignored_node_idx, axis=0)
+
+        # All nodal results
+        all_nodal_results = gather_nodal_results(fconn=fconn)
+        nodal_control_centrality = all_nodal_results[patient_id][clip_id]
+        if(epoch == 'pre'):
+            nodal_control_centrality = nodal_control_centrality[:,:nodal_control_centrality.shape[1]/2]
+        if(epoch == 'post'):
+            nodal_control_centrality = nodal_control_centrality[:,nodal_control_centrality.shape[1]/2:]
+        mean_nodal_control_centrality = np.mean(nodal_control_centrality, axis=1)
+
+        # Compute dictionary of electrode label to nodal control centrality mean
+        electrode_control_centrality = {}
+        for kk, label in enumerate(labels):
+            if label not in electrode_control_centrality.keys():
+                electrode_control_centrality[label] = []
+            electrode_control_centrality[label].append(mean_nodal_control_centrality[kk])
+
+    medianmean_nodal_control_centrality = {}
+    for label in electrode_control_centrality.keys():
+        medianmean_nodal_control_centrality[label] = np.median(electrode_control_centrality[label])
+
+    # # Fit exponential
+    # nodal_control_centrality = medianmean_nodal_control_centrality.values()
+    # min_nodal_control_centrality = min(nodal_control_centrality)
+    # for label, val in medianmean_nodal_control_centrality.items():
+    #     corr_val = np.log(val + 1 - min_nodal_control_centrality)
+    #     medianmean_nodal_control_centrality[label] = corr_val
+
+    # Compute mean and normalize nodal_control_centrality for each node
+    nodal_control_centrality = medianmean_nodal_control_centrality.values()
+    mean_nodal_control_centrality = np.mean(nodal_control_centrality)
+    min_nodal_control_centrality = min(nodal_control_centrality)
+    max_nodal_control_centrality = max(nodal_control_centrality)
+
+    # Normalize with mean, min, max
+    for label, val in medianmean_nodal_control_centrality.items():
+        corr_val = (val- min_nodal_control_centrality)/(max_nodal_control_centrality-min_nodal_control_centrality)
+        medianmean_nodal_control_centrality[label] = corr_val
+
+    # Load electrode labels csv
+    lines = open(ele_csv_fn,'r').readlines()
+    out_txt = ''
+
+    # Write normalized nodal_control_centrality
+    out_txt = ''
+    for line in lines:
+        label = line.split(',')[3].replace('\n','').replace('\r','')
+        try:
+            out_txt += '%s,%s,%0.8f\n'%(','.join(line.split(',')[:3]),label,medianmean_nodal_control_centrality[label])
+        except KeyError:
+            continue
+
+    open(os.path.join(comp_dir, patient_id, 'aim3', ele_csv_fn.split('/')[-1].replace('_soz_coord.csv','_Ictal_%s_%s_%s_hub_coord.csv'%(epoch,clip_idx_label,fconn))),'w').write(out_txt)
+
+
+def plot_figure1C(patient_id, clip_idx, clip_idx_label, dilate_radius, fconn='highgamma'):
+
+    comp_dir = os.path.expanduser(data['COMP_DIR'])
+
+    all_cres = gather_results(dilate_radius, fconn)
+    all_base_sync = gather_sync_results(dilate_radius, fconn)
+
+    min_seizure_len = 1E100
+
+    for clip_id in clip_idx:
+        cres = all_cres[patient_id][clip_id]
+        if cres.shape[0] < min_seizure_len:
+            min_seizure_len = cres.shape[0]
+
+    for clip_id in clip_idx:
+        cres = all_cres[patient_id][clip_id]
+        base_sync = all_base_sync[patient_id][clip_id]
+
+        cres = np.interp(np.linspace(-1.0,1.0,min_seizure_len),np.linspace(-1.0,1.0,cres.shape[0]),cres.flatten())
+        base_sync = np.interp(np.linspace(-1.0,1.0,min_seizure_len),np.linspace(-1.0,1.0,base_sync.shape[0]),base_sync.flatten())
+
+        try:
+            avg_cres_data = np.hstack((avg_cres_data,np.reshape(cres,(cres.shape[0],1))))
+        except Exception:
+            avg_cres_data = np.reshape(cres,(cres.shape[0],1))
+        try:
+            avg_base_sync_data = np.hstack((avg_base_sync_data,np.reshape(base_sync,(base_sync.shape[0],1))))
+        except Exception:
+            avg_base_sync_data = np.reshape(base_sync,(base_sync.shape[0],1))
+
+    avg_cres_error = scipy.stats.sem(avg_cres_data,axis=1,nan_policy='omit')
+    avg_base_sync_error = scipy.stats.sem(avg_base_sync_data,axis
+        =1,nan_policy='omit')
+
+    avg_cres_data = np.nanmedian(avg_cres_data,axis=1)
+    avg_base_sync_data = np.nanmedian(avg_base_sync_data,axis=1)
+
+    plt.figure(dpi=1200)
+    fig, ax1 = plt.subplots()
+
+    ax2 = ax1.twinx()
+    ax1.plot(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data,'g-',alpha=0.5)
+    ax1.plot(np.linspace(-1.0,1.0,avg_base_sync_data.shape[0]),avg_base_sync_data,'b-',alpha=0.5)
+
+
+    ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data-avg_cres_error,avg_cres_data+avg_cres_error,facecolor='green',alpha=0.25)
+    ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_base_sync_data-avg_base_sync_error,avg_base_sync_data+avg_base_sync_error,facecolor='blue',alpha=0.25)
+
+    ax1.set_xlabel('Normalized Time')
+    ax1.set_ylabel('$cc_{res}(t)$', color='g')
+    ax2.set_ylabel('$s(t)$', color='b')
+    ax1.set_ylim([-0.6,0.8])
+    ax2.set_ylim([0.0,1.0])
+    ax1.grid(False)
+    ax2.grid(False)
+    # plt.show()
+    plt.savefig('%s/../fig/Figure1C.%s.%s.%s.png'%(comp_dir,patient_id,clip_idx_label,fconn),bbox_inches='tight')
+
+
+def plot_figure5(patient_id, clip_idx, clip_idx_label):
+    '''
+    '''
+
+    comp_dir = os.path.expanduser(data['COMP_DIR'])
+    # Create figure
+    outcome = get_outcome(patient_id)
+    fig,axs = plt.subplots(1,5,sharey=True)
+    fig.set_size_inches((12,4))
+    fig.suptitle('Patient %s - Subtype %s - %s Outcome'%(patient_id,clip_idx_label,outcome))
+
+    # Figure font options
+    font1 = {'family':'raleway',
+            'color': 'lightblue',
+            'weight':'bold',
+            'size':8,
+            }
+    font2 = {'family':'raleway',
+            'color': 'darkred',
+            'weight':'bold',
+            'size':8,
+            }
+    max_y = 0.02
+    min_y = -0.02
+
+    for ax, fconn in zip(axs,['alphatheta','beta','lowgamma','highgamma','broadband_CC']):
+        if(fconn == 'alphatheta'):
+            title = 'Alpha/Theta:\n 5-15 Hz'
+        if(fconn == 'beta'):
+            title = 'Beta:\n 15-25 Hz'
+        if(fconn == 'lowgamma'):
+            title = 'Low Gamma:\n 30-40 Hz'
+        if(fconn == 'highgamma'):
+            title = 'High Gamma:\n 95-105 Hz'
+        if(fconn == 'broadband_CC'):
+            title = 'Broadband\n Cross-Correlation'
+
+        # All nodal results
+        all_nodal_results = gather_nodal_results(fconn=fconn)
+
+        # plt.figure(dpi=600)
+
+        # Set up colors
+        colors = ['k','r','g','b','c','m','y','w']
+        color_iter = 0
+
+        # Load event
+        for clip_id in clip_idx:
+            event = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]
+            nodal_control_centrality = all_nodal_results[patient_id][clip_id]
+
+            resected_node_idx, channels = get_resected_node_dx(patient_id)
+            non_resected_node_idx = []
+            for k in range(nodal_control_centrality.shape[0]):
+                if k not in resected_node_idx:
+                    non_resected_node_idx.append(k)
+
+            nodal_control_centrality = nodal_control_centrality[:,:nodal_control_centrality.shape[1]/2]
+            mean_nodal_control_centrality = np.mean(nodal_control_centrality, axis=1)
+
+            ax.scatter(np.zeros((len(resected_node_idx),)),mean_nodal_control_centrality[resected_node_idx],color=colors[color_iter],alpha=0.1)
+            ax.hold(True)
+            ax.scatter(np.ones((len(non_resected_node_idx),)),mean_nodal_control_centrality[non_resected_node_idx],color=colors[color_iter],alpha=0.1)
+
+            nodal_control_centrality = nodal_control_centrality[:,nodal_control_centrality.shape[1]/2:]
+            mean_nodal_control_centrality = np.mean(nodal_control_centrality, axis=1)
+
+            ax.scatter(2*np.ones((len(resected_node_idx),)),mean_nodal_control_centrality[resected_node_idx],color=colors[color_iter],alpha=0.1)
+            ax.hold(True)
+            ax.scatter(3*np.ones((len(non_resected_node_idx),)),mean_nodal_control_centrality[non_resected_node_idx],color=colors[color_iter],alpha=0.1)
+
+            ax.set_ylim([min_y,max_y])
+            ax.set_xticks([0,1,2,3])
+            ax.set_xticklabels(['Resected','Non-Resected','Resected','Non-Resected'],fontdict={'size':8,'weight':'bold'},rotation='vertical')
+            color_iter += 1
+        ax.text(0.05,max_y-(max_y-min_y)*0.04,'Pre-Seizure',fontdict=font1)
+        ax.text(2.05,max_y-(max_y-min_y)*0.04,'Seizure',fontdict=font2)
+        ax.text(0.0, min_y+(max_y-min_y)*0.1,title,fontdict={'family':'raleway','size':12,'color':'black'})
+    plt.tight_layout()
+    fig.savefig('%s/../fig/Figure3.%s.%s.png'%(comp_dir,patient_id,clip_idx_label))
+
+
+def hack():
+    # import sys
+    # import glob
+    # import json
+    # import time
+
+    # from util import *
+    # from util_connectivity import *
+    # from util_virtual_resection import *
+    # from util_plot import *
+
+    patient_id = 'HUP074'
+    epoch_length = 1
+    dilate_radius = 0
+    event_id = '2'
+
+    # Generate list of cartoon map labels
+    labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+        data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+        ),'r').readlines())
+
+    # Get path
+    comp_dir = os.path.expanduser(data['COMP_DIR'])
+    data_dir = os.path.expanduser(data['DATA_DIR'])
+
+    # Load ignored node labels
+    ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+    for ignored_node_label in ignored_node_labels:
+        if(ignored_node_label not in labels):
+            labels.append(ignored_node_label)
+
+
+    events = data['PATIENTS'][patient_id]['Events']['Ictal']
+    fn = os.path.join(data_dir, patient_id, 'eeg', events[event_id]['FILE'])
+    channels = []
+    # Get channels, ECoG Data, Fsx
+    with h5py.File(fn) as f:
+        evData = f['evData'].value
+        Fs = f['Fs'].value
+        for column in f['channels']:
+            row_data = []
+            for row_number in range(len(column)):
+                row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+            channels.append(row_data)
+    Fs = int(Fs[0][0])
+    channels = channels[0]
+
+    T = evData.shape[0]
+
+    # Correspond lable names
+    labels = correspond_label_names(channels, labels)
+
+    # Load electrodes to ignore
+    ignored_node_idx = map(lambda x: labels[x][0],ignored_node_labels)
+    for ii,node_id in enumerate(ignored_node_idx):
+        print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+    evData = np.delete(evData, ignored_node_idx, axis=1)
+
+
+
+    # Recorrespond label names
+    labels_dict = correspond_label_names(channels, labels)
+
+    # Generate list of resected electrodes and write to CSV file
+    try:
+        if(dilate_radius == 0):
+            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+        elif(dilate_radius > 0):
+            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+            for fringe_node_label in data['PATIENTS'][patient_id]['RESECTED_FRINGE_ELECTRODES']:
+                resected_node_labels.append(fringe_node_label)
+        else:
+            blah
+    except Exception:
+        resected_electrodes_fn = write_resected_electrodes(patient_id, dilate_radius, data, labels_dict)
+
+        # Load resected electrodes
+        try:
+            resected_nodes = map(lambda x: int(x.split(',')[0]), open(resected_electrodes_fn,'r').readlines())
+            resected_node_labels = map(lambda x: x.split(',')[1].replace('\n',''), open(resected_electrodes_fn,'r').readlines())
+        except IndexError:
+            print 'ERROR! Resected electrodes %s does not have any electrodes. Skipping'%(resected_electrodes_fn)
+            blah
+
+    # Map the resected electrodes to channels
+    clean_resected_node_labels = []
+    for resected_node_label in resected_node_labels:
+        if resected_node_label in ignored_node_labels:
+            continue
+        else:
+            clean_resected_node_labels.append(resected_node_label)
+    resected_node_idx = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
+    for ii,node_id in enumerate(resected_node_idx):
+        print 'Virtually resecting node label: %s because label %s is in the resection zone'%(channels[node_id],resected_node_labels[ii])
+
+
+
+    # Generate list of SOZ electrodes and write to CSV file
+    soz_node_labels = events[event_id]["SEIZURE_ONSET_ELECTRODES"]
+
+    # Map the resected electrodes to channels
+    clean_soz_node_labels = []
+    for soz_node_label in soz_node_labels:
+        if soz_node_label in ignored_node_labels:
+            continue
+        else:
+            clean_soz_node_labels.append(soz_node_label)
+    soz_node_idx = map(lambda x: labels_dict[x][0], clean_soz_node_labels)
+    for ii,node_id in enumerate(soz_node_idx):
+        print 'Virtually resecting SOZ node label: %s because label %s is in the SOZ zone'%(channels[node_id],soz_node_labels[ii])
+
+
+    eec = evData.shape[0]/2 # in samples
+    ueo = Fs * (events[event_id]['SeizureUEO']-events[event_id]['SeizureEEC']) + eec
+    end = Fs * (events[event_id]['SeizureEnd']-events[event_id]['SeizureEEC']) + eec
+
+    # amt = 80.0
+    # evData = evData[eec-(end-eec)*amt:eec+(end-eec)*amt:100,:]
+    evData = evData[::100,:]
+
+    T = np.float(evData.shape[0])*100
+    sep = 0.5
+    lw = 2
+
+    # Parameter set
+    param = {}
+    param['Notch_60Hz'] = {'wpass': [58.0, 62.0],
+                           'wstop': [59.0, 61.0],
+                           'gpass': 0.1,
+                           'gstop': 60.0}
+    param['HPF_5Hz'] = {'wpass': [5.0],
+                        'wstop': [4.0],
+                        'gpass': 0.1,
+                        'gstop': 60.0}
+    param['LPF_115Hz'] = {'wpass': [115.0],
+                          'wstop': [120.0],
+                          'gpass': 0.1,
+                          'gstop': 60.0}
+    param['LPF_50Hz'] = {'wpass': [50.0],
+                          'wstop': [55.0],
+                          'gpass': 0.1,
+                          'gstop': 60.0}
+    param['XCorr'] = {'tau': 0.25}
+
+    # Build pipeline
+    data_hat = reref.common_avg_ref(evData)
+    data_hat = prewhiten.ar_one(data_hat)
+    data_hat = filters.elliptic(data_hat, Fs, **param['Notch_60Hz'])
+    data_hat = filters.elliptic(data_hat, Fs, **param['HPF_5Hz'])
+    if(Fs > 230):
+        data_hat = filters.elliptic(data_hat, Fs, **param['LPF_115Hz'])
+    else:
+        data_hat = filters.elliptic(data_hat, Fs, **param['LPF_50Hz'])
+
+    num_channels = data_hat.shape[1]
+
+    ev_min = np.min(data_hat[:])
+    ev_max = np.max(data_hat[:])
+    ev_range = ev_max-ev_min
+
+    ev_iter = 0
+    count_iter = 0
+    plt.figure(1,dpi=1200)
+    for channel in range(num_channels):
+        if channel not in soz_node_idx and channel not in resected_node_idx:
+            count_iter += 1
+            if np.mod(count_iter,2) == 0:
+                plt.plot(np.linspace(-T/(2*Fs),T/(2*Fs),data_hat.shape[0]),data_hat[:,channel]+sep*ev_iter*ev_range, color='k', linewidth=lw)
+                ev_iter += 1
+                plt.hold(True)
+        else:
+            if channel in resected_node_idx:
+                if channel in soz_node_idx:
+                    plt.plot(np.linspace(-T/(2*Fs),0,data_hat[:data_hat.shape[0]/2,channel].shape[0]),data_hat[:data_hat.shape[0]/2,channel]+sep*ev_iter*ev_range, color='r', linewidth=lw)
+                    plt.plot(np.linspace(0,T/(2*Fs),data_hat[data_hat.shape[0]/2:,channel].shape[0]),data_hat[data_hat.shape[0]/2:,channel]+sep*ev_iter*ev_range, color='m', linewidth=lw)
+                    ev_iter += 1
+                    plt.hold(True)
+                else:
+                    plt.plot(np.linspace(-T/(2*Fs),T/(2*Fs),data_hat.shape[0]),data_hat[:,channel]+sep*ev_iter*ev_range, color='r', linewidth=lw)
+                    ev_iter += 1
+                    plt.hold(True)
+            else:
+                if channel in soz_node_idx:
+                    plt.plot(np.linspace(-T/(2*Fs),0,data_hat[:data_hat.shape[0]/2,channel].shape[0]),data_hat[:data_hat.shape[0]/2,channel]+sep*ev_iter*ev_range, color='k', linewidth=lw)
+                    plt.plot(np.linspace(0,T/(2*Fs),data_hat[data_hat.shape[0]/2:,channel].shape[0]),data_hat[data_hat.shape[0]/2:,channel]+sep*ev_iter*ev_range, color='b', linewidth=lw)
+                    ev_iter += 1
+                    plt.hold(True)
+                else:
+                    blah
+    plt.grid(True)
+    frame1 = plt.gcf()
+    frame1.axes[0].get_yaxis().set_visible(False)
+    plt.xlim([-T/(2*Fs),T/(2*Fs)])
+    plt.ylim([ev_min,ev_max+sep*ev_iter*ev_range])
+    plt.plot([0,0],[ev_min,ev_max+sep*ev_iter*ev_range],color='#444444')
+    plt.plot([np.float(ueo-eec)/Fs+1,np.float(ueo-eec)/Fs+1],[ev_min,ev_max+sep*ev_iter*ev_range],color='#666666')
+    plt.plot([np.float(end-eec)/Fs+1,np.float(end-eec)/Fs+1],[ev_min,ev_max+sep*ev_iter*ev_range],color='#aaaaaa')
+    plt.xlabel('Time (s)')
+    plt.ylabel('EEG (uV)')
+    plt.savefig('../../fig/Figure4_1.svg',bbox_inches='tight')

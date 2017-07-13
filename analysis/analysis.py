@@ -45,26 +45,48 @@ if __name__ == '__main__':
         except Exception:
             count_conn += 1
 
-    # if(not(os.path.isfile('%s/%s/aim3/%s.Ictal.3.multiband.npz'%(os.path.expanduser(data['COMP_DIR']),patient_id,patient_id)))):
+    # Check if all connectivity adjacency matrices have been computed
     if(len(glob.glob('%s/%s/aim3/*multiband*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
         # Compute multi band connectivity and store adjacency matricies
-        blah
-        pass
-        # compute_multiband_connectivity(patient_id, epoch_length)
+        # blah
+        # pass
+        compute_multiband_connectivity(patient_id, epoch_length)
+
+    # Check if all node-level virtual resections have been computed
+    if(len(glob.glob('%s/%s/aim3/*noderes*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
+        # Compute node-level virtual resection
+        nodal_virtual_resection(patient_id, data=data)
+
+    # # Check if all node-level virtual resections have been computed
+    # if(len(glob.glob('%s/%s/aim3/*nodenull*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
+    #     for event_type, events in data['PATIENTS'][patient_id]['Events'].items():
+    #         for event_id in events.keys():
+    #             try:
+    #                 if(events[event_id]['STATUS'] == 'ALL_DROPOUT'):
+    #                     continue # unusable clip
+    #             except KeyError:
+    #                 pass
+    #             # Compute node-level null models of virtual resection
+    #             null_nodal_virtual_resection(patient_id, event_type, event_id, data=data)
 
     # Keep dilating and eroding resection zone to capture percentage of network nodes
-    # for dilate_radius in [0, -5, 5, 10, -10, 15, -15, 20, -20]:
-    for dilate_radius in [0]:
+    for dilate_radius in [0, -5, 5, 10, -10, 15, -15, 20, -20]:
+    # for dilate_radius in [0]:
         # Check if already exists
         unique_idx = []
         for fn in glob.glob(os.path.expanduser('%s/%s/aim3/*pipedef*'%(data['COMP_DIR'],patient_id))):
             pipedef = json.load(open(fn,'r'))
-            if(pipedef['fconn'] == 'multiband+broadband' and pipedef['dilate_radius'] == dilate_radius):
-                uid = fn.split('.')[-3]
-                event_type = fn.split('.')[1]
-                event_id = fn.split('.')[2]
-                unique_idx.append((uid,event_type,event_id))
+            try:
+                if(pipedef['fconn'] == 'multiband+broadband' and pipedef['dilate_radius'] == dilate_radius):
+                    uid = fn.split('.')[-3]
+                    event_type = fn.split('.')[1]
+                    event_id = fn.split('.')[2]
+                    unique_idx.append((uid,event_type,event_id))
+            except KeyError:
+                continue
         if(len(unique_idx) == 0):
+        # if dilate_radius < 0:
+            print dilate_radius
             # Compute virtual resection to get c_{res}(t)
             unique_idx = virtual_resection(patient_id, dilate_radius, data)
 
@@ -83,3 +105,10 @@ if __name__ == '__main__':
             # plot_experiment(patient_id,unique_id)
             print unique_id, event_type, event_id
             pass
+
+    # Compute control centrality of SOZ
+    # Check if already exists
+    if not len(glob.glob(os.path.expanduser('%s/%s/aim3/*sozres*'%(data['COMP_DIR'],patient_id)))):
+        # Compute virtual resection to get c_{res}(t)
+        unique_idx = soz_virtual_resection(patient_id, data)
+

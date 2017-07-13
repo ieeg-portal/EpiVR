@@ -31,7 +31,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 from Echobase.Common import errors
 from Echobase.Network.Metrics.globaltopo import synchronizability
+from Echobase.Network.Metrics.nodetopo import node_control
 from Echobase.Network.Transforms import lesion
+from Echobase.Network.Rewire import geometry
 from Echobase.Pipelines.ecog_network import *
 
 np.random.seed(sum(map(ord, "aesthetics")))
