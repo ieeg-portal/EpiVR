@@ -19,9 +19,9 @@
           {
             "FILE":"HUP064-short-ictal-block-1.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"3",
+            "EMU_Report_Event_Number":"1",
             "SeizureEEC":632657.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":632666.73,
             "SeizureEnd":632764.000,
             "SEIZURE_ONSET_ELECTRODES":["LG23","LG31"],
             "SeizurePhenotype":"A"
@@ -40,7 +40,7 @@
       "AgeSurgery":"36",
       "SeizureOnset":"RTL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"VALIDATION",
+      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -50,10 +50,10 @@
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"1",
             "SeizureEEC":223606.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":223606,
             "SeizureEnd":223685.000,
             "SEIZURE_ONSET_ELECTRODES":["RG25","RG26","RG27"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "2":
           {
@@ -61,10 +61,10 @@
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"2",
             "SeizureEEC":228925.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":228925,
             "SeizureEnd":229019.000,
             "SEIZURE_ONSET_ELECTRODES":["RG22","RG23","RG24"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "3":
           {
@@ -72,10 +72,10 @@
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"3",
             "SeizureEEC":249851.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":249851,
             "SeizureEnd":249941.000,
             "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RAT3","RAT4","RG3","RG4","RG5","RG6","RG9","RG10","RG11","RG17","RST1","RST2","RST3"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           }
         }
       },
@@ -99,55 +99,55 @@
           {
             "FILE":"HUP068-short-ictal-block-1.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"4",
+            "EMU_Report_Event_Number":"1",
             "SeizureEEC":819104.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":819104,
             "SeizureEnd":819193.000,
-            "SEIZURE_ONSET_ELECTRODES":["RG11","RG12","RG13","RG14","RST4"],
+            "SEIZURE_ONSET_ELECTRODES":["RG11","RG14","RG15","RG53","RG54","RPT3"],
             "SeizurePhenotype":"A"
           },
           "2":
           {
             "FILE":"HUP068-short-ictal-block-2.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"5",
+            "EMU_Report_Event_Number":"2",
             "SeizureEEC":836557.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":836557,
             "SeizureEnd":836651.000,
-            "SEIZURE_ONSET_ELECTRODES":["RG11","RG12","RG13","RG14"],
+            "SEIZURE_ONSET_ELECTRODES":["RG11","RG14","RG15","RG53","RG54","RPT3"],
             "SeizurePhenotype":"A"
           },
           "3":
           {
             "FILE":"HUP068-short-ictal-block-3.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"6",
+            "EMU_Report_Event_Number":"3",
             "SeizureEEC":911307.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":911307,
             "SeizureEnd":911414.000,
-            "SEIZURE_ONSET_ELECTRODES":["RST2","RST3"],
-            "SeizurePhenotype":"B"
+            "SEIZURE_ONSET_ELECTRODES":["RG1","RG2","RG3","RG4","RG9","RG10","RG11","RG12","RG13","RG14","RG17","RG18","RG19","RG20","RG21"],
+            "SeizurePhenotype":"A"
           },
           "4":
           {
             "FILE":"HUP068-short-ictal-block-4.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"7",
-            "SeizureEEC":933636.000,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":933639.010,
+            "SeizureUEO":933639.010,
             "SeizureEnd":933747.000,
-            "SEIZURE_ONSET_ELECTRODES":["RG11","RG27","RG29","RST2"],
-            "SeizurePhenotype":""
+            "SEIZURE_ONSET_ELECTRODES":["RG1","RG2","RG3","RG4","RG9","RG10","RG11","RG12","RG13","RG14","RG53","RG54","RG61"],
+            "SeizurePhenotype":"A"
           },
           "5":
           {
             "FILE":"HUP068-short-ictal-block-5.mat",
             "SeizureType":"CPS",
-            "EMU_Report_Event_Number":"8",
+            "EMU_Report_Event_Number":"5",
             "SeizureEEC":968205.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":968211.340,
             "SeizureEnd":968288.000,
-            "SEIZURE_ONSET_ELECTRODES":["RST2","RST3","RST4"],
+            "SEIZURE_ONSET_ELECTRODES":["RG4","RG10","RG11","RG12","RG13","RG14","RG54","RG55"],
             "SeizurePhenotype":"B"
           }
         }
@@ -174,87 +174,87 @@
             "SeizureType":"SPS",
             "EMU_Report_Event_Number":"1",
             "SeizureEEC":62929.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":62930.48,
             "SeizureEnd":62943.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "2":
           {
             "FILE":"HUP070-short-ictal-block-2.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"2",
             "SeizureEEC":65364.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":65365.04,
             "SeizureEnd":65374.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "3":
           {
             "FILE":"HUP070-short-ictal-block-3.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"3",
             "STATUS": "ALL_DROPOUT",
             "SeizureEEC":66661.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":66663.17,
             "SeizureEnd":66672.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "4":
           {
             "FILE":"HUP070-short-ictal-block-4.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"2",
+            "EMU_Report_Event_Number":"4",
             "SeizureEEC":252106.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":252144.37,
             "SeizureEnd":252121.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "5":
           {
             "FILE":"HUP070-short-ictal-block-5.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"5",
             "SeizureEEC":277320.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":277323.1,
             "SeizureEnd":277328.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "6":
           {
             "FILE":"HUP070-short-ictal-block-6.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"6",
             "SeizureEEC":277367.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":277367.55,
             "SeizureEnd":277374.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "7":
           {
             "FILE":"HUP070-short-ictal-block-7.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"7",
             "SeizureEEC":325865.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":325868.68,
             "SeizureEnd":325875.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           },
           "8":
           {
             "FILE":"HUP070-short-ictal-block-8.mat",
             "SeizureType":"SPS",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"8",
             "SeizureEEC":328368.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":328370.11,
             "SeizureEnd":328377.000,
-            "SEIZURE_ONSET_ELECTRODES":["LG21"],
+            "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
           }
         }
@@ -271,7 +271,7 @@
       "AgeSurgery":"40",
       "SeizureOnset":"RFL",
       "GridCoverageOfResection":"center",
-      "Cohort":"VALIDATION",
+      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -281,9 +281,9 @@
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"1",
             "SeizureEEC":384039.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":384052.25,
             "SeizureEnd":384133.000,
-            "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"],
+            "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8"],
             "SeizurePhenotype":"A"
           },
           "2":
@@ -291,10 +291,10 @@
             "FILE":"HUP073-short-ictal-block-2.mat",
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"2",
-            "SeizureEEC":413204.000,
-            "SeizureUEO":-1,
+            "SeizureEEC":413195.950,
+            "SeizureUEO":413198.27,
             "SeizureEnd":413280.000,
-            "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"],
+            "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8"],
             "SeizurePhenotype":"A"
           },
           "3":
@@ -302,21 +302,21 @@
             "FILE":"HUP073-short-ictal-block-3.mat",
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"4",
-            "SeizureEEC":472075.000,
-            "SeizureUEO":-1,
+            "SeizureEEC":472064.91,
+            "SeizureUEO":472071.93,
             "SeizureEnd":472141.000,
-            "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"],
-            "SeizurePhenotype":"A"
+            "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8","RLT1","RLT2","RLT3"],
+            "SeizurePhenotype":"B"
           },
           "4":
           {
             "FILE":"HUP073-short-ictal-block-4.mat",
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"5",
-            "SeizureEEC":474114.000,
-            "SeizureUEO":-1,
+            "SeizureEEC":474124.760,
+            "SeizureUEO":474136.13,
             "SeizureEnd":474186.000,
-            "SEIZURE_ONSET_ELECTRODES":["RFP1","RFP2","RFP3","RFP4","RIH1","RIH2","RIH3","RIH4","RIH5","RIH6"],
+            "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8","RLT2","RLT3","RLT4","RLT5","RLT6"],
             "SeizurePhenotype":"B"
           },
           "5":
@@ -325,10 +325,10 @@
             "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"6",
             "SeizureEEC":476488.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":476500.73,
             "SeizureEnd":476565.000,
-            "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"],
-            "SeizurePhenotype":"A"
+            "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8","RLT2","RLT3","RLT4","RLT5","RLT6"],
+            "SeizurePhenotype":"B"
           }
         }
       },
@@ -344,7 +344,7 @@
       "AgeSurgery":"25",
       "SeizureOnset":"LTL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"VALIDATION",
+      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -457,9 +457,9 @@
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"1",
             "SeizureEEC":267376.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":267375.83,
             "SeizureEnd":267412.000,
-            "SEIZURE_ONSET_ELECTRODES":["AST2"],
+            "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
           },
           "2":
@@ -469,9 +469,9 @@
             "EMU_Report_Event_Number":"2",
             "STATUS": "DROPOUT",
             "SeizureEEC":292659.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":292666.07,
             "SeizureEnd":292718.000,
-            "SEIZURE_ONSET_ELECTRODES":["AST2"],
+            "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
           },
           "3":
@@ -479,10 +479,10 @@
             "FILE":"HUP078-short-ictal-block-3.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"2",
-            "SeizureEEC":305960.000,
-            "SeizureUEO":-1,
+            "SeizureEEC":305959.200,
+            "SeizureUEO":305959.200,
             "SeizureEnd":305997.000,
-            "SEIZURE_ONSET_ELECTRODES":["AST2"],
+            "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
           },
           "4":
@@ -490,10 +490,10 @@
             "FILE":"HUP078-short-ictal-block-4.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"2",
-            "SeizureEEC":314000.000,
-            "SeizureUEO":-1,
+            "SeizureEEC":314016.710,
+            "SeizureUEO":314031.75,
             "SeizureEnd":314063.000,
-            "SEIZURE_ONSET_ELECTRODES":["AST2"],
+            "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
           },
           "5":
@@ -502,9 +502,9 @@
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"2",
             "SeizureEEC":342228.000,
-            "SeizureUEO":-1,
+            "SeizureUEO":342228.12,
             "SeizureEnd":342265.000,
-            "SEIZURE_ONSET_ELECTRODES":["AST2"],
+            "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
           }
         }
@@ -534,7 +534,7 @@
             "SeizureUEO":37117,
             "SeizureEnd":37181,
             "SEIZURE_ONSET_ELECTRODES":["GRID1","GRID2","GRID3","GRID39","GRID40","GRID52","GRID53","GRID54"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "2":
           {
@@ -545,7 +545,7 @@
             "SeizureUEO":594956,
             "SeizureEnd":595019,
             "SEIZURE_ONSET_ELECTRODES":["GRID1","GRID2","GRID3","GRID39","GRID40","GRID45","GRID46","GRID47"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "3":
           {
@@ -556,7 +556,7 @@
             "SeizureUEO":630105,
             "SeizureEnd":630178,
             "SEIZURE_ONSET_ELECTRODES":["GRID1","GRID2","GRID3","GRID39","GRID40","GRID45","GRID46","GRID47","GRID54","GRID55","GRID56"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "4":
           {
@@ -567,7 +567,7 @@
             "SeizureUEO":1202316,
             "SeizureEnd":1202379,
             "SEIZURE_ONSET_ELECTRODES":["GRID1","GRID2","GRID3","GRID32","GRID33","GRID38","GRID39","GRID45","GRID46","GRID47","GRID54","GRID55"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           }
         }
       },
@@ -596,7 +596,7 @@
             "SeizureUEO":282394,
             "SeizureEnd":283031.31,
             "SEIZURE_ONSET_ELECTRODES":["RG57","RG58","RG59","RG60","RH2","RH3"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "2":
           {
@@ -607,7 +607,7 @@
             "SeizureUEO":286426,
             "SeizureEnd":287553,
             "SEIZURE_ONSET_ELECTRODES":["RG61","RG62","RG53","RG54"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"B"
           },
           "4":
           {
@@ -618,7 +618,7 @@
             "SeizureUEO":400946,
             "SeizureEnd":401498,
             "SEIZURE_ONSET_ELECTRODES":["RG61","RG62"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"B"
           },
           "5":
           {
@@ -630,7 +630,7 @@
             "SeizureUEO":423890,
             "SeizureEnd":423962,
             "SEIZURE_ONSET_ELECTRODES":["RG27","RG43","RG44"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"C"
           },
           "6":
           {
@@ -641,7 +641,7 @@
             "SeizureUEO":428344,
             "SeizureEnd":428893,
             "SEIZURE_ONSET_ELECTRODES":["RH2","RH3","RG27","RG43","RG44"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"C"
           },
           "7":
           {
@@ -652,7 +652,7 @@
             "SeizureUEO":439882,
             "SeizureEnd":439979,
             "SEIZURE_ONSET_ELECTRODES":["RH2","RH3"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"C"
           }
         }
       },
@@ -668,7 +668,7 @@
       "AgeSurgery":"29",
       "SeizureOnset":"LPL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"VALIDATION",
+      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -792,7 +792,7 @@
             "SeizureUEO":837454.8009,
             "SeizureEnd":837462.988,
             "SEIZURE_ONSET_ELECTRODES":["LG15","LG16","LG23","LG24","LG31"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"D"
           },
           "22":
           {
@@ -803,7 +803,7 @@
             "SeizureUEO":855190.9822,
             "SeizureEnd":855222.962,
             "SEIZURE_ONSET_ELECTRODES":["LG14","LG15","LG16","LG23","LG24"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
           },
           "23":
           {
@@ -814,7 +814,18 @@
             "SeizureUEO":867718.3124,
             "SeizureEnd":867745.097,
             "SEIZURE_ONSET_ELECTRODES":["LG14","LG15","LG16","LG23","LG24"],
-            "SeizurePhenotype":""
+            "SeizurePhenotype":"A"
+          },
+          "25":
+          {
+            "FILE":"HUP083-short-ictal-block-25.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"25",
+            "SeizureEEC":987809.6,
+            "SeizureUEO":987811.94,
+            "SeizureEnd":987979.22,
+            "SEIZURE_ONSET_ELECTRODES":["LG5","LG6","LG14","LG15","LG16","LG23","LG24"],
+            "SeizurePhenotype":"A"
           }
         }
       },
@@ -838,23 +849,23 @@
           {
             "FILE":"HUP086-short-ictal-block-1.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"3",
-            "SeizureEEC":763898.000,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":763890.000,
+            "SeizureUEO":763899.75,
             "SeizureEnd":763970.000,
             "SeizurePhenotype":"A",
-            "SEIZURE_ONSET_ELECTRODES":["LG17","LG18","LG19","LG20","LG25","LG26","LG27","LG28","LG33","LG34","LG49","LG50","LG51","LG52","LG53","LG54","LG55","LG58","LG59","LG60","LG61","LG62","LG63","LG64"]
+            "SEIZURE_ONSET_ELECTRODES":["LG57","LMST3","LMST4","LPST3","LPST4","LG52","LG53"]
           },
           "2":
           {
             "FILE":"HUP086-short-ictal-block-2.mat",
             "SeizureType":"CPS+GTC",
-            "EMU_Report_Event_Number":"4",
-            "SeizureEEC":798468.000,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":798461.020,
+            "SeizureUEO":798469.62,
             "SeizureEnd":798549.000,
             "SeizurePhenotype":"A",
-            "SEIZURE_ONSET_ELECTRODES":["LG17","LG18","LG19","LG20","LG25","LG26","LG27","LG28","LG33","LG34","LG49","LG50","LG51","LG52","LG53","LG54","LG55","LG58","LG59","LG60","LG61","LG62","LG63","LG64"]
+            "SEIZURE_ONSET_ELECTRODES":["LG57","LMST3","LMST4","LPST3","LPST4","LG52","LG53"]
           }
         }
       },
@@ -878,23 +889,23 @@
           {
             "FILE":"HUP087-short-ictal-block-1.mat",
             "SeizureType":"CPS",
-            "EMU_Report_Event_Number":"??",
+            "EMU_Report_Event_Number":"1",
             "SeizureEEC":136808.000,
             "SeizureUEO":-1,
             "SeizureEnd":136842.000,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LG29","LG36","LG38"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":["LG28","LG29","LG30","LG31","LG32","LG36","LG37","LG38","LG39","LG40"]
           },
           "2":
           {
             "FILE":"HUP087-short-ictal-block-2.mat",
             "SeizureType":"CPS",
-            "EMU_Report_Event_Number":"??",
+            "EMU_Report_Event_Number":"2",
             "SeizureEEC":235732.000,
             "SeizureUEO":-1,
             "SeizureEnd":235800.000,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LG3","LG22","LG29","LG45"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":["LG15","LG16","LG28","LG29","LG30","LG31","LG32","LG36","LG37","LG38","LG39","LG40"]
           }
         }
       },
@@ -910,7 +921,7 @@
       "AgeSurgery":"24",
       "SeizureOnset":"LFL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"VALIDATION",
+      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -1002,7 +1013,7 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP094/aim1/HUP094_T1_19991225_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP094/aim1/HUP094_T1_19991225_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["EKG1","EKG2","LDA1","LDA2","LPF8","LDA6"]
+      "IGNORE_ELECTRODES":["EKG1","EKG2","LDA1","LDA3"]
     },
     "HUP105":
     {
@@ -1012,7 +1023,7 @@
       "AgeSurgery":"39",
       "SeizureOnset":"RTL",
       "GridCoverageOfResection":"??",
-      "Cohort":"DEVELOPMENT",
+      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1042,7 +1053,7 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP105/aim1/HUP105_T1_19981114_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP105/aim1/HUP105_T1_19981114_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["EKG","LA1","LA2","LA3","LA4","RF5","LAT4","RH1","RH3","RH4"]
+      "IGNORE_ELECTRODES":["EKG","LA1","LA2","LA3","LA4","RF5"]
     },
     "HUP106":
     {
@@ -1104,7 +1115,7 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP106/aim1/HUP106_T1_19990923_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP106/aim1/HUP106_T1_19990923_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["ECG1","ECG2","RH4"]
+      "IGNORE_ELECTRODES":["EKG1","EKG2"]
     },
     "HUP107":
     {
@@ -1199,9 +1210,9 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP107/aim1/HUP107_T1_19991219_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP107/aim1/HUP107_T1_19991219_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["ECG1","ECG2","RP5","RP8"]
+      "IGNORE_ELECTRODES":["EKG1","EKG2"]
     },
-    "HUP111":
+    "HUP111A":
     {
       "Outcome": "1.2",
       "Sex":"F",
@@ -1209,13 +1220,13 @@
       "AgeSurgery":"40",
       "SeizureOnset":"RTL",
       "GridCoverageOfResection":"??",
-      "Cohort":"DEVELOPMENT",
+      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
           "1":
           {
-            "FILE":"HUP111-short-ictal-block-1.mat",
+            "FILE":"HUP111A-short-ictal-block-1.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"2",
             "SeizureEEC":75460,
@@ -1226,7 +1237,7 @@
           },
           "2":
           {
-            "FILE":"HUP111-short-ictal-block-2.mat",
+            "FILE":"HUP111A-short-ictal-block-2.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"3",
             "SeizureEEC":130488,
@@ -1237,7 +1248,7 @@
           },
           "3":
           {
-            "FILE":"HUP111-short-ictal-block-3.mat",
+            "FILE":"HUP111A-short-ictal-block-3.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"4",
             "SeizureEEC":142719,
@@ -1248,7 +1259,7 @@
           },
           "4":
           {
-            "FILE":"HUP111-short-ictal-block-4.mat",
+            "FILE":"HUP111A-short-ictal-block-4.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"5",
             "SeizureEEC":130488,
@@ -1259,7 +1270,7 @@
           },
           "5":
           {
-            "FILE":"HUP111-short-ictal-block-5.mat",
+            "FILE":"HUP111A-short-ictal-block-5.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"6",
             "SeizureEEC":152117,
@@ -1270,7 +1281,7 @@
           },
           "6":
           {
-            "FILE":"HUP111-short-ictal-block-6.mat",
+            "FILE":"HUP111A-short-ictal-block-6.mat",
             "SeizureType":"CPS",
             "EMU_Report_Event_Number":"7",
             "SeizureEEC":185739,
@@ -1281,8 +1292,187 @@
           }
         }
       },
-      "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP111/aim1/HUP111_T1_19990822_RES_SEG_AVG.nii.gz",
-      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP111/aim1/HUP111_T1_19990822_electrode_labels.csv",
+      "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP111A/aim1/HUP111A_T1_19990822_RES_SEG_AVG.nii.gz",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP111A/aim1/HUP111A_T1_19990822_electrode_labels.csv",
+      "IGNORE_ELECTRODES":["EKG1","EKG2"]
+    },
+    "HUP111B":
+    {
+      "Outcome":"1.2",
+      "Sex":"F",
+      "AgeOnset":"28",
+      "AgeSurgery":"40",
+      "SeizureOnset":"RTL",
+      "GridCoverageOfResection":"??",
+      "Cohort":"VALIDATION",
+      "Events":{
+        "Ictal":
+        {
+          "11":
+          {
+            "FILE":"HUP111B-short-ictal-block-11.mat",
+            "SeizureType":"SPS",
+            "EMU_Report_Event_Number":"11",
+            "SeizureEEC":137728,
+            "SeizureUEO":137728,
+            "SeizureEnd":137737,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RMST2","RMST3","RPST1","RPST2","RPST3","RG36","RG37","RG38","RG46","RG47","RG48","RG28","RG29"]
+          },
+          "12":
+          {
+            "FILE":"HUP111B-short-ictal-block-12.mat",
+            "SeizureType":"SPS",
+            "EMU_Report_Event_Number":"12",
+            "SeizureEEC":138591,
+            "SeizureUEO":138591,
+            "SeizureEnd":138600.92,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RMST2","RMST3","RPST1","RPST2","RPST3","RG36","RG37","RG38","RG46","RG47","RG48","RG28","RG29"]
+          },
+          "15":
+          {
+            "FILE":"HUP111B-short-ictal-block-15.mat",
+            "SeizureType":"SPS",
+            "EMU_Report_Event_Number":"15",
+            "SeizureEEC":161279,
+            "SeizureUEO":161282,
+            "SeizureEnd":161289.86,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RMST2","RMST3","RPST1","RPST2","RPST3","RG36","RG37","RG38","RG46","RG47","RG48","RG28","RG29"]
+          },
+          "16":
+          {
+            "FILE":"HUP111B-short-ictal-block-16.mat",
+            "SeizureType":"SPS",
+            "EMU_Report_Event_Number":"16",
+            "SeizureEEC":162630,
+            "SeizureUEO":162630,
+            "SeizureEnd":162638.79,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RMST2","RMST3","RPST1","RPST2","RPST3","RG36","RG37","RG38","RG46","RG47","RG48","RG28","RG29"]
+          },
+          "17":
+          {
+            "FILE":"HUP111B-short-ictal-block-17.mat",
+            "SeizureType":"SPS",
+            "EMU_Report_Event_Number":"17",
+            "SeizureEEC":167404,
+            "SeizureUEO":167404,
+            "SeizureEnd":167411,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RMST2","RMST3","RPST1","RPST2","RPST3","RG36","RG37","RG38","RG46","RG47","RG48","RG28","RG29"]
+          },
+          "18":
+          {
+            "FILE":"HUP111B-short-ictal-block-18.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"18",
+            "SeizureEEC":170938,
+            "SeizureUEO":170944,
+            "SeizureEnd":171001.83,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "19":
+          {
+            "FILE":"HUP111B-short-ictal-block-19.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"19",
+            "SeizureEEC":173585,
+            "SeizureUEO":173591,
+            "SeizureEnd":173656.5,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "20":
+          {
+            "FILE":"HUP111B-short-ictal-block-20.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"20",
+            "SeizureEEC":175720,
+            "SeizureUEO":175726,
+            "SeizureEnd":175795.57,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "21":
+          {
+            "FILE":"HUP111B-short-ictal-block-21.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"21",
+            "SeizureEEC":220066,
+            "SeizureUEO":220073,
+            "SeizureEnd":220128.99,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "22":
+          {
+            "FILE":"HUP111B-short-ictal-block-22.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"22",
+            "SeizureEEC":222579,
+            "SeizureUEO":222585,
+            "SeizureEnd":222664.41,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          }
+        }
+      },
+      "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP111B/aim1/HUP111B_T1_19990822_RES_SEG_AVG.nii.gz",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP111B/aim1/HUP111B_T1_19990822_electrode_labels.csv",
+      "IGNORE_ELECTRODES":["EKG1","EKG2","RG8"]
+    },
+    "HUP116":
+    {
+      "Outcome": "",
+      "Sex":"",
+      "AgeOnset":"",
+      "AgeSurgery":"",
+      "SeizureOnset":"",
+      "GridCoverageOfResection":"??",
+      "Cohort":"VALIDATION",
+      "Events":{
+        "Ictal":
+        {
+          "1":
+          {
+            "FILE":"HUP116-short-ictal-block-1.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":251930,
+            "SeizureUEO":251949,
+            "SeizureEnd":252090.04,
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "2":
+          {
+            "FILE":"HUP116-short-ictal-block-2.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":309511,
+            "SeizureUEO":309511,
+            "SeizureEnd":309672.61,
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "3":
+          {
+            "FILE":"HUP116-short-ictal-block-3.mat",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":312081,
+            "SeizureUEO":312143,
+            "SeizureEnd":312601.48,
+            "SeizurePhenotype":"C",
+            "SEIZURE_ONSET_ELECTRODES":[""]
+          }
+        }
+      },
+      "RESECTION_IMAGE":"",
+      "ELECTRODE_LABELS":"",
       "IGNORE_ELECTRODES":["EKG1","EKG2"]
     },
     "Study004":
@@ -1298,35 +1488,35 @@
           "1":
           {
             "FILE":"Study004-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
+            "SeizureType":"GTC",
+            "EMU_Report_Event_Number":"1",
             "SeizureEEC":201264.282176,
-            "SeizureUEO":201265.307263,
+            "SeizureUEO":201264.28,
             "SeizureEnd":201322.123000,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RG1","RG2","RG14","RG17","RG29","RG8","RG9","RMT1","RPT2","RPT3","RPT4"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RG1","RG14","RG15","RG16","RG20","RG21","RG22","RG27","RG28","RG34","RG35"]
           },
           "2":
           {
             "FILE":"Study004-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
+            "SeizureType":"GTC",
+            "EMU_Report_Event_Number":"2",
             "SeizureEEC":286364.831152,
             "SeizureUEO":286365.843263,
             "SeizureEnd":286411.587000,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RAT3","RG14","RG15","RG16","RG17","RG2","RG21","RG24","RG25","RG26","RG27","RMT1","RMT2","RPT1","RPT2","RPT3"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RG1","RG14","RG15","RG16","RG20","RG21","RG22","RG27","RG28","RG34","RG35"]
           },
           "3":
           {
             "FILE":"Study004-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
             "SeizureEEC":373583.200232,
             "SeizureUEO":373584.212343,
             "SeizureEnd":373611.132000,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RAT3","RG13","RG14","RG15","RG16","RG17","RG18","RG19","RG2","RG20","RG21","RG22","RG23","RG24","RG25","RG26","RG27","RG28","RG29","RG3","RG7","RG8","RG9","RMT1","RMT2","RPP4","RPT1","RPT2","RPT3"]
+            "SeizurePhenotype":"B",
+            "SEIZURE_ONSET_ELECTRODES":["RG13","RG14","RG20","RG21","RG25","RG26","RG27"]
           }
         }
       },
@@ -1349,299 +1539,299 @@
           "1":
           {
             "FILE":"Study012-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":519869.322249,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":519820.74,
+            "SeizureUEO":519840.48,
             "SeizureEnd":520105.779279,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "2":
           {
             "FILE":"Study012-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":524969.355285,
-            "SeizureEnd":525129.925154,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":524937.86,
+            "SeizureUEO":524950.23,
+            "SeizureEnd":525129.75,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "3":
           {
             "FILE":"Study012-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":543532.719577,
-            "SeizureEnd":543564.083411,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":543522.83,
+            "SeizureUEO":543522.83,
+            "SeizureEnd":543564.69,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "4":
           {
             "FILE":"Study012-short-ictal-block-4.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":544021.244494,
-            "SeizureEnd":544131.967090,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":544007.2,
+            "SeizureUEO":544010.35,
+            "SeizureEnd":544139.61,
+            "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "5":
           {
             "FILE":"Study012-short-ictal-block-5.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":555724.903341,
-            "SeizureEnd":555759.451768,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":555711.76,
+            "SeizureUEO":555716.05,
+            "SeizureEnd":555762.48,
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "6":
           {
             "FILE":"Study012-short-ictal-block-6.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":559092.789039,
-            "SeizureEnd":559130.428040,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":559080.63,
+            "SeizureUEO":559080.63,
+            "SeizureEnd":559127.66,
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "7":
           {
             "FILE":"Study012-short-ictal-block-7.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":561874.154590,
-            "SeizureEnd":561912.841787,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":561861.1,
+            "SeizureUEO":561861.1,
+            "SeizureEnd":561913.12,
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "8":
           {
             "FILE":"Study012-short-ictal-block-8.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":567835.993977,
-            "SeizureEnd":567875.505327,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"8",
+            "SeizureEEC":567835.89,
+            "SeizureUEO":567835.89,
+            "SeizureEnd":567880.04,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[],
             "STATUS":"LATE_DROPOUT"
           },
           "9":
           {
             "FILE":"Study012-short-ictal-block-9.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":577259.053878,
-            "SeizureEnd":577301.611794,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":577247.64,
+            "SeizureUEO":577247.64,
+            "SeizureEnd":577305.8,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "10":
           {
             "FILE":"Study012-short-ictal-block-10.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":592426.510264,
-            "SeizureEnd":592493.878796,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"10",
+            "SeizureEEC":592425.48,
+            "SeizureUEO":592425.48,
+            "SeizureEnd":592494.02,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "11":
           {
             "FILE":"Study012-short-ictal-block-11.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":598177.565444,
-            "SeizureEnd":598249.542832,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"11",
+            "SeizureEEC":598177,
+            "SeizureUEO":598177,
+            "SeizureEnd":598249.56,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "12":
           {
             "FILE":"Study012-short-ictal-block-12.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":602410.302059,
-            "SeizureEnd":602452.805965,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"12",
+            "SeizureEEC":602410.38,
+            "SeizureUEO":602410.38,
+            "SeizureEnd":602452.41,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "13":
           {
             "FILE":"Study012-short-ictal-block-13.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":604695.133248,
-            "SeizureEnd":604758.843099,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"13",
+            "SeizureEEC":604690.48,
+            "SeizureUEO":604693.34,
+            "SeizureEnd":604780.95,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "14":
           {
             "FILE":"Study012-short-ictal-block-14.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":606498.230738,
-            "SeizureEnd":606598.745436,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"14",
+            "SeizureEEC":606495.94,
+            "SeizureUEO":606498.43,
+            "SeizureEnd":606598.64,
+            "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "15":
           {
             "FILE":"Study012-short-ictal-block-15.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":615935.177811,
-            "SeizureEnd":615996.593234,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"15",
+            "SeizureEEC":615934.94,
+            "SeizureUEO":615936.83,
+            "SeizureEnd":615996.65,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "16":
           {
             "FILE":"Study012-short-ictal-block-16.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":619241.624079,
-            "SeizureEnd":619363.808807,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"16",
+            "SeizureEEC":619241.37,
+            "SeizureUEO":619241.37,
+            "SeizureEnd":619384.9,
+            "SeizurePhenotype":"E",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "17":
           {
             "FILE":"Study012-short-ictal-block-17.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":636259.232706,
-            "SeizureEnd":636296.985729,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"17",
+            "SeizureEEC":636258.82,
+            "SeizureUEO":636258.82,
+            "SeizureEnd":636297.15,
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "18":
           {
             "FILE":"Study012-short-ictal-block-18.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":651484.893920,
-            "SeizureEnd":651522.898988,
-            "SeizurePhenotype":"",
+            "SeizureEEC":651483.39,
+            "SeizureUEO":651483.39,
+            "SeizureEnd":651522.89,
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "19":
           {
             "FILE":"Study012-short-ictal-block-19.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":658398.727757,
-            "SeizureEnd":658442.163836,
-            "SeizurePhenotype":"",
+            "SeizureEEC":658396.58,
+            "SeizureUEO":658396.58,
+            "SeizureEnd":658438.23,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "20":
           {
             "FILE":"Study012-short-ictal-block-20.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":665925.754379,
-            "SeizureEnd":666001.250422,
-            "SeizurePhenotype":"",
+            "SeizureEEC":665924.25,
+            "SeizureUEO":665924.25,
+            "SeizureEnd":666002.82,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "21":
           {
             "FILE":"Study012-short-ictal-block-21.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":672793.027234,
-            "SeizureEnd":672862.806259,
-            "SeizurePhenotype":"",
+            "SeizureEEC":672791.88,
+            "SeizureUEO":672791.88,
+            "SeizureEnd":672883.7,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "22":
           {
             "FILE":"Study012-short-ictal-block-22.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":680635.522583,
-            "SeizureEnd":680726.229455,
-            "SeizurePhenotype":"",
+            "SeizureEEC":680634.02,
+            "SeizureUEO":680634.02,
+            "SeizureEnd":680726.29,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "23":
           {
             "FILE":"Study012-short-ictal-block-23.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":686739.427441,
-            "SeizureEnd":686824.401247,
-            "SeizurePhenotype":"",
+            "SeizureEEC":686720.71,
+            "SeizureUEO":686720.71,
+            "SeizureEnd":686828.56,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "24":
           {
             "FILE":"Study012-short-ictal-block-24.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":812230.056234,
-            "SeizureEnd":812263.596473,
-            "SeizurePhenotype":"",
+            "SeizureEEC":812228.56,
+            "SeizureUEO":812228.56,
+            "SeizureEnd":812263.94,
+            "SeizurePhenotype":"F",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "25":
           {
             "FILE":"Study012-short-ictal-block-25.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":813867.981999,
-            "SeizureEnd":813898.635702,
-            "SeizurePhenotype":"",
+            "SeizureEEC":813866.48,
+            "SeizureUEO":813866.48,
+            "SeizureEnd":813898.91,
+            "SeizurePhenotype":"F",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "26":
           {
             "FILE":"Study012-short-ictal-block-26.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS+GTC",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":824945.138265,
-            "SeizureEnd":825017.409709,
-            "SeizurePhenotype":"",
+            "SeizureEEC":824943.98,
+            "SeizureUEO":824943.94,
+            "SeizureEnd":825017.71,
+            "SeizurePhenotype":"G",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "27":
           {
             "FILE":"Study012-short-ictal-block-27.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":842355.765635,
-            "SeizureEnd":842384.372956,
-            "SeizurePhenotype":"",
+            "SeizureEEC":842354.27,
+            "SeizureUEO":842354.27,
+            "SeizureEnd":842384.52,
+            "SeizurePhenotype":"F",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "28":
@@ -1675,12 +1865,12 @@
           "1":
           {
             "FILE":"Study016-short-ictal-block-1.mat",
-            "SeizureType":"??",
+            "SeizureType":"GTC",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":41639.014457,
             "SeizureUEO":41645.101772,
             "SeizureEnd":41779.218505,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RTG7","RTG8"]
           },
           "2":
@@ -1689,20 +1879,20 @@
             "SeizureType":"??",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":298062.099449,
-            "SeizureUEO":298066.100218,
+            "SeizureUEO":298071.13,
             "SeizureEnd":298140.050294,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["RTG7"]
           },
           "3":
           {
             "FILE":"Study016-short-ictal-block-3.mat",
-            "SeizureType":"??",
+            "SeizureType":"GTC",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":304794.017456,
-            "SeizureUEO":304804.038925,
-            "SeizureEnd":304957.022836,
-            "SeizurePhenotype":"",
+            "SeizureEEC":304860.31,
+            "SeizureUEO":304880.80,
+            "SeizureEnd":304946.95,
+            "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["RAS3","RAS4"]
           },
           "4":
@@ -1710,10 +1900,10 @@
             "FILE":"Study016-short-ictal-block-4.mat",
             "SeizureType":"??",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":438164.617578,
-            "SeizureUEO":438179.617578,
+            "SeizureEEC":438236.73,
+            "SeizureUEO":438248.33,
             "SeizureEnd":438284.814799,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":["ROF4"]
           },
           "5":
@@ -1721,10 +1911,10 @@
             "FILE":"Study016-short-ictal-block-5.mat",
             "SeizureType":"??",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":452586.826922,
-            "SeizureUEO":452592.826922,
+            "SeizureEEC":452661.98,
+            "SeizureUEO":452665.47,
             "SeizureEnd":452710.828177,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":["RFG8","RFG9","ROF1","ROF2","ROF3"]
           },
           "6":
@@ -1732,10 +1922,10 @@
             "FILE":"Study016-short-ictal-block-6.mat",
             "SeizureType":"??",
             "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":466913.566250,
-            "SeizureUEO":466922.566250,
+            "SeizureEEC":466989.75,
+            "SeizureUEO":466994.47,
             "SeizureEnd":467032.782243,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"]
           }
         }
@@ -1760,10 +1950,10 @@
           {
             "FILE":"Study017-short-ictal-block-1.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":100821.81,
+            "SeizureUEO":100845.37,
+            "SeizureEnd":100949.26,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1771,10 +1961,10 @@
           {
             "FILE":"Study017-short-ictal-block-2.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":179004.37,
+            "SeizureUEO":179072.08,
+            "SeizureEnd":179156.64,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1782,10 +1972,10 @@
           {
             "FILE":"Study017-short-ictal-block-3.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":541415.72,
+            "SeizureUEO":541536,
+            "SeizureEnd":541649.83,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1793,10 +1983,10 @@
           {
             "FILE":"Study017-short-ictal-block-4.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":573722.73,
+            "SeizureUEO":573732.95,
+            "SeizureEnd":573855.44,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1804,10 +1994,10 @@
           {
             "FILE":"Study017-short-ictal-block-5.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":584405.22,
+            "SeizureUEO":584405.22,
+            "SeizureEnd":584501.14,
             "SeizurePhenotype":"A?",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1815,10 +2005,10 @@
           {
             "FILE":"Study017-short-ictal-block-6.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":600743.09,
+            "SeizureUEO":600755.92,
+            "SeizureEnd":600865.4,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1826,10 +2016,10 @@
           {
             "FILE":"Study017-short-ictal-block-7.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":626399,
+            "SeizureUEO":626402.16,
+            "SeizureEnd":626484.87,
             "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1837,10 +2027,10 @@
           {
             "FILE":"Study017-short-ictal-block-8.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"B",
+            "SeizureEEC":632481.98,
+            "SeizureUEO":632481.98,
+            "SeizureEnd":632602.28,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
@@ -1848,10 +2038,10 @@
           {
             "FILE":"Study017-short-ictal-block-9.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":644587.87,
+            "SeizureUEO":644587.87,
+            "SeizureEnd":644667.17,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           }
@@ -1875,187 +2065,187 @@
           "1":
           {
             "FILE":"Study019-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":4245.593542,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":4250.46,
+            "SeizureUEO":4264.32,
             "SeizureEnd":4397.888336,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LT20","LT31","LT32","LT33"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[]
           },
           "2":
           {
             "FILE":"Study019-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":10623.404189,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":10625.26,
+            "SeizureUEO":10625.26,
             "SeizureEnd":10960.710560,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["AD1","AD2","AD3","AD4","AIT1","AIT2","AIT3","AIT4","AT1","AT2","AT3","AT4","IF2","IF3","IF4","IF5","IF6","IF7","IF8","LF11","LF12","LF13","LF14","LF19","LF20","LF21","LF22","LF23","LF24","LT1","LT10","LT11","LT12","LT13"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[]
           },
           "3":
           {
             "FILE":"Study019-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
             "SeizureEEC":14932.213327,
-            "SeizureUEO":-1,
+            "SeizureUEO":14936.31,
             "SeizureEnd":15061.170571,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LT15","LT16"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[]
           },
           "4":
           {
             "FILE":"Study019-short-ictal-block-4.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":23661.038963,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":23664.68,
+            "SeizureUEO":23667.06,
             "SeizureEnd":23740.996720,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT28","PT4"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[]
           },
           "5":
           {
             "FILE":"Study019-short-ictal-block-5.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":26055.315068,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":26060.16,
+            "SeizureUEO":26060.16,
             "SeizureEnd":26113.388198,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT28"]
+            "SeizurePhenotype":"A",
+            "SEIZURE_ONSET_ELECTRODES":[]
           },
           "6":
           {
             "FILE":"Study019-short-ictal-block-6.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":29428.721350,
-            "SeizureUEO":-1,
-            "SeizureEnd":29770.639765,
-            "SeizurePhenotype":"",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":29434.07,
+            "SeizureUEO":29434.07,
+            "SeizureEnd":29787.94,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16"]
           },
           "7":
           {
             "FILE":"Study019-short-ictal-block-7.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
+            "EMU_Report_Event_Number":"7",
             "SeizureEEC":43232.238191,
-            "SeizureUEO":-1,
-            "SeizureEnd":43536.829360,
-            "SeizurePhenotype":"",
+            "SeizureUEO":43240.06,
+            "SeizureEnd":43545.64,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT21","LT22","LT28","LT33","PT3","PT4"]
           },
           "8":
           {
             "FILE":"Study019-short-ictal-block-8.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":54403.781351,
-            "SeizureUEO":-1,
-            "SeizureEnd":54649.007781,
-            "SeizurePhenotype":"",
+            "EMU_Report_Event_Number":"8",
+            "SeizureEEC":54414.09,
+            "SeizureUEO":54414.09,
+            "SeizureEnd":54659.32,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "9":
           {
             "FILE":"Study019-short-ictal-block-9.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":65929.289478,
-            "SeizureUEO":-1,
-            "SeizureEnd":66179.257325,
-            "SeizurePhenotype":"",
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":65944.81,
+            "SeizureUEO":65944.81,
+            "SeizureEnd":66202.88,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "10":
           {
             "FILE":"Study019-short-ictal-block-10.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":72428.160458,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"10",
+            "SeizureEEC":72440.75,
+            "SeizureUEO":72440.75,
             "SeizureEnd":72600.597231,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "11":
           {
             "FILE":"Study019-short-ictal-block-11.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":76187.232082,
-            "SeizureUEO":-1,
-            "SeizureEnd":76454.324346,
-            "SeizurePhenotype":"",
+            "EMU_Report_Event_Number":"11",
+            "SeizureEEC":76205.23,
+            "SeizureUEO":76205.23,
+            "SeizureEnd":76458.97,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT2","LT3"]
           },
           "12":
           {
             "FILE":"Study019-short-ictal-block-12.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":80391.666434,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"12",
+            "SeizureEEC":80403.68,
+            "SeizureUEO":80403.68,
             "SeizureEnd":80576.360371,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "13":
           {
             "FILE":"Study019-short-ictal-block-13.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":84370.079835,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"13",
+            "SeizureEEC":84433.58,
+            "SeizureUEO":84433.58,
             "SeizureEnd":84656.674634,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "14":
           {
             "FILE":"Study019-short-ictal-block-14.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":89732.754352,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"14",
+            "SeizureEEC":89771.47,
+            "SeizureUEO":89771.47,
             "SeizureEnd":89934.409724,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT10","LT11"]
           },
           "15":
           {
             "FILE":"Study019-short-ictal-block-15.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":92355.226114,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"15",
+            "SeizureEEC":92418.91,
+            "SeizureUEO":92418.91,
             "SeizureEnd":92638.014811,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT3","LT4"]
           },
           "16":
           {
             "FILE":"Study019-short-ictal-block-16.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":97066.679941,
-            "SeizureUEO":-1,
-            "SeizureEnd":97186.191148,
-            "SeizurePhenotype":"",
+            "EMU_Report_Event_Number":"16",
+            "SeizureEEC":97083.73,
+            "SeizureUEO":97083.73,
+            "SeizureEnd":97218.69,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT16","LT17"]
           },
           "17":
           {
             "FILE":"Study019-short-ictal-block-17.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":102309.346854,
-            "SeizureUEO":-1,
-            "SeizureEnd":102535.094475,
+            "EMU_Report_Event_Number":"17",
+            "SeizureEEC":102324.99,
+            "SeizureUEO":102324.99,
+            "SeizureEnd":102539.26,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT11","LT17"]
           },
@@ -2063,9 +2253,9 @@
           {
             "FILE":"Study019-short-ictal-block-18.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":109680.699869,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"18",
+            "SeizureEEC":109700.52,
+            "SeizureUEO":109700.52,
             "SeizureEnd":109961.196325,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT20","LT21","LT32","PT3"]
@@ -2073,10 +2263,10 @@
           "19":
           {
             "FILE":"Study019-short-ictal-block-19.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":128307.328677,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"19",
+            "SeizureEEC":128331.09,
+            "SeizureUEO":128331.09,
             "SeizureEnd":128360.440092,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT21","LT26","LT32","PT3"]
@@ -2084,10 +2274,10 @@
           "20":
           {
             "FILE":"Study019-short-ictal-block-20.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":132032.566362,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"20",
+            "SeizureEEC":132057.52,
+            "SeizureUEO":132057.52,
             "SeizureEnd":132295.402603,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT21","LT32","PT3"]
@@ -2095,55 +2285,55 @@
           "21":
           {
             "FILE":"Study019-short-ictal-block-21.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":135247.887866,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"21",
+            "SeizureEEC":135265.82,
+            "SeizureUEO":135273.73,
             "SeizureEnd":135320.644563,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT21","LT32"]
           },
           "22":
           {
             "FILE":"Study019-short-ictal-block-22.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":137569.623875,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"22",
+            "SeizureEEC":137595.47,
+            "SeizureUEO":137595.47,
             "SeizureEnd":137684.166345,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT21"],
             "STATUS":"LATE_DROPOUT"
           },
           "23":
           {
             "FILE":"Study019-short-ictal-block-23.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":139764.859047,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"23",
+            "SeizureEEC":139790.08,
+            "SeizureUEO":139791.86,
             "SeizureEnd":139841.134213,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT21"]
           },
           "24":
           {
             "FILE":"Study019-short-ictal-block-24.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":141554.187022,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"24",
+            "SeizureEEC":141580.43,
+            "SeizureUEO":141581.17,
             "SeizureEnd":141789.007678,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["LT1","LT2","LT7"]
           },
           "25":
           {
             "FILE":"Study019-short-ictal-block-25.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":145097.093458,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"25",
+            "SeizureEEC":145124.70,
+            "SeizureUEO":145124.70,
             "SeizureEnd":145313.494503,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT21","LT32"]
@@ -2151,76 +2341,76 @@
           "26":
           {
             "FILE":"Study019-short-ictal-block-26.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":147340.591914,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"26",
+            "SeizureEEC":147368.35,
+            "SeizureUEO":147368.35,
             "SeizureEnd":147379.820003,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT20","LT21","LT22","LT26","LT32"]
           },
           "27":
           {
             "FILE":"Study019-short-ictal-block-27.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":149447.793063,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"27",
+            "SeizureEEC":149474.48,
+            "SeizureUEO":149475.98,
             "SeizureEnd":149515.330417,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT21","LT32","LT33"]
           },
           "28":
           {
             "FILE":"Study019-short-ictal-block-28.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":149937.982244,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"28",
+            "SeizureEEC":149965.14,
+            "SeizureUEO":149965.14,
             "SeizureEnd":150132.525269,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["LT1","LT2"]
           },
           "29":
           {
             "FILE":"Study019-short-ictal-block-29.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":159260.322512,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"29",
+            "SeizureEEC":159290.29,
+            "SeizureUEO":159290.29,
             "SeizureEnd":159379.997054,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT1","LT2","LT7","LT8"]
           },
           "30":
           {
             "FILE":"Study019-short-ictal-block-30.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":170611.826344,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"30",
+            "SeizureEEC":170643.84,
+            "SeizureUEO":170650.69,
             "SeizureEnd":170791.470506,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT20","LT21","LT22","LT26","LT32"]
           },
           "31":
           {
             "FILE":"Study019-short-ictal-block-31.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":183406.240203,
-            "SeizureUEO":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"31",
+            "SeizureEEC":183440.05,
+            "SeizureUEO":183440.05,
             "SeizureEnd":183595.036996,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LT15","LT16","LT20","LT21","LT22","LT26","LT27","LT32"]
           },
           "32":
           {
             "FILE":"Study019-short-ictal-block-32.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":200225.522475,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"32",
+            "SeizureEEC":200262.66,
+            "SeizureUEO":200262.66,
             "SeizureEnd":200329.131935,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT1","LT2","LT7","LT8"]
@@ -2229,10 +2419,10 @@
           {
             "FILE":"Study019-short-ictal-block-33.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":227399.743514,
-            "SeizureUEO":-1,
-            "SeizureEnd":227482.459925,
+            "EMU_Report_Event_Number":"33",
+            "SeizureEEC":227446.44,
+            "SeizureUEO":227446.44,
+            "SeizureEnd":227484.76,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT20","LT21","LT22","LT23","LT27","LT32"]
           },
@@ -2240,10 +2430,10 @@
           {
             "FILE":"Study019-short-ictal-block-34.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":400758.642840,
-            "SeizureUEO":-1,
-            "SeizureEnd":400856.567106,
+            "EMU_Report_Event_Number":"34",
+            "SeizureEEC":400829.28,
+            "SeizureUEO":400829.28,
+            "SeizureEnd":400872.90,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["AT2"]
           },
@@ -2251,9 +2441,9 @@
           {
             "FILE":"Study019-short-ictal-block-35.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":407373.374022,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"35",
+            "SeizureEEC":407411.50,
+            "SeizureUEO":407411.50,
             "SeizureEnd":407504.587176,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT21","LT26","LT32","LT33"]
@@ -2262,9 +2452,9 @@
           {
             "FILE":"Study019-short-ictal-block-36.mat",
             "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":428063.254943,
-            "SeizureUEO":-1,
+            "EMU_Report_Event_Number":"36",
+            "SeizureEEC":428144.14,
+            "SeizureUEO":428150.22,
             "SeizureEnd":428195.571372,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT21"]
@@ -2385,101 +2575,101 @@
           "1":
           {
             "FILE":"Study021-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":8577.66,
+            "SeizureUEO":8577.66,
+            "SeizureEnd":8648.66,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RFG41","RFG42","RFG43","RAT2","RAT3","RTG1","RTG2","RTG3","RTG4","RTG7","RTG8","RTG9","RTG10","RTG11","RTG12"]
           },
           "2":
           {
             "FILE":"Study021-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":11294.76,
+            "SeizureUEO":11302.27,
+            "SeizureEnd":11351.93,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RFG41","RFG43","RFG44","RAT2","RTD1"],
             "STATUS":"DROPOUT"
           },
           "3":
           {
             "FILE":"Study021-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":76265.87,
             "SeizureUEO":-1,
             "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RFG46","RFG47","RFG48"]
           },
           "4":
           {
             "FILE":"Study021-short-ictal-block-4.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":86732.58,
+            "SeizureUEO":86739.16,
+            "SeizureEnd":86790.26,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RFG30","RFG31","RFG32","RFG46","RFG47","RFG48","RAT2","RAT3","RAT4","RPT1","RPT2","RPT3"]
           },
           "5":
           {
             "FILE":"Study021-short-ictal-block-5.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":87226.86,
+            "SeizureUEO":87228.08,
+            "SeizureEnd":87297.56,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["RFG30","RFG31","RFG32","RFG46","RFG47","RFG48","RAT2","RAT3","RAT4","RPT1","RPT2","RPT3"]
           },
           "6":
           {
             "FILE":"Study021-short-ictal-block-6.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":102305.15,
+            "SeizureUEO":102305.15,
+            "SeizureEnd":102386.65,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["RTG2","RTG3","RTG4","RTG10","RTG22","RTG23","RFG31","RFG32","RAT1","RAT2","RAT3","RAT4","RPT1","RPT2","RPT3","RPT4","RTD1"]
           },
           "7":
           {
             "FILE":"Study021-short-ictal-block-7.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":109084.99,
+            "SeizureUEO":109084.99,
+            "SeizureEnd":109154.59,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["RFG46","RFG47","RFG48","RAT1","RAT2","RAT3","RAT4","RTD1","RTD2","RTD3","RTD4"]
           },
           "8":
           {
             "FILE":"Study021-short-ictal-block-8.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"8",
+            "SeizureEEC":174315.04,
+            "SeizureUEO":174315.04,
+            "SeizureEnd":174377.62,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["RAT2"]
           },
           "9":
           {
             "FILE":"Study021-short-ictal-block-9.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":371490.85,
+            "SeizureUEO":371490.85,
+            "SeizureEnd":371502.45,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["RAT2"]
           },
           "10":
@@ -2683,111 +2873,111 @@
           "1":
           {
             "FILE":"Study026-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":56923.332124,
-            "SeizureUEO":56924.332124,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":56919.06,
+            "SeizureUEO":56931.91,
             "SeizureEnd":56977.281927,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT4","LMT7"]
           },
           "2":
           {
             "FILE":"Study026-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":60795.890743,
-            "SeizureUEO":60797.890743,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":60792.42,
+            "SeizureUEO":60807.22,
             "SeizureEnd":60841.472989,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LFG28","LMT7"]
           },
           "3":
           {
             "FILE":"Study026-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":63234.026822,
-            "SeizureUEO":63235.026822,
-            "SeizureEnd":63281.423034,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":63245.76,
+            "SeizureUEO":63245.76,
+            "SeizureEnd":63282.79,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT7"]
           },
           "4":
           {
             "FILE":"Study026-short-ictal-block-4.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":68114.288117,
-            "SeizureUEO":68115.288117,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":68116.40,
+            "SeizureUEO":68126.35,
             "SeizureEnd":68166.202984,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT2","LMT3","LMT7"]
           },
           "5":
           {
             "FILE":"Study026-short-ictal-block-5.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":76855.323868,
-            "SeizureUEO":76857.323868,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":76856.45,
+            "SeizureUEO":76869.77,
             "SeizureEnd":76904.281999,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT4","LMT7"]
           },
           "6":
           {
             "FILE":"Study026-short-ictal-block-6.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":89430.774114,
-            "SeizureUEO":89431.774114,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":89441.50,
+            "SeizureUEO":89446.59,
             "SeizureEnd":89492.824494,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT7"]
           },
           "7":
           {
             "FILE":"Study026-short-ictal-block-7.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":96134.182047,
-            "SeizureUEO":96134.182047,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":96143.36,
+            "SeizureUEO":96152.13,
             "SeizureEnd":96191.470982,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT7"]
           },
           "8":
           {
             "FILE":"Study026-short-ictal-block-8.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":97517.975913,
-            "SeizureUEO":97517.975913,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"8",
+            "SeizureEEC":97518.80,
+            "SeizureUEO":97536.75,
             "SeizureEnd":97586.176507,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT2","LMT3","LMT7"]
           },
           "9":
           {
             "FILE":"Study026-short-ictal-block-9.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":104908.751005,
-            "SeizureUEO":104908.751005,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":104914.89,
+            "SeizureUEO":104927.67,
             "SeizureEnd":104957.228115,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT2","LMT3","LMT7"]
           },
           "10":
           {
             "FILE":"Study026-short-ictal-block-10.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":107901.931002,
-            "SeizureUEO":107901.931002,
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"10",
+            "SeizureEEC":107918.08,
+            "SeizureUEO":107921.93,
             "SeizureEnd":107957.355405,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT7"]
           }
         }
@@ -2886,34 +3076,34 @@
           "1":
           {
             "FILE":"Study029-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":296052.227750,
-            "SeizureEnd":296132.956767,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":296032.11,
+            "SeizureUEO":296051.99,
+            "SeizureEnd":296133.16,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["AIT1","AIT2","AIT3","AIT4","PIT1","PIT2","PIT3","PIT4"]
           },
           "2":
           {
             "FILE":"Study029-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":338052.571739,
-            "SeizureEnd":338149.417755,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":338052.24,
+            "SeizureUEO":338052.24,
+            "SeizureEnd":338149.31,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["AIT1","AIT2","AIT3","AIT4","PIT1","PIT2","PIT3","PIT4"]
           },
           "3":
           {
             "FILE":"Study029-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":384673.172827,
-            "SeizureEnd":384763.769679,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":384648.66,
+            "SeizureUEO":384673.08,
+            "SeizureEnd":384764.11,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["AIT1","AIT2","AIT3","AIT4","PIT1","PIT2","PIT3","PIT4"]
           }
         }
@@ -2921,7 +3111,7 @@
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/Study029/aim1/Study029_T1_19980624_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study029/aim1/Study029_T1_19980624_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["LT1","LT2","LT3","LT7","LT8","LT9","LT13","LT14","LT15","LT19","LT20","LT21","AIT1","AIT2","AIT3","AIT4"],
-      "IGNORE_ELECTRODES":["PF1","OF6"]
+      "IGNORE_ELECTRODES":["PF1","OF6","LT12"]
     },
     "Study033":
     {
@@ -2937,100 +3127,100 @@
           "1":
           {
             "FILE":"Study033-short-ictal-block-1.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":72958.886000,
             "SeizureUEO":72961.886000,
             "SeizureEnd":74446.966000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LG36","LG37","LG38","LG44","LG45","LG46","LG52","LG53","LG54","LG60"]
           },
           "2":
           {
             "FILE":"Study033-short-ictal-block-2.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":87237.474000,
             "SeizureUEO":87237.474000,
             "SeizureEnd":87449.528000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "3":
           {
             "FILE":"Study033-short-ictal-block-3.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":105887.819000,
             "SeizureUEO":105888.819000,
             "SeizureEnd":105940.653000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "4":
           {
             "FILE":"Study033-short-ictal-block-4.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":147484.499000,
             "SeizureUEO":147484.499000,
             "SeizureEnd":147699.429000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "5":
           {
             "FILE":"Study033-short-ictal-block-5.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":152662.604000,
             "SeizureUEO":152665.604000,
             "SeizureEnd":153040.772000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "6":
           {
             "FILE":"Study033-short-ictal-block-6.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":179859.024000,
             "SeizureUEO":179859.024000,
             "SeizureEnd":180154.344000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "7":
           {
             "FILE":"Study033-short-ictal-block-7.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":189734.806000,
             "SeizureUEO":189734.806000,
             "SeizureEnd":189894.096000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
           },
           "8":
           {
             "FILE":"Study033-short-ictal-block-8.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":241353.909000,
             "SeizureUEO":241353.909000,
             "SeizureEnd":241615.675000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LG37","LG38","LG39","LG44","LG45","LG46","LG47","LG53","LG54","LG61","LG62"]
           },
           "9":
           {
             "FILE":"Study033-short-ictal-block-9.mat",
-            "SeizureType":"??",
+            "SeizureType":"CPS",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":251717.254000,
             "SeizureUEO":251719.254000,
             "SeizureEnd":251841.712000,
-            "SeizurePhenotype":"",
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LTG1","LTG10"]
           }
         }
@@ -3054,100 +3244,100 @@
           "1":
           {
             "FILE":"Study038-short-ictal-block-1.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"1",
+            "SeizureEEC":38608.05,
+            "SeizureUEO":38608.05,
+            "SeizureEnd":38711.27,
+            "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["ITS1","ITS2","ITS3","ITS4","STS3","STS4","STS5","STS6","STS7"]
           },
           "2":
           {
             "FILE":"Study038-short-ictal-block-2.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"2",
+            "SeizureEEC":47625.92,
+            "SeizureUEO":47625.92,
+            "SeizureEnd":47652.3,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["AD1"]
           },
           "3":
           {
             "FILE":"Study038-short-ictal-block-3.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"3",
+            "SeizureEEC":52727.81,
+            "SeizureUEO":52727.81,
+            "SeizureEnd":52892,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["AD1"]
           },
           "4":
           {
             "FILE":"Study038-short-ictal-block-4.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"4",
+            "SeizureEEC":61427.84,
+            "SeizureUEO":61427.84,
+            "SeizureEnd":61641.85,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["AD1"]
           },
           "5":
           {
             "FILE":"Study038-short-ictal-block-5.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"5",
+            "SeizureEEC":68918.35,
+            "SeizureUEO":68918.35,
+            "SeizureEnd":69023.09,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["AD4"]
           },
           "6":
           {
             "FILE":"Study038-short-ictal-block-6.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"6",
+            "SeizureEEC":73893.45,
+            "SeizureUEO":73893.45,
+            "SeizureEnd":73975.26,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["LG9","LG10","LG11","LG12","LG17","LG18","LG19","LG20","LG25","LG26","LG27","LG28"]
           },
           "7":
           {
             "FILE":"Study038-short-ictal-block-7.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"7",
+            "SeizureEEC":78779.87,
+            "SeizureUEO":78783.31,
+            "SeizureEnd":78946.32,
+            "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["AD1"]
           },
           "8":
           {
             "FILE":"Study038-short-ictal-block-8.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS",
+            "EMU_Report_Event_Number":"8",
+            "SeizureEEC":82852.7,
+            "SeizureUEO":82852.7,
+            "SeizureEnd":82972.11,
+            "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["LG9","LG10","LG11","LG12","LG17","LG18","LG19","LG20","LG25","LG26","LG27","LG28"]
           },
           "9":
           {
             "FILE":"Study038-short-ictal-block-9.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
+            "SeizureType":"CPS+GTC",
+            "EMU_Report_Event_Number":"9",
+            "SeizureEEC":103760.33,
+            "SeizureUEO":103760.33,
+            "SeizureEnd":103889.84,
+            "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["AD4"]
           }
         }
