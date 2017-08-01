@@ -2284,7 +2284,7 @@ def write_all_nodal_csv_individual_seizure(width=120):
     '''
     This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
     '''
-    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP105','HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
         for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
             res = gather_nodal_results(fconn)
@@ -2350,7 +2350,7 @@ def write_all_nodal_csv_individual_seizure(width=120):
                 df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
 def make_html(patient_id):
-    comp_dir = data['COMP_DIR']
+    comp_dir = DATA['COMPD']
     # Compute all event idx
     event_idx = map(str,sorted(map(int,data['PATIENTS'][patient_id]['Events']['Ictal'].keys())))
 
@@ -2535,3 +2535,7 @@ def make_html(patient_id):
         # pass
     open('%s/../fig/demo/%s.html'%(comp_dir,patient_id),'w').write(final_html)
     return
+
+
+
+

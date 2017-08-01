@@ -1115,7 +1115,7 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP106/aim1/HUP106_T1_19990923_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP106/aim1/HUP106_T1_19990923_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["EKG1","EKG2"]
+      "IGNORE_ELECTRODES":["ECG1","ECG2"]
     },
     "HUP107":
     {
