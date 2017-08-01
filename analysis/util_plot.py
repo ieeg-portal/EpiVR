@@ -2284,7 +2284,7 @@ def write_all_nodal_csv_individual_seizure(width=120):
     '''
     This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
     '''
-    for patient_id in ['HUP105','HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
         for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
             res = gather_nodal_results(fconn)

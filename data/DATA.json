@@ -1210,7 +1210,7 @@
       },
       "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP107/aim1/HUP107_T1_19991219_RES_SEG_AVG.nii.gz",
       "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP107/aim1/HUP107_T1_19991219_electrode_labels.csv",
-      "IGNORE_ELECTRODES":["EKG1","EKG2"]
+      "IGNORE_ELECTRODES":["ECG1","ECG2"]
     },
     "HUP111A":
     {
