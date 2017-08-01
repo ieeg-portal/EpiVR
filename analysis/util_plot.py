@@ -719,8 +719,8 @@ def gather_results(dilate_radius, fconn = 'highgamma'):
                 if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
-                    if('CPS' not in seizure_type):
-                        continue
+                    # if('CPS' not in seizure_type):
+                    #     continue
                     results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
         except:
             continue
@@ -766,8 +766,8 @@ def gather_sync_results(dilate_radius, fconn = 'highgamma'):
                 if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
-                    if('CPS' not in seizure_type):
-                        continue
+                    # if('CPS' not in seizure_type):
+                    #     continue
                     results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['base_sync_%s'%fconn]
         except:
             continue
@@ -1462,8 +1462,8 @@ def gather_nodal_results(fconn = 'highgamma'):
                     print fn
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
-                    if('CPS' not in seizure_type):
-                        continue
+                    # if('CPS' not in seizure_type):
+                    #     continue
                     results[patient_id][fn.split('.')[2]] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
         except:
             continue
@@ -2066,3 +2066,472 @@ def hack():
     plt.xlabel('Time (s)')
     plt.ylabel('EEG (uV)')
     plt.savefig('../../fig/Figure4_1.svg',bbox_inches='tight')
+
+
+def write_all_nodal_mean_csv_individual_seizure():
+    '''
+    This writes the nodal mean csv for a given patient id and seizure id.
+    '''
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            res = gather_nodal_results(fconn)
+            # for each nodal clip  - gather_nodal_results
+            for event_id in res[patient_id].keys():
+                # Generate list of cartoon map labels
+                labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+                    data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+                    ),'r').readlines())
+
+                # Get path
+                comp_dir = os.path.expanduser(data['COMP_DIR'])
+                data_dir = os.path.expanduser(data['DATA_DIR'])
+
+                # Load ignored node labels
+                ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+                for ignored_node_label in ignored_node_labels:
+                    if(ignored_node_label not in labels):
+                        labels.append(ignored_node_label)
+
+                # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
+                fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['FILE'])
+                channels = []
+
+                # Get channels, ECoG Data, Fsx
+                with h5py.File(fn) as f:
+                    evData = f['evData'].value
+                    Fs = f['Fs'].value
+                    for column in f['channels']:
+                        row_data = []
+                        for row_number in range(len(column)):
+                            row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+                        channels.append(row_data)
+                Fs = int(Fs[0][0])
+                channels = channels[0]
+                # evData = scipy.stats.zscore(evData,axis=1)
+                T = evData.shape[0]
+
+                # Correspond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+                # Load electrodes to ignore
+                ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
+                for ii,node_id in enumerate(ignored_node_idx):
+                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                channels = list(np.delete(np.array(channels),ignored_node_idx))
+
+                # Recorrespond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+
+                channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
+
+
+                # Create PREICTAL patient_id.ictal.event_id.nodres.frequency.preictal.mean.csv
+                noderes = res[patient_id][event_id]
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,:noderes.shape[1]/2.0],axis=1))))
+                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.preictal.mean.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,noderes.shape[1]/2.0:],axis=1))))
+                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.ictal.mean.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+
+def plot_network_measures_individual_seizure():
+    '''
+    Duplication of plot_figure1C but modified to run for all patients and individual seizures
+    '''
+
+    dilate_radius = 0
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            all_cres = gather_results(dilate_radius, fconn)
+            all_base_sync = gather_sync_results(dilate_radius, fconn)
+
+            # for each nodal clip  - gather_nodal_results
+            for event_id in all_cres[patient_id].keys():
+                clip_idx = [event_id]
+                comp_dir = os.path.expanduser(data['COMP_DIR'])
+                min_seizure_len = 1E100
+                for clip_id in clip_idx:
+                    cres = all_cres[patient_id][clip_id]
+                    if cres.shape[0] < min_seizure_len:
+                        min_seizure_len = cres.shape[0]
+
+                for clip_id in clip_idx:
+                    cres = all_cres[patient_id][clip_id]
+                    base_sync = all_base_sync[patient_id][clip_id]
+
+                    cres = np.interp(np.linspace(-1.0,1.0,min_seizure_len),np.linspace(-1.0,1.0,cres.shape[0]),cres.flatten())
+                    base_sync = np.interp(np.linspace(-1.0,1.0,min_seizure_len),np.linspace(-1.0,1.0,base_sync.shape[0]),base_sync.flatten())
+
+                    try:
+                        avg_cres_data = np.hstack((avg_cres_data,np.reshape(cres,(cres.shape[0],1))))
+                    except Exception:
+                        avg_cres_data = np.reshape(cres,(cres.shape[0],1))
+                    try:
+                        avg_base_sync_data = np.hstack((avg_base_sync_data,np.reshape(base_sync,(base_sync.shape[0],1))))
+                    except Exception:
+                        avg_base_sync_data = np.reshape(base_sync,(base_sync.shape[0],1))
+
+                avg_cres_error = scipy.stats.sem(avg_cres_data,axis=1,nan_policy='omit')
+                avg_base_sync_error = scipy.stats.sem(avg_base_sync_data,axis
+                    =1,nan_policy='omit')
+
+                avg_cres_data = np.nanmedian(avg_cres_data,axis=1)
+                avg_base_sync_data = np.nanmedian(avg_base_sync_data,axis=1)
+
+                plt.figure(dpi=1200)
+                fig, ax1 = plt.subplots()
+
+                ax2 = ax1.twinx()
+                ax1.plot(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data,'g-',alpha=0.5)
+                ax1.plot(np.linspace(-1.0,1.0,avg_base_sync_data.shape[0]),avg_base_sync_data,'b-',alpha=0.5)
+
+
+                ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data-avg_cres_error,avg_cres_data+avg_cres_error,facecolor='green',alpha=0.25)
+                ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_base_sync_data-avg_base_sync_error,avg_base_sync_data+avg_base_sync_error,facecolor='blue',alpha=0.25)
+
+                ax1.set_xlabel('Normalized Time')
+                ax1.set_ylabel('$cc_{res}(t)$', color='g')
+                ax2.set_ylabel('$s(t)$', color='b')
+                ax1.set_ylim([-0.6,0.8])
+                ax2.set_ylim([0.0,1.0])
+                ax1.grid(False)
+                ax2.grid(False)
+                # plt.show()
+                plt.savefig('%s/../fig/pt/%s.Ictal.%s.cres_and_sync.%s.png'%(comp_dir,patient_id,event_id,fconn),bbox_inches='tight')
+
+def plot_average_network_measures_all_seizures():
+    '''
+    Averages seizures across PATIENTS
+    '''
+    dilate_radius = 0
+    comp_dir = data['COMP_DIR']
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            all_cres = gather_results(dilate_radius, fconn)
+            all_base_sync = gather_sync_results(dilate_radius, fconn)
+
+            # Get minimum length
+            min_event_len  = 1E100
+            for event_id in all_cres[patient_id].keys():
+                event_len = all_cres[patient_id][event_id].shape[0]
+                if event_len < min_event_len:
+                    min_event_len = event_len
+
+            # Norm all seizures to min_event_len
+            width = min_event_len
+            dictionary_values_norm = {}
+            dictionary_values_norm[patient_id] = {}
+            for event_id, clip in all_cres[patient_id].items():
+                xp = np.linspace(-1.0,1.0,clip.shape[0])
+                dictionary_values_norm[patient_id][event_id] = np.interp(np.linspace(-1.0,1,width),xp,clip)
+            all_cres = dictionary_values_norm
+            dictionary_values_norm = {}
+            dictionary_values_norm[patient_id] = {}
+            for event_id, clip in all_base_sync[patient_id].items():
+                xp = np.linspace(-1.0,1.0,clip.shape[0])
+                dictionary_values_norm[patient_id][event_id] = np.interp(np.linspace(-1.0,1,width),xp,clip)
+            all_base_sync = dictionary_values_norm
+
+            clip_idx = all_cres[patient_id].keys()
+
+            for clip_id in clip_idx:
+                    cres = all_cres[patient_id][clip_id]
+                    base_sync = all_base_sync[patient_id][clip_id]
+
+                    cres = np.interp(np.linspace(-1.0,1.0,min_event_len),np.linspace(-1.0,1.0,cres.shape[0]),cres.flatten())
+                    base_sync = np.interp(np.linspace(-1.0,1.0,min_event_len),np.linspace(-1.0,1.0,base_sync.shape[0]),base_sync.flatten())
+
+                    try:
+                        avg_cres_data = np.hstack((avg_cres_data,np.reshape(cres,(cres.shape[0],1))))
+                    except Exception:
+                        avg_cres_data = np.reshape(cres,(cres.shape[0],1))
+                    try:
+                        avg_base_sync_data = np.hstack((avg_base_sync_data,np.reshape(base_sync,(base_sync.shape[0],1))))
+                    except Exception:
+                        avg_base_sync_data = np.reshape(base_sync,(base_sync.shape[0],1))
+
+            avg_cres_error = scipy.stats.sem(avg_cres_data,axis=1,nan_policy='omit')
+            avg_base_sync_error = scipy.stats.sem(avg_base_sync_data,axis
+                =1,nan_policy='omit')
+
+            avg_cres_data = np.nanmedian(avg_cres_data,axis=1)
+            avg_base_sync_data = np.nanmedian(avg_base_sync_data,axis=1)
+
+            plt.figure(dpi=1200)
+            fig, ax1 = plt.subplots()
+
+            ax2 = ax1.twinx()
+            ax1.plot(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data,'g-',alpha=0.5)
+            ax1.plot(np.linspace(-1.0,1.0,avg_base_sync_data.shape[0]),avg_base_sync_data,'b-',alpha=0.5)
+
+
+            ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data-avg_cres_error,avg_cres_data+avg_cres_error,facecolor='green',alpha=0.25)
+            ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_base_sync_data-avg_base_sync_error,avg_base_sync_data+avg_base_sync_error,facecolor='blue',alpha=0.25)
+
+            ax1.set_xlabel('Normalized Time')
+            ax1.set_ylabel('$cc_{res}(t)$', color='g')
+            ax2.set_ylabel('$s(t)$', color='b')
+            ax1.set_ylim([-0.6,0.8])
+            ax2.set_ylim([0.0,1.0])
+            ax1.grid(False)
+            ax2.grid(False)
+            # plt.show()
+            plt.savefig('%s/../fig/pt/%s.Ictal.average.cres_and_sync.%s.png'%(comp_dir,patient_id,fconn),bbox_inches='tight')
+
+def write_all_nodal_csv_individual_seizure(width=120):
+    '''
+    This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
+    '''
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            res = gather_nodal_results(fconn)
+            # for each nodal clip  - gather_nodal_results
+            for event_id in res[patient_id].keys():
+                # Generate list of cartoon map labels
+                labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+                    data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+                    ),'r').readlines())
+
+                # Get path
+                comp_dir = os.path.expanduser(data['COMP_DIR'])
+                data_dir = os.path.expanduser(data['DATA_DIR'])
+
+                # Load ignored node labels
+                ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+                for ignored_node_label in ignored_node_labels:
+                    if(ignored_node_label not in labels):
+                        labels.append(ignored_node_label)
+
+                # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
+                fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['FILE'])
+                channels = []
+
+                # Get channels, ECoG Data, Fsx
+                with h5py.File(fn) as f:
+                    evData = f['evData'].value
+                    Fs = f['Fs'].value
+                    for column in f['channels']:
+                        row_data = []
+                        for row_number in range(len(column)):
+                            row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+                        channels.append(row_data)
+                Fs = int(Fs[0][0])
+                channels = channels[0]
+                # evData = scipy.stats.zscore(evData,axis=1)
+                T = evData.shape[0]
+
+                # Correspond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+                # Load electrodes to ignore
+                ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
+                for ii,node_id in enumerate(ignored_node_idx):
+                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                channels = list(np.delete(np.array(channels),ignored_node_idx))
+
+                # Recorrespond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+
+                channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
+
+                # Create PREICTAL patient_id.ictal.event_id.noderes.frequency.preictal.mean.csv
+                noderes = scipy.stats.zscore(res[patient_id][event_id],axis=0)
+                xp = np.linspace(-1.0,1.0,noderes.shape[1])
+                f = scipy.interpolate.interp1d(xp,noderes)
+                noderes_norm = f(np.linspace(-1.0,1.0,width))
+
+                noderes_out = np.concatenate((np.array(channel_names).reshape([noderes_norm.shape[0],1]),noderes_norm),axis=1)
+
+                df = pd.DataFrame(noderes_out)
+                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+
+def make_html(patient_id):
+    comp_dir = data['COMP_DIR']
+    # Compute all event idx
+    event_idx = map(str,sorted(map(int,data['PATIENTS'][patient_id]['Events']['Ictal'].keys())))
+
+    # Generate html subcode
+    subcode_html = ''
+    for event_id in event_idx:
+        subcode_html += '''
+                <div class="tab">
+                    <button class="tablinks" onclick="openType(event, '%s')" id="defaultOpen">%s</button>
+                </div>
+'''%(event_id,event_id)
+    for event_id in event_idx:
+        subcode_html += '''
+                <div id="%s" class="tabcontent">
+                    <h2 style="font-family:Raleway;"> Clip %s </h2>
+                    <h2 style="font-family:Raleway;"> Network Measures </h2>
+                    <h3 style="font-family:Raleway;"> High Gamma </h3>
+                    <img src="pt/%s.Ictal.%s.cres_and_sync.highgamma.png">
+                    <h3 style="font-family:Raleway;"> Broadband </p>
+                    <img src="pt/%s.Ictal.%s.cres_and_sync.broadband_CC.png">
+                    <h3 style="font-family:Raleway;"> Alpha/Theta </p>
+                    <img src="pt/%s.Ictal.%s.cres_and_sync.alphatheta.png">
+                    <h3 style="font-family:Raleway;"> Beta </p>
+                    <img src="pt/%s.Ictal.%s.cres_and_sync.beta.png">
+                    <h3 style="font-family:Raleway;"> Low Gamma </p>
+                    <img src="pt/%s.Ictal.%s.cres_and_sync.lowgamma.png">
+                    <h2 style="font-family:Raleway;"> Animation of node-level </h2>
+                    <h3 style="font-family:Raleway;"> Broadband </h3>
+                    <img src="pt/%s.Ictal.%s.noderes.broadband.mp4">
+                </div>
+'''%(event_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id)
+
+    # Print final html code
+    final_html = '''
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="">
+            <meta name="author" content="">
+
+            <title>Virtual Resection Project </title>
+
+            <!-- Bootstrap Core CSS -->
+            <link href="static/css/bootstrap-social.css" rel="stylesheet">
+            <link href="static/css/tab.css" rel="stylesheet">
+            <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+            <!-- Custom CSS -->
+            <link href="static/css/business-frontpage.css" rel="stylesheet">
+            <style>
+                img {
+                    filter: gray; /* IE6-9 */
+                    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+                    -webkit-filter: grayscale(1);  Google Chrome, Safari 6+ & Opera 15+
+                }
+
+                /* Disable grayscale on hover */
+                img:hover {
+                    filter: none;
+                    -webkit-filter: grayscale(0);
+                }
+                /*body{font-family:Garamond}*/
+            </style>
+            <link href='https://fonts.googleapis.com/css?family=Raleway:300,500|Bitter:400,400italic,700,Lato:300' rel='stylesheet' type='text/css'>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+            <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+
+        </head>
+
+        <body>
+            <!-- jQuery -->
+            <script src="static/js/jquery-1.11.2.min.js"></script>
+
+            <!-- Bootstrap Core JavaScript -->
+            <script src="static/bootstrap/dist/js/bootstrap.js"></script>
+
+            <!-- Metis Menu Plugin JavaScript -->
+            <script src="static/js/metisMenu.js"></script>
+
+            <!-- SB Admin Custom Theme JavaScript -->
+            <script src="static/sb-admin/dist/js/sb-admin-2.js"></script>
+
+            <!-- Chosen JavaScript -->
+            <script type="text/javascript" src="static/chosen/chosen.jquery.min.js"></script>
+            <script type="text/javascript" src="static/chosen/chosen.proto.min.js"></script>
+
+            <!-- Twitter Typeahead -->
+            <script src="static/js/typeahead.bundle.js"></script>
+            <script src="static/js/handlebars-v3.0.0.js"></script>
+
+            <!-- Custom Scripts -->
+            <script src="static/js/dynamic-number-coloring.js"></script>
+
+            <link href="static/css/dc.css" rel="stylesheet" type="text/css">
+            <script type="text/javascript" src="static/js/d3.v3.js"></script>
+            <script type="text/javascript" src="static/js/crossfilter.js"></script>
+            <script type="text/javascript" src="static/js/dc.js"></script>
+            <script type="text/javascript" src="static/js/colorbrewer.js"></script>
+
+            <!-- Navigation -->
+
+            <!-- Page Content -->
+            <div class="container">
+
+                <hr>
+                <h1 style="font-family:Raleway;font-size:300%%;"> Virtual Resection - %s </h1>
+
+                <hr style="border: none;height: 3px;color: #333;background-color: #333;">
+                <h2 style="font-family:Raleway;"> Overview </h2>
+                <img src="pt/%s_Figure1A.png">
+                <h3>Outcome: </h3>
+                <h4>Lesion Status: </h4>
+                <h4>Gender: </h4>
+                <h4>Age at Onset: </h4>
+                <h4>Age at Surgery: </h4>
+                <h4>Seizure Onset: </h4>
+                <img src="pt/%s_Figure1A.png">
+
+%s
+
+
+                <hr style="border: none;height: 3px;color: #333;background-color: #333;">
+                <h2 style="font-family:Raleway;"> All Seizures </h2>
+                <img src="pt/%s.average.cres_and_sync.broadband_CC.png">
+                <img src="pt/%s.average.cres_and_sync.highgamma.png">
+                <img src="pt/%s.average.cres_and_sync.lowgamma.png">
+                <img src="pt/%s.average.cres_and_sync.beta.png">
+                <img src="pt/%s.average.cres_and_sync.alphatheta.png">
+
+            </div>
+
+            <!-- /.container -->
+            <script type="text/javascript">
+            function openType(evt, evtName) {
+                // Declare all variables
+                var i, tabcontent, tablinks;
+
+                // Get all elements with class="tabcontent" and hide them
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Get all elements with class="tablinks" and remove the class "active"
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(evtName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+            </script>
+            <script type="text/javascript">
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+            </script>
+
+            <!-- jQuery -->
+            <script src="static/js/jquery.js"></script>
+
+            <!-- Bootstrap Core JavaScript -->
+            <script src="static/js/bootstrap.min.js"></script>
+
+        </body>
+
+        </html>
+
+        '''%(patient_id,patient_id,patient_id,subcode_html,patient_id,patient_id,patient_id,patient_id,patient_id)
+        # pass
+    open('%s/../fig/demo/%s.html'%(comp_dir,patient_id),'w').write(final_html)
+    return
