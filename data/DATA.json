@@ -1426,8 +1426,8 @@
     },
     "HUP116":
     {
-      "Outcome": "",
-      "Sex":"",
+      "Outcome": "1.1",
+      "Sex":"F",
       "AgeOnset":"",
       "AgeSurgery":"",
       "SeizureOnset":"",
@@ -1471,8 +1471,8 @@
           }
         }
       },
-      "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"",
+      "RESECTION_IMAGE":"/gdrive/public/USERS/lkini/aim1/results/HUP116/aim1/HUP116_T1_19991003_RES_SEG_AVG.nii.gz",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/HUP116/aim1/HUP116_T1_19991003_electrode_labels.csv",
       "IGNORE_ELECTRODES":["EKG1","EKG2"]
     },
     "Study004":

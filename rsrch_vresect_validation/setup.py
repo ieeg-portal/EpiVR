@@ -48,6 +48,12 @@ from analysis.util_virtual_resection import *
 with open(os.path.expanduser('~/gdrive/aim3/code/data/DATA.json')) as json_data_file:
     data = json.load(json_data_file)
 
+def cohen_d(x,y):
+    nx = len(x)
+    ny = len(y)
+    dof = nx+ny-2
+    return (np.nanmean(x) - np.nanmean(y)) / np.sqrt(((nx-1)*np.nanstd(x,ddof=1)**2+(ny-1)*np.nanstd(y,ddof=1)**2)/dof)
+
 def gather_cres_results(dilate_radius, fconn = 'highgamma'):
     '''
     Utility function to output a dictionary of all results.
@@ -452,7 +458,8 @@ def get_resected_node_dx(patient_id,dilate_radius=0):
     # Load electrodes to ignore
     ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
     for ii,node_id in enumerate(ignored_node_idx):
-        print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+        pass
+        # print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
     channels = list(np.delete(np.array(channels),ignored_node_idx))
 
     # Recorrespond label names
@@ -488,6 +495,7 @@ def get_resected_node_dx(patient_id,dilate_radius=0):
             clean_resected_node_labels.append(resected_node_label)
     resected_node_idx = map(lambda x: labels_dict[x][0], clean_resected_node_labels)
     for ii,node_id in enumerate(resected_node_idx):
-        print 'Virtually resecting node label: %s because label %s is in the resection zone'%(channels[node_id],resected_node_labels[ii])
+        pass
+        # print 'Virtually resecting node label: %s because label %s is in the resection zone'%(channels[node_id],resected_node_labels[ii])
     return resected_node_idx, channels
 

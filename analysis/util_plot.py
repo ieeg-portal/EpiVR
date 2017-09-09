@@ -1456,10 +1456,10 @@ def gather_nodal_results(fconn = 'highgamma'):
         # Open all adj
         try:
             for fn in os.listdir(comp_dir):
-                if('noderes' in fn):
+                if('noderes' in fn and 'csv' not in fn):
                     if(patient_id not in results.keys()):
                         results[patient_id] = {}
-                    print fn
+                    # print fn
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
                     # if('CPS' not in seizure_type):
@@ -2284,7 +2284,7 @@ def write_all_nodal_csv_individual_seizure(width=120):
     '''
     This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
     '''
-    for patient_id in ['HUP106','HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
         for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
             res = gather_nodal_results(fconn)
@@ -2349,24 +2349,35 @@ def write_all_nodal_csv_individual_seizure(width=120):
                 df = pd.DataFrame(noderes_out)
                 df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
-def make_html(patient_id):
-    comp_dir = DATA['COMPD']
+def make_html(patient_id, data=data):
+    comp_dir = data['COMP_DIR']
     # Compute all event idx
     event_idx = map(str,sorted(map(int,data['PATIENTS'][patient_id]['Events']['Ictal'].keys())))
 
-    # Generate html subcode
+
     subcode_html = ''
+
+    # Generate html subcode for seizure details
     for event_id in event_idx:
         subcode_html += '''
                 <div class="tab">
                     <button class="tablinks" onclick="openType(event, '%s')" id="defaultOpen">%s</button>
                 </div>
-'''%(event_id,event_id)
+    '''%(event_id,event_id)
     for event_id in event_idx:
         subcode_html += '''
                 <div id="%s" class="tabcontent">
-                    <h2 style="font-family:Raleway;"> Clip %s </h2>
-                    <h2 style="font-family:Raleway;"> Network Measures </h2>
+                    <h2 style="font-family:Raleway;"> Clip %s - Seizure Details</h2>
+                    <h3 style="font-family:Raleway;"> Seizure clip </h3>
+                    <img src="pt/%s.Ictal.%s.seizure_clip.png">
+                    <h3 style="font-family:Raleway;"> Seizure Type: %s </h3>
+    '''%(event_id,event_id,patient_id,event_id,data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['SeizureType'])
+
+
+    for event_id in event_idx:
+        subcode_html += '''
+                    <h2 style="font-family:Raleway;"> Clip %s - Network Measures</h2>
+
                     <h3 style="font-family:Raleway;"> High Gamma </h3>
                     <img src="pt/%s.Ictal.%s.cres_and_sync.highgamma.png">
                     <h3 style="font-family:Raleway;"> Broadband </p>
@@ -2381,7 +2392,7 @@ def make_html(patient_id):
                     <h3 style="font-family:Raleway;"> Broadband </h3>
                     <img src="pt/%s.Ictal.%s.noderes.broadband.mp4">
                 </div>
-'''%(event_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id)
+    '''%(event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id)
 
     # Print final html code
     final_html = '''
@@ -2478,9 +2489,8 @@ def make_html(patient_id):
                 <h4>Age at Onset: </h4>
                 <h4>Age at Surgery: </h4>
                 <h4>Seizure Onset: </h4>
-                <img src="pt/%s_Figure1A.png">
 
-%s
+    %s
 
 
                 <hr style="border: none;height: 3px;color: #333;background-color: #333;">
@@ -2531,7 +2541,7 @@ def make_html(patient_id):
 
         </html>
 
-        '''%(patient_id,patient_id,patient_id,subcode_html,patient_id,patient_id,patient_id,patient_id,patient_id)
+        '''%(patient_id,patient_id,subcode_html,patient_id,patient_id,patient_id,patient_id,patient_id)
         # pass
     open('%s/../fig/demo/%s.html'%(comp_dir,patient_id),'w').write(final_html)
     return
