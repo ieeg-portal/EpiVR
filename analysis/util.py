@@ -83,7 +83,7 @@ def correspond_label_names(eeg_channel_labels, cartoon_map_labels):
                 if(channel_label == cartoon_label): # For CHOP patients ???
                     labels[cartoon_label] = (ii,channel_label)
                 else:
-                    for p in re.findall(r'([A-Za-z]+)[ _-]*([0-9]{0,2})',channel_label):
+                    for p in re.findall(r'([A-Za-z-]+)[ _-]*([0-9]{0,2})',channel_label):
                         channel_label_prefix = p[0]
                         try:
                             channel_label_num = str(int(p[1]))
@@ -96,6 +96,8 @@ def correspond_label_names(eeg_channel_labels, cartoon_map_labels):
                         except AttributeError:
                             cartoon_label_num = ''
 
+                        if '-' in channel_label_prefix: # Hacked for HUP116
+                            channel_label_prefix = channel_label_prefix.replace('-','')
                         if channel_label_prefix == cartoon_label_prefix and channel_label_num == cartoon_label_num:
                             labels[cartoon_label] = (ii,channel_label)
     return labels

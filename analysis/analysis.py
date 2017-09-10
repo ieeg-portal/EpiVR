@@ -106,9 +106,12 @@ if __name__ == '__main__':
             print unique_id, event_type, event_id
             pass
 
+
+
     # Compute control centrality of SOZ
     # Check if already exists
     if not len(glob.glob(os.path.expanduser('%s/%s/aim3/*sozres*'%(data['COMP_DIR'],patient_id)))):
         # Compute virtual resection to get c_{res}(t)
         unique_idx = soz_virtual_resection(patient_id, data)
+
 

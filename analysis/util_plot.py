@@ -2068,71 +2068,9 @@ def hack():
     plt.savefig('../../fig/Figure4_1.svg',bbox_inches='tight')
 
 
-def write_all_nodal_mean_csv_individual_seizure():
-    '''
-    This writes the nodal mean csv for a given patient id and seizure id.
-    '''
-    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
-        # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
-            res = gather_nodal_results(fconn)
-            # for each nodal clip  - gather_nodal_results
-            for event_id in res[patient_id].keys():
-                # Generate list of cartoon map labels
-                labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
-                    data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
-                    ),'r').readlines())
-
-                # Get path
-                comp_dir = os.path.expanduser(data['COMP_DIR'])
-                data_dir = os.path.expanduser(data['DATA_DIR'])
-
-                # Load ignored node labels
-                ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
-                for ignored_node_label in ignored_node_labels:
-                    if(ignored_node_label not in labels):
-                        labels.append(ignored_node_label)
-
-                # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
-                fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['FILE'])
-                channels = []
-
-                # Get channels, ECoG Data, Fsx
-                with h5py.File(fn) as f:
-                    evData = f['evData'].value
-                    Fs = f['Fs'].value
-                    for column in f['channels']:
-                        row_data = []
-                        for row_number in range(len(column)):
-                            row_data.append(''.join(map(unichr, f[column[row_number]][:])))
-                        channels.append(row_data)
-                Fs = int(Fs[0][0])
-                channels = channels[0]
-                # evData = scipy.stats.zscore(evData,axis=1)
-                T = evData.shape[0]
-
-                # Correspond label names
-                labels_dict = correspond_label_names(channels, labels)
-
-                # Load electrodes to ignore
-                ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
-                for ii,node_id in enumerate(ignored_node_idx):
-                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
-                channels = list(np.delete(np.array(channels),ignored_node_idx))
-
-                # Recorrespond label names
-                labels_dict = correspond_label_names(channels, labels)
 
 
-                channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
 
-
-                # Create PREICTAL patient_id.ictal.event_id.nodres.frequency.preictal.mean.csv
-                noderes = res[patient_id][event_id]
-                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,:noderes.shape[1]/2.0],axis=1))))
-                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.preictal.mean.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
-                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,noderes.shape[1]/2.0:],axis=1))))
-                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.ictal.mean.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
 def plot_network_measures_individual_seizure():
     '''
@@ -2198,7 +2136,7 @@ def plot_network_measures_individual_seizure():
                 ax1.grid(False)
                 ax2.grid(False)
                 # plt.show()
-                plt.savefig('%s/../fig/pt/%s.Ictal.%s.cres_and_sync.%s.png'%(comp_dir,patient_id,event_id,fconn),bbox_inches='tight')
+                plt.savefig('%s/../fig/demo/pt/%s.Ictal.%s.cres_and_sync.%s.png'%(comp_dir,patient_id,event_id,fconn),bbox_inches='tight')
 
 def plot_average_network_measures_all_seizures():
     '''
@@ -2278,13 +2216,154 @@ def plot_average_network_measures_all_seizures():
             ax1.grid(False)
             ax2.grid(False)
             # plt.show()
-            plt.savefig('%s/../fig/pt/%s.Ictal.average.cres_and_sync.%s.png'%(comp_dir,patient_id,fconn),bbox_inches='tight')
+            plt.savefig('%s/../fig/demo/pt/%s/%s.average.scaled.cres_and_sync.%s.png'%(comp_dir,patient_id,patient_id,fconn),bbox_inches='tight')
+
+def plot_average_unscaled_network_measures_all_seizures():
+    '''
+    Averages seizures across PATIENTS unscaled but centered at EEC
+    '''
+
+    dilate_radius = 0
+    comp_dir = data['COMP_DIR']
+    for patient_id in ['HUP065']:#['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            all_cres = gather_results(dilate_radius, fconn)
+            all_base_sync = gather_sync_results(dilate_radius, fconn)
+
+            # Get minimum length
+            max_event_len  = -1
+            for event_id in all_cres[patient_id].keys():
+                event_len = all_cres[patient_id][event_id].shape[0]
+                if event_len > max_event_len:
+                    max_event_len = event_len
+
+
+            clip_idx = all_cres[patient_id].keys()
+
+            for clip_id in clip_idx:
+                    cres = all_cres[patient_id][clip_id]
+                    base_sync = all_base_sync[patient_id][clip_id]
+
+
+
+                    # Pad cres and base sync
+                    pad_len = max_event_len-cres.shape[0]
+                    cres = np.pad(cres, (np.int(np.floor(pad_len/2.0)),np.int(np.ceil(pad_len/2.0))), 'constant', constant_values=(np.nan,np.nan))
+                    pad_len = max_event_len-base_sync.shape[0]
+                    base_sync = np.pad(base_sync, (np.int(np.floor(pad_len/2.0)),np.int(np.ceil(pad_len/2.0))), 'constant', constant_values=(np.nan,np.nan))
+
+                    try:
+                        avg_cres_data = np.hstack((avg_cres_data,np.reshape(cres,(max_event_len,1))))
+                    except Exception:
+                        avg_cres_data = np.reshape(cres,(max_event_len,1))
+                    try:
+                        avg_base_sync_data = np.hstack((avg_base_sync_data,np.reshape(base_sync,(max_event_len,1))))
+                    except Exception:
+                        avg_base_sync_data = np.reshape(base_sync,(max_event_len,1))
+            print avg_cres_data, avg_cres_data.shape
+            avg_cres_error = scipy.stats.sem(avg_cres_data,axis=1,nan_policy='omit')
+            avg_base_sync_error = scipy.stats.sem(avg_base_sync_data,axis
+                =1,nan_policy='omit')
+
+            avg_cres_data = np.nanmedian(avg_cres_data,axis=1)
+            avg_base_sync_data = np.nanmedian(avg_base_sync_data,axis=1)
+
+            plt.figure(dpi=1200)
+            fig, ax1 = plt.subplots()
+
+            ax2 = ax1.twinx()
+            ax1.plot(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data,'g-',alpha=0.5)
+            ax1.plot(np.linspace(-1.0,1.0,avg_base_sync_data.shape[0]),avg_base_sync_data,'b-',alpha=0.5)
+
+
+            ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_cres_data-avg_cres_error,avg_cres_data+avg_cres_error,facecolor='green',alpha=0.25)
+            ax1.fill_between(np.linspace(-1.0,1.0,avg_cres_data.shape[0]),avg_base_sync_data-avg_base_sync_error,avg_base_sync_data+avg_base_sync_error,facecolor='blue',alpha=0.25)
+
+            ax1.set_xlabel('Normalized Time')
+            ax1.set_ylabel('$cc_{res}(t)$', color='g')
+            ax2.set_ylabel('$s(t)$', color='b')
+            ax1.set_ylim([-0.6,0.8])
+            ax2.set_ylim([0.0,1.0])
+            ax1.grid(False)
+            ax2.grid(False)
+            # plt.show()
+            plt.savefig('%s/../fig/demo/pt/%s/%s.average.unscaled.cres_and_sync.%s.png'%(comp_dir,patient_id,patient_id,fconn),bbox_inches='tight')
+
+
+
+
+def write_all_nodal_mean_csv_individual_seizure():
+    '''
+    This writes the nodal mean csv for a given patient id and seizure id.
+    '''
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            res = gather_nodal_results(fconn)
+            # for each nodal clip  - gather_nodal_results
+            for event_id in res[patient_id].keys():
+                # Generate list of cartoon map labels
+                labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+                    data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+                    ),'r').readlines())
+
+                # Get path
+                comp_dir = os.path.expanduser(data['COMP_DIR'])
+                data_dir = os.path.expanduser(data['DATA_DIR'])
+
+                # Load ignored node labels
+                ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+                for ignored_node_label in ignored_node_labels:
+                    if(ignored_node_label not in labels):
+                        labels.append(ignored_node_label)
+
+                # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
+                fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['FILE'])
+                channels = []
+
+                # Get channels, ECoG Data, Fsx
+                with h5py.File(fn) as f:
+                    evData = f['evData'].value
+                    Fs = f['Fs'].value
+                    for column in f['channels']:
+                        row_data = []
+                        for row_number in range(len(column)):
+                            row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+                        channels.append(row_data)
+                Fs = int(Fs[0][0])
+                channels = channels[0]
+                # evData = scipy.stats.zscore(evData,axis=1)
+                T = evData.shape[0]
+
+                # Correspond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+                # Load electrodes to ignore
+                ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
+                for ii,node_id in enumerate(ignored_node_idx):
+                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                channels = list(np.delete(np.array(channels),ignored_node_idx))
+
+                # Recorrespond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+
+                channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
+
+
+                # Create PREICTAL patient_id.ictal.event_id.nodres.frequency.preictal.mean.csv
+                noderes = res[patient_id][event_id]
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,:noderes.shape[1]/2.0],axis=1))))
+                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.preictal.%s.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,noderes.shape[1]/2.0:],axis=1))))
+                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.ictal.%s.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
 def write_all_nodal_csv_individual_seizure(width=120):
     '''
     This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
     '''
-    for patient_id in ['HUP107','HUP111A','HUP111B','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP075']:#['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
         for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
             res = gather_nodal_results(fconn)
@@ -2339,7 +2418,8 @@ def write_all_nodal_csv_individual_seizure(width=120):
                 channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
 
                 # Create PREICTAL patient_id.ictal.event_id.noderes.frequency.preictal.mean.csv
-                noderes = scipy.stats.zscore(res[patient_id][event_id],axis=0)
+                # noderes = scipy.stats.zscore(res[patient_id][event_id],axis=0)
+                noderes = res[patient_id][event_id]
                 xp = np.linspace(-1.0,1.0,noderes.shape[1])
                 f = scipy.interpolate.interp1d(xp,noderes)
                 noderes_norm = f(np.linspace(-1.0,1.0,width))
@@ -2349,53 +2429,395 @@ def write_all_nodal_csv_individual_seizure(width=120):
                 df = pd.DataFrame(noderes_out)
                 df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
+def write_all_nodal_mean_csv_individual_patient(width=120):
+    '''
+    This writes the nodal mean csv for a given patient id averaged across seizures
+    '''
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        # for each band
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+            res = gather_nodal_results(fconn)
+            all_noderes_norm = []
+            # for each nodal clip  - gather_nodal_results
+            for event_id in res[patient_id].keys():
+                # Generate list of cartoon map labels
+                labels = map(lambda x: x.split(',')[4].replace('\n',''), open(os.path.expanduser(
+                    data['PATIENTS'][patient_id]['ELECTRODE_LABELS']
+                    ),'r').readlines())
+
+                # Get path
+                comp_dir = os.path.expanduser(data['COMP_DIR'])
+                data_dir = os.path.expanduser(data['DATA_DIR'])
+
+                # Load ignored node labels
+                ignored_node_labels = data['PATIENTS'][patient_id]['IGNORE_ELECTRODES']
+                for ignored_node_label in ignored_node_labels:
+                    if(ignored_node_label not in labels):
+                        labels.append(ignored_node_label)
+
+                # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
+                fn = os.path.join(data_dir, patient_id, 'eeg', data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['FILE'])
+                channels = []
+
+                # Get channels, ECoG Data, Fsx
+                with h5py.File(fn) as f:
+                    evData = f['evData'].value
+                    Fs = f['Fs'].value
+                    for column in f['channels']:
+                        row_data = []
+                        for row_number in range(len(column)):
+                            row_data.append(''.join(map(unichr, f[column[row_number]][:])))
+                        channels.append(row_data)
+                Fs = int(Fs[0][0])
+                channels = channels[0]
+                # evData = scipy.stats.zscore(evData,axis=1)
+                T = evData.shape[0]
+
+                # Correspond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+                # Load electrodes to ignore
+                ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
+                for ii,node_id in enumerate(ignored_node_idx):
+                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                channels = list(np.delete(np.array(channels),ignored_node_idx))
+
+                # Recorrespond label names
+                labels_dict = correspond_label_names(channels, labels)
+
+
+                channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
+
+                # Create PREICTAL patient_id.ictal.event_id.noderes.frequency.preictal.mean.csv
+                # noderes = scipy.stats.zscore(res[patient_id][event_id],axis=0)
+                noderes = res[patient_id][event_id]
+                xp = np.linspace(-1.0,1.0,noderes.shape[1])
+                f = scipy.interpolate.interp1d(xp,noderes)
+                noderes_norm = f(np.linspace(-1.0,1.0,width))
+                all_noderes_norm.append(noderes_norm)
+            all_noderes_norm = np.array(all_noderes_norm)
+            all_noderes_norm = np.nanmedian(all_noderes_norm,axis=0)
+            noderes = scipy.stats.zscore(all_noderes_norm,axis=0)
+
+            noderes_out = np.concatenate((np.array(channel_names).reshape([noderes_norm.shape[0],1]),noderes_norm),axis=1)
+            df = pd.DataFrame(noderes_out)
+            df.to_csv('%s/%s/aim3/%s.average.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
+
+            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(all_noderes_norm[:,:all_noderes_norm.shape[1]/2.0],axis=1))))
+            df.to_csv('%s/%s/aim3/%s.average.noderes.preictal.%s.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
+            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(all_noderes_norm[:,all_noderes_norm.shape[1]/2.0:],axis=1))))
+            df.to_csv('%s/%s/aim3/%s.average.noderes.ictal.%s.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
+            # blah
+
+
 def make_html(patient_id, data=data):
     comp_dir = data['COMP_DIR']
+
     # Compute all event idx
     event_idx = map(str,sorted(map(int,data['PATIENTS'][patient_id]['Events']['Ictal'].keys())))
 
+    # Get all patient data
+    gender = 'Not Filled Out'
+    age_at_surgery = 'Not Filled Out'
+    age_at_onset = 'Not Filled Out'
+    outcome = 'Not Filled Out'
+    lesion_status = 'Not Filled Out'
+    resection_type = 'Not Filled Out'
+    localization = 'Not Filled Out'
+    pathology = 'Not Filled Out'
+    clinical_summary = 'Not Filled Out'
 
-    subcode_html = ''
+    # Seizure info
+    all_subtypes_string = 'Not Filled Out'
+    CPS_GTC_count = -1
+    CPS_count = -1
+    SPS_count = -1
+    mean_seizure_len = -1.11
+    std_seizure_len = -1.11
+
+
+
+
+
+
+    subcode_html = '''
+                    <div class="tab">
+                        <button class="tablinks" onclick="openType(event, 'all')" id="defaultOpen">All Seizures</button>
+    '''
 
     # Generate html subcode for seizure details
     for event_id in event_idx:
-        subcode_html += '''
-                <div class="tab">
-                    <button class="tablinks" onclick="openType(event, '%s')" id="defaultOpen">%s</button>
-                </div>
+        subcode_html +='''
+                        <button class="tablinks" onclick="openType(event, '%s')">%s</button>
     '''%(event_id,event_id)
-    for event_id in event_idx:
-        subcode_html += '''
-                <div id="%s" class="tabcontent">
-                    <h2 style="font-family:Raleway;"> Clip %s - Seizure Details</h2>
-                    <h3 style="font-family:Raleway;"> Seizure clip </h3>
-                    <img src="pt/%s.Ictal.%s.seizure_clip.png">
-                    <h3 style="font-family:Raleway;"> Seizure Type: %s </h3>
-    '''%(event_id,event_id,patient_id,event_id,data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]['SeizureType'])
-
-
-    for event_id in event_idx:
-        subcode_html += '''
-                    <h2 style="font-family:Raleway;"> Clip %s - Network Measures</h2>
-
-                    <h3 style="font-family:Raleway;"> High Gamma </h3>
-                    <img src="pt/%s.Ictal.%s.cres_and_sync.highgamma.png">
-                    <h3 style="font-family:Raleway;"> Broadband </p>
-                    <img src="pt/%s.Ictal.%s.cres_and_sync.broadband_CC.png">
-                    <h3 style="font-family:Raleway;"> Alpha/Theta </p>
-                    <img src="pt/%s.Ictal.%s.cres_and_sync.alphatheta.png">
-                    <h3 style="font-family:Raleway;"> Beta </p>
-                    <img src="pt/%s.Ictal.%s.cres_and_sync.beta.png">
-                    <h3 style="font-family:Raleway;"> Low Gamma </p>
-                    <img src="pt/%s.Ictal.%s.cres_and_sync.lowgamma.png">
-                    <h2 style="font-family:Raleway;"> Animation of node-level </h2>
-                    <h3 style="font-family:Raleway;"> Broadband </h3>
-                    <img src="pt/%s.Ictal.%s.noderes.broadband.mp4">
+    subcode_html += '''
                 </div>
-    '''%(event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id,patient_id,event_id)
+                    <div id="all" class="tabcontent">
+                        <h2 style="font-family:Raleway;"> All Seizures </h2>
+                        <h3> Subtypes: %s </h3>
+                        <h3> Seizure Types: %i CPS+GTC, %i CPS, %i SPS </h3>
+                        <h3> Mean Length of Seizures: %0.2f sec +/- %0.2f sec </h3>
+
+                        <!-- Scaled network measures -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Scaled Network Measures </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.broadband_CC.png"></div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.alphatheta.png"></div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.beta.png"></div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.lowgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.highgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.ultra.png"></div>
+
+                        <!-- Unscale network measures -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Unscaled Network Measures </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.broadband_CC.png"></div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.alphatheta.png"></div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.beta.png"></div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.lowgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.highgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.ultra.png"></div>
+
+
+                        <!-- Mean Node Control Centrality (z scored or not?) -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Mean Node Control Centrality </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.broadband_CC.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.broadband_CC.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.broadband_CC.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.broadband_CC.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.broadband_CC.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.broadband_CC.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.alphatheta.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.alphatheta.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.alphatheta.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.alphatheta.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.alphatheta.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.alphatheta.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.beta.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.beta.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.beta.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.beta.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.beta.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.beta.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.lowgamma.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.lowgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.lowgamma.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.lowgamma.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.lowgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.lowgamma.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.highgamma.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.left.png" height=200>
+                        </div>
+
+                        <!-- Animation of node centrality (z scored or not?) -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Animation of mean node control centrality </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.broadband_CC.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.broadband_CC.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.broadband_CC.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.alphatheta.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.alphatheta.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.alphatheta.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.beta.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.beta.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.beta.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.lowgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.lowgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.lowgamma.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.highgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.highgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.highgamma.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.ultra.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.ultra.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.ultra.with_resection.gifv.png" height=200>
+                        </div>
+                    </div>
+
+    '''%(all_subtypes_string,CPS_GTC_count,CPS_count,SPS_count,mean_seizure_len,std_seizure_len,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id )
+
+    for event_id in event_idx:
+        subtype = 'Not Filled Out'
+        seizure_type = 'Not Filled Out'
+        length_of_seizure = -1.11
+
+        subcode_html += '''
+                    <div id="%s" class="tabcontent">
+                        <h2 style="font-family:Raleway;"> Clip %s </h2>
+                        <h3> Subtype: %s </h3>
+                        <h3> Seizure Type: %s </h3>
+                        <h3> Length of seizure: %f sec <h3>
+
+                        <!-- Scaled network measures -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Network Measures </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.broadband_CC.png"></div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.alphatheta.png"></div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.beta.png"></div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.lowgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.highgamma.png"></div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.ultra.png"></div>
+
+                        <!-- Mean Node Control Centrality (z scored or not?) -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Mean Node Control Centrality </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.broadband_CC.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.broadband_CC.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.broadband_CC.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.broadband_CC.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.broadband_CC.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.broadband_CC.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.alphatheta.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.alphatheta.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.alphatheta.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.alphatheta.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.alphatheta.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.alphatheta.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.beta.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.beta.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.beta.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.beta.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.beta.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.beta.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.lowgamma.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.lowgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.lowgamma.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.lowgamma.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.lowgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.lowgamma.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.highgamma.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.left.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;">
+                            Pre-Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.left.png" height=200>
+                            <br>
+                            Ictal
+                            <br>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.left.png" height=200>
+                        </div>
+
+                        <!-- Animation of node centrality (z scored or not?) -->
+                        <hr style="border: none;height: 1px;color: #333;background-color: #333;">
+                        <h2> Animation of mean node control centrality </h2>
+                        <h4 style="font-family:Raleway;"> Broadband Cross-Correlation </h4>
+                        <div name="broadband" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.broadband_CC.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.broadband_CC.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.broadband_CC.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Alpha/Theta </h4>
+                        <div name="alphatheta" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.alphatheta.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.alphatheta.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.alphatheta.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Beta </h4>
+                        <div name="beta" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.beta.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.beta.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.beta.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Low Gamma </h4>
+                        <div name="lowgamma" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.lowgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.lowgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.lowgamma.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> High Gamma </h4>
+                        <div name="highgamma" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.gifv.png" height=200>
+                        </div>
+                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
+                        <div name="ultra" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.gifv.png" height=200>
+                        </div>
+                    </div>
+        '''%(event_id,event_id,subtype,seizure_type,length_of_seizure,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id)
+
+    first_snippet_html = ''
+    for event_id in event_idx:
+        first_snippet_html += '''
+                                <p> <a href="#%s" onclick="openType(event, '5')">Jump to Clip %s </a> </p>
+
+        '''%(event_id,event_id)
 
     # Print final html code
     final_html = '''
+
         <!DOCTYPE html>
         <html lang="en">
 
@@ -2417,18 +2839,80 @@ def make_html(patient_id, data=data):
             <!-- Custom CSS -->
             <link href="static/css/business-frontpage.css" rel="stylesheet">
             <style>
-                img {
-                    filter: gray; /* IE6-9 */
-                    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
-                    -webkit-filter: grayscale(1);  Google Chrome, Safari 6+ & Opera 15+
+
+                label {
+                  display: block;
+                  padding-left: 15px;
+                  text-indent: 20px;
+                  white-space: nowrap;
+                }
+                input {
+                  width: 13px;
+                  height: 13px;
+                  padding: 0;
+                  margin:0;
+                  vertical-align: bottom;
+                  position: relative;
+                  top: -1px;
+                  *overflow: hidden;
                 }
 
-                /* Disable grayscale on hover */
-                img:hover {
-                    filter: none;
-                    -webkit-filter: grayscale(0);
+                .switch {
+                  position: relative;
+                  display: inline-block;
+                  width: 30px;
+                  height: 17px;
                 }
-                /*body{font-family:Garamond}*/
+
+                .switch input {display:none;}
+
+                .slider {
+                  position: absolute;
+                  cursor: pointer;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  background-color: #ccc;
+                  -webkit-transition: .4s;
+                  transition: .4s;
+                }
+
+                .slider:before {
+                  position: absolute;
+                  content: "";
+                  height: 13px;
+                  width: 13px;
+                  left: 2px;
+                  bottom: 2px;
+                  background-color: white;
+                  -webkit-transition: .4s;
+                  transition: .4s;
+                }
+
+                input:checked + .slider {
+                  background-color: #2196F3;
+                }
+
+                input:focus + .slider {
+                  box-shadow: 0 0 1px #2196F3;
+                }
+
+                input:checked + .slider:before {
+                  -webkit-transform: translateX(13px);
+                  -ms-transform: translateX(13px);
+                  transform: translateX(13px);
+                }
+
+                /* Rounded sliders */
+                .slider.round {
+                  border-radius: 17px;
+                }
+
+                .slider.round:before {
+                  border-radius: 50%%;
+                }
+
             </style>
             <link href='https://fonts.googleapis.com/css?family=Raleway:300,500|Bitter:400,400italic,700,Lato:300' rel='stylesheet' type='text/css'>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -2476,30 +2960,118 @@ def make_html(patient_id, data=data):
 
             <!-- Page Content -->
             <div class="container">
-
                 <hr>
                 <h1 style="font-family:Raleway;font-size:300%%;"> Virtual Resection - %s </h1>
 
-                <hr style="border: none;height: 3px;color: #333;background-color: #333;">
-                <h2 style="font-family:Raleway;"> Overview </h2>
-                <img src="pt/%s_Figure1A.png">
-                <h3>Outcome: </h3>
-                <h4>Lesion Status: </h4>
-                <h4>Gender: </h4>
-                <h4>Age at Onset: </h4>
-                <h4>Age at Surgery: </h4>
-                <h4>Seizure Onset: </h4>
+                <!-- Overview section -->
+                <div class="container">
+                    <hr style="border: none;height: 3px;color: #333;background-color: #333;">
+                    <h2 style="font-family:Raleway;"> Overview </h2>
 
-    %s
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- Demographics -->
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-right: 1px dashed gray;">
+                                <h3 style="font-family:Raleway; text-align:center;">Demographics</h3>
+                                <h4> Gender: %s</h4>
+                                <h4> Age at Surgery: %s</h4>
+                                <h4> Age at Seizure Onset: %s</h4>
+                            </div>
+
+                            <!-- Clinical -->
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <h3 style="font-family:Raleway; text-align:center;">Clinical</h3>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4> Outcome: %s</h4>
+                                    <h4> Lesion Status: %s</h4>
+                                    <h4> Type of Resection: %s</h4>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4> Localization of ECoG: %s</h4>
+                                    <h4> Pathology: %s</h4>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <h4> Clinical Summary: %s</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- Frequency selection -->
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border-top: 1px dashed gray;">
+                                <h3 style="font-family:Raleway; text-align:center;">Frequency Selection</h3>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('broadband')">
+                                  <span class="slider round"></span> Broadband Cross-Correlation
+                                </label>
+                                <br>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('alphatheta')">
+                                  <span class="slider round"></span> Alpha/Theta
+                                </label>
+                                <br>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('beta')">
+                                  <span class="slider round"></span> Beta
+                                </label>
+                                <br>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('lowgamma')">
+                                  <span class="slider round"></span> Low Gamma
+                                </label>
+                                <br>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('highgamma')">
+                                  <span class="slider round"></span> High Gamma
+                                </label>
+                                <br>
+                                <label class="switch">
+                                  <input type="checkbox" onclick="show_frequency('ultra')">
+                                  <span class="slider round"></span> Ultrahigh
+                                </label>
+
+                            </div>
 
 
-                <hr style="border: none;height: 3px;color: #333;background-color: #333;">
-                <h2 style="font-family:Raleway;"> All Seizures </h2>
-                <img src="pt/%s.average.cres_and_sync.broadband_CC.png">
-                <img src="pt/%s.average.cres_and_sync.highgamma.png">
-                <img src="pt/%s.average.cres_and_sync.lowgamma.png">
-                <img src="pt/%s.average.cres_and_sync.beta.png">
-                <img src="pt/%s.average.cres_and_sync.alphatheta.png">
+                            <!-- Jump to Seizure section -->
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border-top: 1px dashed gray; ">
+                                <h3 style="font-family:Raleway; text-align:center;">Select Seizure</h3>
+                                <p> <a href="#all">Jump to Average </a> </p>
+%s
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- Overview figures -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border-top: 1px dashed gray;">
+                                <h3 style="font-family:Raleway; text-align:center;">Patient</h3>
+                                Hover for resection zone
+                                <div>
+                                    <!-- !! Main over view figure -->
+                                    <img src="pt/%s/%s.OverviewFigure.no_resection.right.png" height=200 onmouseover="this.src='pt/%s/%s.OverviewFigure.with_resection.right.png';" onmouseout="this.src='pt/%s/%s.OverviewFigure.no_resection.right.png';">
+                                    <img src="pt/%s/%s.OverviewFigure.no_resection.bottom.png" height=200 onmouseover="this.src='pt/%s/%s.OverviewFigure.with_resection.bottom.png';" onmouseout="this.src='pt/%s/%s.OverviewFigure.no_resection.bottom.png';">
+                                    <img src="pt/%s/%s.OverviewFigure.no_resection.left.png" height=200 onmouseover="this.src='pt/%s/%s.OverviewFigure.with_resection.left.png';" onmouseout="this.src='pt/%s/%s.OverviewFigure.no_resection.left.png';">
+                                    <!-- !! Cut away mri of coronal -->
+                                    <!-- <img src="pt/%s/%s.OverviewFigure+MRI.Coronal.with_resection.png" width=200> -->
+                                    <!-- !! Cut away mri of sagittal -->
+                                    <!-- <img src="pt/%s/%s.OverviewFigure+MRI.Sagittal.with_resection.png" width=200> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Seizure specific section -->
+                <div>
+                    <hr style="border: none;height: 3px;color: #333;background-color: #333;">
+%s
+                </div>
 
             </div>
 
@@ -2525,6 +3097,19 @@ def make_html(patient_id, data=data):
                 document.getElementById(evtName).style.display = "block";
                 evt.currentTarget.className += " active";
             }
+
+            function show_frequency(id) {
+                var x = document.getElementsByName(id);
+                for(var i = 0; i < x.length; i++){
+                    xx = x[i];
+                    if (xx.style.display === 'none') {
+                        xx.style.display = 'block';
+                    } else {
+                        xx.style.display = 'none';
+                    }
+                }
+
+            }
             </script>
             <script type="text/javascript">
             // Get the element with id="defaultOpen" and click on it
@@ -2541,8 +3126,11 @@ def make_html(patient_id, data=data):
 
         </html>
 
-        '''%(patient_id,patient_id,subcode_html,patient_id,patient_id,patient_id,patient_id,patient_id)
-        # pass
+
+    '''%(patient_id,gender,age_at_surgery,age_at_onset,outcome,lesion_status,resection_type,localization,pathology,clinical_summary,first_snippet_html,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,patient_id,subcode_html)
+
+
+
     open('%s/../fig/demo/%s.html'%(comp_dir,patient_id),'w').write(final_html)
     return
 
