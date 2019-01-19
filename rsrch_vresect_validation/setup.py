@@ -78,15 +78,17 @@ def gather_cres_results(dilate_radius, fconn = 'highgamma'):
             continue
 
         comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
-        try:
-            if data['PATIENTS'][patient_id]['Cohort'] != 'DEVELOPMENT' and data['PATIENTS'][patient_id]['Cohort'] != 'VALIDATION':
-                continue
-        except Exception:
-            continue
+        # try:
+        #     if data['PATIENTS'][patient_id]['Cohort'] != 'DEVELOPMENT' and data['PATIENTS'][patient_id]['Cohort'] != 'VALIDATION':
+        #         continue
+        # except Exception:
+        #     print patient_id
+        #     continue
 
         # Find pipedef file
         for fn in os.listdir(comp_dir):
             if('pipedef' in fn):
+                print fn
                 # Open pipedef
                 pipedef = json.load(open('%s/%s'%(comp_dir,fn),'r'))
                 # determine if correction dilation
@@ -104,8 +106,8 @@ def gather_cres_results(dilate_radius, fconn = 'highgamma'):
                 if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
-                    if('CPS' not in seizure_type and seizure_type != '??'):
-                        continue
+                    # if('CPS' not in seizure_type and seizure_type != '??'):
+                    #     continue
                     results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
         except:
             continue
@@ -243,11 +245,11 @@ def gather_base_sync_results(dilate_radius, fconn = 'highgamma', skip_chop = Fal
             continue
         if(skip_mayo and 'Study' in patient_id):
             continue
-        try:
-            if data['PATIENTS'][patient_id]['Cohort'] != 'DEVELOPMENT' and data['PATIENTS'][patient_id]['Cohort'] != 'VALIDATION':
-                continue
-        except Exception:
-            continue
+        # try:
+        #     if data['PATIENTS'][patient_id]['Cohort'] != 'DEVELOPMENT' and data['PATIENTS'][patient_id]['Cohort'] != 'VALIDATION':
+        #         continue
+        # except Exception:
+        #     continue
         comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
 
         # Find pipedef file
@@ -266,10 +268,11 @@ def gather_base_sync_results(dilate_radius, fconn = 'highgamma', skip_chop = Fal
                 if('cres.%s'%(unique_id) in fn and 'pipedef' not in fn):
                     clip_id = fn.split('.')[2]
                     seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
-                    if('CPS' not in seizure_type and seizure_type != '??'):
-                        continue
+                    # if('CPS' not in seizure_type and seizure_type != '??'):
+                    #     continue
                     results[patient_id][clip_id] = np.load('%s/%s'%(comp_dir,fn))['base_sync_%s'%fconn]
         except:
+            print 'ERROR %s'%patient_id
             continue
 
     return results
@@ -468,10 +471,10 @@ def get_resected_node_dx(patient_id,dilate_radius=0):
     # Generate list of resected electrodes and write to CSV file
     try:
         if(dilate_radius == 0):
-            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
+            resected_node_labels = data['PATIENTS'][patient_id]['MANUAL_RESECTED_ELECTRODES']
         elif(dilate_radius > 0):
-            resected_node_labels = data['PATIENTS'][patient_id]['RESECTED_ELECTRODES']
-            for fringe_node_label in data['PATIENTS'][patient_id]['RESECTED_FRINGE_ELECTRODES']:
+            resected_node_labels = data['PATIENTS'][patient_id]['MANUAL_RESECTED_ELECTRODES']
+            for fringe_node_label in data['PATIENTS'][patient_id]['MANUAL_RESECTED_FRINGE_ELECTRODES']:
                 resected_node_labels.append(fringe_node_label)
         else:
             blah
@@ -497,5 +500,84 @@ def get_resected_node_dx(patient_id,dilate_radius=0):
     for ii,node_id in enumerate(resected_node_idx):
         pass
         # print 'Virtually resecting node label: %s because label %s is in the resection zone'%(channels[node_id],resected_node_labels[ii])
-    return resected_node_idx, channels
 
+    # Map the NON-resected electrodes to channels
+    all_node_idx = map(lambda x: labels_dict[x][0], labels_dict.keys())
+    non_resected_node_idx = []
+    for idx in all_node_idx:
+        if(idx in resected_node_idx):
+            continue
+        else:
+            non_resected_node_idx.append(idx)
+
+    return resected_node_idx, non_resected_node_idx, channels
+
+
+
+def gather_resection_norm_nodal_results(fconn = 'highgamma', width=-1,dilate_radius=0):
+    '''
+    Utility function to output a dictionary of mean node virtual resection results across all resected nodes for each patient.
+
+    Parameters
+    ----------
+        fconn: str,
+            Connectivity metric
+
+    Returns
+    -------
+        results: dict,
+            Results that contain as key patient id, and has as value another dictionary with nodal cres in each clip.
+    '''
+    # All cres
+    results = {}
+    if width == -1:
+        raise 'NOT IMPLEMENTED FOR WIDTH -1'
+
+    for patient_id in os.listdir(os.path.expanduser(data['COMP_DIR'])):
+        if(patient_id == 'TEST1'):
+            continue
+        try:
+            if not len(data['PATIENTS'][patient_id]['ELECTRODE_LABELS'].split('/')[-1].split('_')) > 4:
+                continue
+        except KeyError:
+            continue
+        comp_dir = os.path.join(os.path.expanduser(data['COMP_DIR']),patient_id,'aim3')
+
+        # Open all adj
+        try:
+            for fn in os.listdir(comp_dir):
+                if('noderes' in fn and 'csv' not in fn):
+                    if(patient_id not in results.keys()):
+                        results[patient_id] = {}
+                    # print fn
+                    clip_id = fn.split('.')[2]
+                    seizure_type = data['PATIENTS'][patient_id]['Events']['Ictal'][clip_id]['SeizureType']
+                    # if('CPS' not in seizure_type):
+                    #     continue
+                    results[patient_id][fn.split('.')[2]] = np.load('%s/%s'%(comp_dir,fn))['control_centrality_%s'%fconn]
+        except:
+            continue
+    norm_results = {}
+    for patient_id in os.listdir(os.path.expanduser(data['COMP_DIR'])):
+        if(patient_id == 'TEST1'):
+            continue
+        try:
+            if not len(data['PATIENTS'][patient_id]['ELECTRODE_LABELS'].split('/')[-1].split('_')) > 4:
+                continue
+        except KeyError:
+            continue
+        try:
+            resected_node_idx, non_resected_node_idx, channels = get_resected_node_dx(patient_id, dilate_radius=dilate_radius)
+        except KeyError:
+            continue
+        norm_results[patient_id] = {}
+        for clip_id in data['PATIENTS'][patient_id]['Events']['Ictal'].keys():
+            try:
+                nodal_control_centrality = results[patient_id][clip_id]
+            except KeyError:
+                continue
+
+            nodal_control_centrality = np.nanmean(nodal_control_centrality[resected_node_idx,:],axis=0).flatten()
+            xp = np.linspace(-1.0,1.0,nodal_control_centrality.shape[0])
+            norm_results[patient_id][clip_id] = np.interp(np.linspace(-1.0,1.0,width),xp,nodal_control_centrality)
+    return norm_results

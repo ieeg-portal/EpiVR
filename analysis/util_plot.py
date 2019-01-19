@@ -64,6 +64,14 @@ def plot_eeg(fig_fn, patient_id, event_type, event_id, data=data, sep=0.75, lw=0
                            'wstop': [59.0, 61.0],
                            'gpass': 0.1,
                            'gstop': 60.0}
+    param['Notch_180Hz'] = {'wpass': [176.0, 184.0],
+                           'wstop': [177.0, 183.0],
+                           'gpass': 0.1,
+                           'gstop': 60.0}
+    param['Notch_210Hz'] = {'wpass': [207.0, 215.0],
+                           'wstop': [208.0, 214.0],
+                           'gpass': 0.1,
+                           'gstop': 60.0}
     param['HPF_5Hz'] = {'wpass': [5.0],
                         'wstop': [4.0],
                         'gpass': 0.1,
@@ -82,6 +90,8 @@ def plot_eeg(fig_fn, patient_id, event_type, event_id, data=data, sep=0.75, lw=0
     data_hat = reref.common_avg_ref(evData)
     data_hat = prewhiten.ar_one(data_hat)
     data_hat = filters.elliptic(data_hat, Fs, **param['Notch_60Hz'])
+    data_hat = filters.elliptic(data_hat, fs, **param['Notch_180Hz'])
+    data_hat = filters.elliptic(data_hat, fs, **param['Notch_210Hz'])
     data_hat = filters.elliptic(data_hat, Fs, **param['HPF_5Hz'])
     if(Fs > 230):
         data_hat = filters.elliptic(data_hat, Fs, **param['LPF_115Hz'])
@@ -146,7 +156,7 @@ def plot_experiment(patient_id, unique_id, data=data):
                 files['cnull'].append(os.path.join(comp_dir,fn))
 
     # Generate figures for different types of connectivity measures
-    for fconn in ['alphatheta','beta','lowgamma','highgamma', 'broadband_CC']:
+    for fconn in ['alphatheta','beta','lowgamma','highgamma', 'veryhigh', 'broadband_CC']:
 
         # Load all cres data for each block
         cres_data = np.zeros((
@@ -704,7 +714,8 @@ def gather_results(dilate_radius, fconn = 'highgamma'):
 
         # Find pipedef file
         for fn in os.listdir(comp_dir):
-            if('pipedef' in fn):
+            if('pipedef' in fn and '1000' not in fn):
+                # if('pipedef' in fn):
                 # Open pipedef
                 pipedef = json.load(open('%s/%s'%(comp_dir,fn),'r'))
                 # determine if correction dilation
@@ -1569,7 +1580,7 @@ def plot_all_CC_variability():
 
     comp_dir = os.path.expanduser(data['COMP_DIR'])
 
-    for fconn in ['highgamma','broadband_CC']:
+    for fconn in ['highgamma','veryhigh','broadband_CC']:
         all_nodal_control_centrality = gather_nodal_results(fconn)
         all_null_nodal_control_centrality = gather_null_nodal_results(fconn
                 )
@@ -1809,7 +1820,7 @@ def plot_figure5(patient_id, clip_idx, clip_idx_label):
     max_y = 0.02
     min_y = -0.02
 
-    for ax, fconn in zip(axs,['alphatheta','beta','lowgamma','highgamma','broadband_CC']):
+    for ax, fconn in zip(axs,['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']):
         if(fconn == 'alphatheta'):
             title = 'Alpha/Theta:\n 5-15 Hz'
         if(fconn == 'beta'):
@@ -1818,6 +1829,8 @@ def plot_figure5(patient_id, clip_idx, clip_idx_label):
             title = 'Low Gamma:\n 30-40 Hz'
         if(fconn == 'highgamma'):
             title = 'High Gamma:\n 95-105 Hz'
+        if(fconn == 'veryhigh'):
+            title = 'Very High Freqencies:\n 105-Nyquist(256) Hz'
         if(fconn == 'broadband_CC'):
             title = 'Broadband\n Cross-Correlation'
 
@@ -1864,6 +1877,103 @@ def plot_figure5(patient_id, clip_idx, clip_idx_label):
         ax.text(0.0, min_y+(max_y-min_y)*0.1,title,fontdict={'family':'raleway','size':12,'color':'black'})
     plt.tight_layout()
     fig.savefig('%s/../fig/Figure3.%s.%s.png'%(comp_dir,patient_id,clip_idx_label))
+
+
+def plot_figureS3():
+    '''
+    This script plots distribution of seizure lengths.
+    '''
+
+
+    fig,axs = plt.subplots(1,4,sharey=True)
+    fig.set_size_inches((6.69291339*4,1.67322835*4))
+
+    sz_len = []
+    for patient_id in data['PATIENTS'].keys():
+        if 'CHOP' in patient_id:
+            continue
+        for event_id in data['PATIENTS'][patient_id]['Events']['Ictal'].keys():
+            event = data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]
+            eec = event['SeizureEEC']
+            end = event['SeizureEnd']
+            if eec == -1 or end == -1:
+                continue
+            else:
+                sz_len.append(end-eec)
+    axs[0].hist(sz_len,int(len(sz_len)/5.0))
+    axs[0].set_xlim([0,1600])
+    print np.nanmedian(sz_len)
+    # axs[0].set_xlabel('Time (sec.)')
+    # axs[0].set_ylabel('Number of events')
+    # axs[0].set_title('All seizures', fontdict={'size':8, 'weight':'bold'})
+
+    sz_len = []
+    for patient_id in data['PATIENTS'].keys():
+        if 'CHOP' in patient_id:
+            continue
+        for event_id in data['PATIENTS'][patient_id]['Events']['Ictal'].keys():
+            event = data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]
+            type = event['SeizureType']
+            if type != 'CPS':
+                continue
+            eec = event['SeizureEEC']
+            end = event['SeizureEnd']
+            if eec == -1 or end == -1:
+                continue
+            else:
+                sz_len.append(end-eec)
+    axs[1].hist(sz_len,int(len(sz_len)/4.0))
+    axs[1].set_xlim([0,1600])
+    print np.nanmedian(sz_len)
+    # axs[1].set_xlabel('Time (sec.)')
+    # axs[1].set_title('Complex Partial Seizures', fontdict={'size':8, 'weight':'bold'})
+
+    sz_len = []
+    for patient_id in data['PATIENTS'].keys():
+        if 'CHOP' in patient_id:
+            continue
+        for event_id in data['PATIENTS'][patient_id]['Events']['Ictal'].keys():
+            event = data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]
+            type = event['SeizureType']
+            if type != 'CPS+GTC':
+                continue
+            eec = event['SeizureEEC']
+            end = event['SeizureEnd']
+            if eec == -1 or end == -1:
+                continue
+            else:
+                sz_len.append(end-eec)
+    axs[2].hist(sz_len,int(len(sz_len)/2.0))
+    axs[2].set_xlim([0,1600])
+    print np.nanmedian(sz_len)
+    # axs[2].set_xlabel('Time (sec.)')
+    # axs[2].set_title('Complex Partial Seizures with generalization', fontdict={'size':8, 'weight':'bold'})
+
+    sz_len = []
+    for patient_id in data['PATIENTS'].keys():
+        if 'CHOP' in patient_id:
+            continue
+        for event_id in data['PATIENTS'][patient_id]['Events']['Ictal'].keys():
+            event = data['PATIENTS'][patient_id]['Events']['Ictal'][event_id]
+            type = event['SeizureType']
+            if type != 'SPS':
+                continue
+            eec = event['SeizureEEC']
+            end = event['SeizureEnd']
+            if eec == -1 or end == -1:
+                continue
+            else:
+                sz_len.append(end-eec)
+    axs[3].hist(sz_len,int(len(sz_len)/1.0))
+    axs[3].set_xlim([0,1600])
+    # axs[3].set_xlabel('Time (sec.)')
+    # axs[3].set_title('Simple Partial Seizures', fontdict={'size':8, 'weight':'bold'})
+
+    # plt.suptitle('Distribution of seizure length', fontsize=10)
+    plt.grid(True)
+    plt.savefig('../../fig/FigureS3.png')
+
+
 
 
 def hack():
@@ -2080,7 +2190,7 @@ def plot_network_measures_individual_seizure():
     dilate_radius = 0
     for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
             all_cres = gather_results(dilate_radius, fconn)
             all_base_sync = gather_sync_results(dilate_radius, fconn)
 
@@ -2136,7 +2246,7 @@ def plot_network_measures_individual_seizure():
                 ax1.grid(False)
                 ax2.grid(False)
                 # plt.show()
-                plt.savefig('%s/../fig/demo/pt/%s.Ictal.%s.cres_and_sync.%s.png'%(comp_dir,patient_id,event_id,fconn),bbox_inches='tight')
+                plt.savefig('%s/../fig/demo/pt/%s/%s.Ictal.%s.cres_and_sync.%s.png'%(comp_dir,patient_id,patient_id,event_id,fconn),bbox_inches='tight')
 
 def plot_average_network_measures_all_seizures():
     '''
@@ -2146,7 +2256,7 @@ def plot_average_network_measures_all_seizures():
     comp_dir = data['COMP_DIR']
     for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
             all_cres = gather_results(dilate_radius, fconn)
             all_base_sync = gather_sync_results(dilate_radius, fconn)
 
@@ -2225,9 +2335,9 @@ def plot_average_unscaled_network_measures_all_seizures():
 
     dilate_radius = 0
     comp_dir = data['COMP_DIR']
-    for patient_id in ['HUP065']:#['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
             all_cres = gather_results(dilate_radius, fconn)
             all_base_sync = gather_sync_results(dilate_radius, fconn)
 
@@ -2297,9 +2407,11 @@ def write_all_nodal_mean_csv_individual_seizure():
     '''
     This writes the nodal mean csv for a given patient id and seizure id.
     '''
-    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['Study026']:#
+#['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
+            print patient_id, fconn
             res = gather_nodal_results(fconn)
             # for each nodal clip  - gather_nodal_results
             for event_id in res[patient_id].keys():
@@ -2342,7 +2454,8 @@ def write_all_nodal_mean_csv_individual_seizure():
                 # Load electrodes to ignore
                 ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
                 for ii,node_id in enumerate(ignored_node_idx):
-                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                    pass
+                    # print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
                 channels = list(np.delete(np.array(channels),ignored_node_idx))
 
                 # Recorrespond label names
@@ -2354,18 +2467,21 @@ def write_all_nodal_mean_csv_individual_seizure():
 
                 # Create PREICTAL patient_id.ictal.event_id.nodres.frequency.preictal.mean.csv
                 noderes = res[patient_id][event_id]
-                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,:noderes.shape[1]/2.0],axis=1))))
+                if np.isnan(np.mean(noderes[:,:noderes.shape[1]/2.0],axis=1)).any():
+                    print 'HAS NAN!!!! NANMEANING: %s,%s,%s'%(patient_id, event_id, fconn)
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.nanmean(noderes[:,:noderes.shape[1]/2.0],axis=1))))
                 df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.preictal.%s.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
-                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(noderes[:,noderes.shape[1]/2.0:],axis=1))))
+                df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.nanmean(noderes[:,noderes.shape[1]/2.0:],axis=1))))
                 df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.ictal.%s.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
-def write_all_nodal_csv_individual_seizure(width=120):
+def write_all_nodal_csv_individual_seizure(width=None):
     '''
     This writes the nodal csv for a given patient id and seizure id, stretched to width after z scoring.
     '''
-    for patient_id in ['HUP075']:#['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+    for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
+            print patient_id, fconn
             res = gather_nodal_results(fconn)
             # for each nodal clip  - gather_nodal_results
             for event_id in res[patient_id].keys():
@@ -2408,7 +2524,8 @@ def write_all_nodal_csv_individual_seizure(width=120):
                 # Load electrodes to ignore
                 ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
                 for ii,node_id in enumerate(ignored_node_idx):
-                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                    pass
+                    # print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
                 channels = list(np.delete(np.array(channels),ignored_node_idx))
 
                 # Recorrespond label names
@@ -2417,25 +2534,33 @@ def write_all_nodal_csv_individual_seizure(width=120):
 
                 channel_names = map(lambda x: x[0], sorted(labels_dict.items(), key=lambda x: x[1][0]))
 
-                # Create PREICTAL patient_id.ictal.event_id.noderes.frequency.preictal.mean.csv
-                # noderes = scipy.stats.zscore(res[patient_id][event_id],axis=0)
-                noderes = res[patient_id][event_id]
-                xp = np.linspace(-1.0,1.0,noderes.shape[1])
-                f = scipy.interpolate.interp1d(xp,noderes)
-                noderes_norm = f(np.linspace(-1.0,1.0,width))
+                # Create csv
+                if width == None:
+                    noderes = res[patient_id][event_id]
+                    noderes_norm = noderes
+
+                else:
+                    noderes = res[patient_id][event_id]
+                    xp = np.linspace(-1.0,1.0,noderes.shape[1])
+                    f = scipy.interpolate.interp1d(xp,noderes)
+                    noderes_norm = f(np.linspace(-1.0,1.0,width))
 
                 noderes_out = np.concatenate((np.array(channel_names).reshape([noderes_norm.shape[0],1]),noderes_norm),axis=1)
 
                 df = pd.DataFrame(noderes_out)
-                df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+                if width==None:
+                    df.to_csv('%s/%s/aim3/%s.Ictal.%s.raw.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
+                else:
+                    df.to_csv('%s/%s/aim3/%s.Ictal.%s.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,event_id,fconn),header=False,index=False)
 
 def write_all_nodal_mean_csv_individual_patient(width=120):
     '''
     This writes the nodal mean csv for a given patient id averaged across seizures
     '''
     for patient_id in ['HUP064','HUP065','HUP068','HUP070','HUP073','HUP074','HUP075','HUP078','HUP080','HUP082','HUP083','HUP086','HUP087','HUP088','HUP094','HUP105','HUP106','HUP107','HUP111A','HUP111B','HUP116','Study012','Study016','Study017','Study019','Study020','Study022','Study028','Study029']:
+        print patient_id
         # for each band
-        for fconn in ['alphatheta','beta','lowgamma','highgamma','broadband_CC']:
+        for fconn in ['alphatheta','beta','lowgamma','highgamma','veryhigh','broadband_CC']:
             res = gather_nodal_results(fconn)
             all_noderes_norm = []
             # for each nodal clip  - gather_nodal_results
@@ -2479,7 +2604,8 @@ def write_all_nodal_mean_csv_individual_patient(width=120):
                 # Load electrodes to ignore
                 ignored_node_idx  = map(lambda x: labels_dict[x][0], ignored_node_labels)
                 for ii,node_id in enumerate(ignored_node_idx):
-                    print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
+                    pass
+                    # print 'Ignoring node label: %s because label %s is in IGNORE_ELECTRODES'%(channels[node_id],ignored_node_labels[ii])
                 channels = list(np.delete(np.array(channels),ignored_node_idx))
 
                 # Recorrespond label names
@@ -2503,9 +2629,9 @@ def write_all_nodal_mean_csv_individual_patient(width=120):
             df = pd.DataFrame(noderes_out)
             df.to_csv('%s/%s/aim3/%s.average.noderes.%s.Movie.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
 
-            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(all_noderes_norm[:,:all_noderes_norm.shape[1]/2.0],axis=1))))
+            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.nanmean(all_noderes_norm[:,:all_noderes_norm.shape[1]/2.0],axis=1))))
             df.to_csv('%s/%s/aim3/%s.average.noderes.preictal.%s.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
-            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.mean(all_noderes_norm[:,all_noderes_norm.shape[1]/2.0:],axis=1))))
+            df = pd.DataFrame(zip(channel_names,scipy.stats.zscore(np.nanmean(all_noderes_norm[:,all_noderes_norm.shape[1]/2.0:],axis=1))))
             df.to_csv('%s/%s/aim3/%s.average.noderes.ictal.%s.csv'%(comp_dir,patient_id,patient_id,fconn),header=False,index=False)
             # blah
 
@@ -2571,8 +2697,8 @@ def make_html(patient_id, data=data):
                         <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.lowgamma.png"></div>
                         <h4 style="font-family:Raleway;"> High Gamma </h4>
                         <div name="highgamma" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.highgamma.png"></div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.ultra.png"></div>
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;"><img src="pt/%s/%s.average.scaled.cres_and_sync.veryhigh.png"></div>
 
                         <!-- Unscale network measures -->
                         <hr style="border: none;height: 1px;color: #333;background-color: #333;">
@@ -2587,8 +2713,8 @@ def make_html(patient_id, data=data):
                         <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.lowgamma.png"></div>
                         <h4 style="font-family:Raleway;"> High Gamma </h4>
                         <div name="highgamma" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.highgamma.png"></div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.ultra.png"></div>
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;"><img src="pt/%s/%s.average.unscaled.cres_and_sync.veryhigh.png"></div>
 
 
                         <!-- Mean Node Control Centrality (z scored or not?) -->
@@ -2644,15 +2770,15 @@ def make_html(patient_id, data=data):
                             <br>
                             <img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.highgamma.no_resection.left.png" height=200>
                         </div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;">
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;">
                             Pre-Ictal
                             <br>
-                            <img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.ultra.no_resection.left.png" height=200>
+                            <img src="pt/%s/%s.average.noderes.preictal.veryhigh.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.preictal.veryhigh.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.preictal.veryhigh.no_resection.left.png" height=200>
                             <br>
                             Ictal
                             <br>
-                            <img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.ultra.no_resection.left.png" height=200>
+                            <img src="pt/%s/%s.average.noderes.ictal.veryhigh.no_resection.right.png" height=200><img src="pt/%s/%s.average.noderes.ictal.veryhigh.no_resection.bottom.png" height=200><img src="pt/%s/%s.average.noderes.ictal.veryhigh.no_resection.left.png" height=200>
                         </div>
 
                         <!-- Animation of node centrality (z scored or not?) -->
@@ -2678,9 +2804,9 @@ def make_html(patient_id, data=data):
                         <div name="highgamma" style="display:none;">
                             <img src="pt/%s/%s.average.noderes.highgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.highgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.highgamma.with_resection.gifv.png" height=200>
                         </div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;">
-                            <img src="pt/%s/%s.average.noderes.ultra.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.ultra.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.ultra.with_resection.gifv.png" height=200>
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;">
+                            <img src="pt/%s/%s.average.noderes.veryhigh.with_resection.right.gifv" height=200><img src="pt/%s/%s.average.noderes.veryhigh.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.average.noderes.veryhigh.with_resection.gifv.png" height=200>
                         </div>
                     </div>
 
@@ -2711,8 +2837,8 @@ def make_html(patient_id, data=data):
                         <div name="lowgamma" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.lowgamma.png"></div>
                         <h4 style="font-family:Raleway;"> High Gamma </h4>
                         <div name="highgamma" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.highgamma.png"></div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.ultra.png"></div>
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;"><img src="pt/%s/%s.Ictal.%s.cres_and_sync.veryhigh.png"></div>
 
                         <!-- Mean Node Control Centrality (z scored or not?) -->
                         <hr style="border: none;height: 1px;color: #333;background-color: #333;">
@@ -2767,15 +2893,15 @@ def make_html(patient_id, data=data):
                             <br>
                             <img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.highgamma.no_resection.left.png" height=200>
                         </div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;">
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;">
                             Pre-Ictal
                             <br>
-                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.ultra.no_resection.left.png" height=200>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.preictal.veryhigh.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.veryhigh.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.preictal.veryhigh.no_resection.left.png" height=200>
                             <br>
                             Ictal
                             <br>
-                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.ultra.no_resection.left.png" height=200>
+                            <img src="pt/%s/%s.Ictal.%s.noderes.ictal.veryhigh.no_resection.right.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.veryhigh.no_resection.bottom.png" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ictal.veryhigh.no_resection.left.png" height=200>
                         </div>
 
                         <!-- Animation of node centrality (z scored or not?) -->
@@ -2801,9 +2927,9 @@ def make_html(patient_id, data=data):
                         <div name="highgamma" style="display:none;">
                             <img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.highgamma.with_resection.gifv.png" height=200>
                         </div>
-                        <h4 style="font-family:Raleway;"> Ultrahigh Frequencies </h4>
-                        <div name="ultra" style="display:none;">
-                            <img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.ultra.with_resection.gifv.png" height=200>
+                        <h4 style="font-family:Raleway;"> Very High Frequencies </h4>
+                        <div name="veryhigh" style="display:none;">
+                            <img src="pt/%s/%s.Ictal.%s.noderes.veryhigh.with_resection.right.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.veryhigh.with_resection.bottom.gifv" height=200><img src="pt/%s/%s.Ictal.%s.noderes.veryhigh.with_resection.gifv.png" height=200>
                         </div>
                     </div>
         '''%(event_id,event_id,subtype,seizure_type,length_of_seizure,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id,patient_id,patient_id,event_id)
@@ -2979,7 +3105,7 @@ def make_html(patient_id, data=data):
                             </div>
 
                             <!-- Clinical -->
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="border-left: 1px dashed gray;">
                                 <h3 style="font-family:Raleway; text-align:center;">Clinical</h3>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                     <h4> Outcome: %s</h4>
@@ -3029,8 +3155,8 @@ def make_html(patient_id, data=data):
                                 </label>
                                 <br>
                                 <label class="switch">
-                                  <input type="checkbox" onclick="show_frequency('ultra')">
-                                  <span class="slider round"></span> Ultrahigh
+                                  <input type="checkbox" onclick="show_frequency('veryhigh')">
+                                  <span class="slider round"></span> Very High
                                 </label>
 
                             </div>

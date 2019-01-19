@@ -10,8 +10,10 @@
       "AgeOnset":"3",
       "AgeSurgery":"21",
       "SeizureOnset":"LFL",
+      "Lesion Status":"Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"Other",
       "GridCoverageOfResection":"center",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -25,6 +27,17 @@
             "SeizureEnd":632764.000,
             "SEIZURE_ONSET_ELECTRODES":["LG23","LG31"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP064-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -39,8 +52,10 @@
       "AgeOnset":"2",
       "AgeSurgery":"36",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -76,6 +91,17 @@
             "SeizureEnd":249941.000,
             "SEIZURE_ONSET_ELECTRODES":["RAT1","RAT2","RAT3","RAT4","RG3","RG4","RG5","RG6","RG9","RG10","RG11","RG17","RST1","RST2","RST3"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP065-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -90,8 +116,10 @@
       "AgeOnset":"13",
       "AgeSurgery":"28",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -149,6 +177,17 @@
             "SeizureEnd":968288.000,
             "SEIZURE_ONSET_ELECTRODES":["RG4","RG10","RG11","RG12","RG13","RG14","RG54","RG55"],
             "SeizurePhenotype":"B"
+          },
+          "1000":
+          {
+            "FILE":"HUP068-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -163,8 +202,10 @@
       "AgeOnset":"12",
       "AgeSurgery":"33",
       "SeizureOnset":"LFPL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"Other",
       "GridCoverageOfResection":"center",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -256,6 +297,17 @@
             "SeizureEnd":328377.000,
             "SEIZURE_ONSET_ELECTRODES":["LG12","LG13","LG14","LG15","LG20","LG21","LG22","LG23","LG29","LG30"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP070-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -270,8 +322,10 @@
       "AgeOnset":"5?",
       "AgeSurgery":"40",
       "SeizureOnset":"RFL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"Other",
       "GridCoverageOfResection":"center",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -329,6 +383,17 @@
             "SeizureEnd":476565.000,
             "SEIZURE_ONSET_ELECTRODES":["LLT1","LLT2","LLT3","LLT4","LOF4","LOF5","LOF6","LOF7","LOF8","RLT2","RLT3","RLT4","RLT5","RLT6"],
             "SeizurePhenotype":"B"
+          },
+          "1000":
+          {
+            "FILE":"HUP073-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -343,8 +408,10 @@
       "AgeOnset":"5",
       "AgeSurgery":"25",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"LATL+",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -403,6 +470,17 @@
             "SeizureEnd":411512,
             "SEIZURE_ONSET_ELECTRODES":["GRID39","GRID40","GRID44","GRID45","AIT3"],
             "SeizurePhenotype":"B"
+          },
+          "1000":
+          {
+            "FILE":"HUP074-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -417,8 +495,10 @@
       "AgeOnset":"52",
       "AgeSurgery":"57",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -432,6 +512,17 @@
             "SeizureEnd":730584,
             "SEIZURE_ONSET_ELECTRODES":["G34","G35","G42","G43","G44","G45","AST1","AST2","AST3"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP075-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -446,8 +537,10 @@
       "AgeOnset":"0",
       "AgeSurgery":"54",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -506,6 +599,17 @@
             "SeizureEnd":342265.000,
             "SEIZURE_ONSET_ELECTRODES":["AST1"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP078-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -520,8 +624,10 @@
       "AgeOnset":"?",
       "AgeSurgery":"41",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -568,6 +674,17 @@
             "SeizureEnd":1202379,
             "SEIZURE_ONSET_ELECTRODES":["GRID1","GRID2","GRID3","GRID32","GRID33","GRID38","GRID39","GRID45","GRID46","GRID47","GRID54","GRID55"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP080-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -582,8 +699,10 @@
       "AgeOnset":"34",
       "AgeSurgery":"56",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -653,6 +772,17 @@
             "SeizureEnd":439979,
             "SEIZURE_ONSET_ELECTRODES":["RH2","RH3"],
             "SeizurePhenotype":"C"
+          },
+          "1000":
+          {
+            "FILE":"HUP082-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -667,8 +797,10 @@
       "AgeOnset":"8",
       "AgeSurgery":"29",
       "SeizureOnset":"LPL",
+      "Lesion Status":"Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -826,6 +958,17 @@
             "SeizureEnd":987979.22,
             "SEIZURE_ONSET_ELECTRODES":["LG5","LG6","LG14","LG15","LG16","LG23","LG24"],
             "SeizurePhenotype":"A"
+          },
+          "1000":
+          {
+            "FILE":"HUP083-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -840,8 +983,10 @@
       "AgeOnset":"?",
       "AgeSurgery":"25",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"outside",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -866,6 +1011,17 @@
             "SeizureEnd":798549.000,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LG57","LMST3","LMST4","LPST3","LPST4","LG52","LG53"]
+          },
+          "1000":
+          {
+            "FILE":"HUP086-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -880,8 +1036,10 @@
       "AgeOnset":"19",
       "AgeSurgery":"24",
       "SeizureOnset":"LFL",
+      "Lesion Status":"Lesional",
+      "Pathology":"Tumor/Vascular/Infection",
+      "Resection Type":"Other",
       "GridCoverageOfResection":"corner+center",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -906,6 +1064,17 @@
             "SeizureEnd":235800.000,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LG15","LG16","LG28","LG29","LG30","LG31","LG32","LG36","LG37","LG38","LG39","LG40"]
+          },
+          "1000":
+          {
+            "FILE":"HUP087-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -920,8 +1089,10 @@
       "AgeOnset":"19",
       "AgeSurgery":"24",
       "SeizureOnset":"LFL",
+      "Lesion Status":"Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"corner",
-      "Cohort":"DEVELOPMENT",
       "Events":{
         "Ictal":
         {
@@ -957,6 +1128,17 @@
             "SeizureEnd":585000.39,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["LMST2","LMST3","LMST4","RAD1","RAD2","RHD2","RHD3"]
+          },
+          "1000":
+          {
+            "FILE":"HUP088-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -971,8 +1153,10 @@
       "AgeOnset":"20",
       "AgeSurgery":"48",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1008,6 +1192,17 @@
             "SeizureEnd":1191265.11,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RDA1","RDA2","RDA3"]
+          },
+          "1000":
+          {
+            "FILE":"HUP094-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1022,8 +1217,10 @@
       "AgeOnset":"27",
       "AgeSurgery":"39",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Lesional",
+      "Pathology":"Tumor/Vascular/Infection",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1048,6 +1245,17 @@
             "SeizureEnd":1694643.54,
             "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["RA2","RA3","RA4","RDNET1","RDNET2","RDNET3","RDNET4"]
+          },
+          "1000":
+          {
+            "FILE":"HUP105-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1062,8 +1270,10 @@
       "AgeOnset":"24",
       "AgeSurgery":"45",
       "SeizureOnset":"LTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"LATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1110,6 +1320,17 @@
             "SeizureEnd":828481.85,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["LA1","LA2","LA3","LA4","LH2"]
+          },
+          "1000":
+          {
+            "FILE":"HUP106-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1124,8 +1345,10 @@
       "AgeOnset":"5",
       "AgeSurgery":"36",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1205,6 +1428,17 @@
             "SeizureEnd":695342.15,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["RDH2","RDH3","RDH4","RAT1","RAT2"]
+          },
+          "1000":
+          {
+            "FILE":"HUP107-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1219,8 +1453,10 @@
       "AgeOnset":"28",
       "AgeSurgery":"40",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1289,6 +1525,17 @@
             "SeizureEnd":185795.5,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["RP1","RP2","RP3","RP4","RP5","RP6","RPF2","RPF3","RPF4","RPF5"]
+          },
+          "1000":
+          {
+            "FILE":"HUP111A-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1303,8 +1550,10 @@
       "AgeOnset":"28",
       "AgeSurgery":"40",
       "SeizureOnset":"RTL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"HS/MTS",
+      "Resection Type":"RATL",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1417,6 +1666,17 @@
             "SeizureEnd":222664.41,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "1000":
+          {
+            "FILE":"HUP111B-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1431,8 +1691,10 @@
       "AgeOnset":"",
       "AgeSurgery":"",
       "SeizureOnset":"",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"???",
+      "Resection Type":"RTA",
       "GridCoverageOfResection":"??",
-      "Cohort":"VALIDATION",
       "Events":{
         "Ictal":
         {
@@ -1468,6 +1730,17 @@
             "SeizureEnd":312601.48,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":[""]
+          },
+          "1000":
+          {
+            "FILE":"HUP116-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1482,6 +1755,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"??",
       "SeizureOnset":"RTO",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Events":{
         "Ictal":
         {
@@ -1517,11 +1793,22 @@
             "SeizureEnd":373611.132000,
             "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["RG13","RG14","RG20","RG21","RG25","RG26","RG27"]
+          },
+          "1000":
+          {
+            "FILE":"Study004-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study004/aim1/Study004_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["RAT1","RAT2","RAT3","RAT4","RMT1","RMT2","RMT3","RMT4","RPT1","RPT2","RPT3","RPT4","RG1","RG2","RG3","RG7","RG8","RG13"],
       "IGNORE_ELECTRODES":["RAP4","RG19"]
     },
@@ -1532,7 +1819,9 @@
       "AgeOnset":"23",
       "AgeSurgery":"37",
       "SeizureOnset":"RFL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"???",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Events":{
         "Ictal":
         {
@@ -1844,6 +2133,17 @@
             "SeizureEnd":855971.885363,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":[]
+          },
+          "1000":
+          {
+            "FILE":"Study012-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1858,7 +2158,9 @@
       "AgeOnset":"5",
       "AgeSurgery":"36",
       "SeizureOnset":"RFTL",
-      "Cohort":"VALIDATION",
+      "Lesion Status":"???",
+      "Pathology":"Gliosis",
+      "Resection Type":"RATL",
       "Events":{
         "Ictal":
         {
@@ -1927,6 +2229,17 @@
             "SeizureEnd":467032.782243,
             "SeizurePhenotype":"D",
             "SEIZURE_ONSET_ELECTRODES":["ROF1","ROF2","ROF3"]
+          },
+          "1000":
+          {
+            "FILE":"Study016-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -1942,7 +2255,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"??",
       "SeizureOnset":"RTL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"???",
+      "Resection Type":"RATL",
       "Events":{
         "Ictal":
         {
@@ -2044,6 +2359,17 @@
             "SeizureEnd":644667.17,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":[]
+          },
+          "1000":
+          {
+            "FILE":"Study017-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -2058,7 +2384,9 @@
       "AgeOnset":"31",
       "AgeSurgery":"33",
       "SeizureOnset":"LTL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"Lesional?",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Events":{
         "Ictal":
         {
@@ -2458,6 +2786,17 @@
             "SeizureEnd":428195.571372,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LT21"]
+          },
+          "1000":
+          {
+            "FILE":"Study019-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -2473,7 +2812,9 @@
       "AgeOnset":"5",
       "AgeSurgery":"10",
       "SeizureOnset":"RFL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"???",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Events":{
         "Ictal":
         {
@@ -2553,6 +2894,17 @@
             "SeizureEnd":310091.063021,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["RAG18"]
+          },
+          "1000":
+          {
+            "FILE":"Study020-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -2568,6 +2920,9 @@
       "AgeOnset":"11-20",
       "AgeSurgery":"11-20",
       "SeizureOnset":"RFTL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"RATL+",
       "Cohort":"",
       "Events":{
         "Ictal":
@@ -2672,32 +3027,21 @@
             "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["RAT2"]
           },
-          "10":
+          "1000":
           {
-            "FILE":"Study021-short-ictal-block-10.mat",
-            "SeizureType":"??",
+            "FILE":"Study021-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
             "EMU_Report_Event_Number":"-1",
             "SeizureEEC":-1,
             "SeizureUEO":-1,
             "SeizureEnd":-1,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["RFG46","RFG47","RFG48"]
-          },
-          "11":
-          {
-            "FILE":"Study021-short-ictal-block-11.mat",
-            "SeizureType":"??",
-            "EMU_Report_Event_Number":"-1",
-            "SeizureEEC":-1,
-            "SeizureUEO":-1,
-            "SeizureEnd":-1,
-            "SeizurePhenotype":"",
-            "SEIZURE_ONSET_ELECTRODES":["RFG44","RFG45","RFG46","RFG47","RFG48","RAT2","RTD1"]
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study021/aim1/Study021_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["RTG1","RTG2","RTG3","RTG4","RTG7","RTG8","RTG9","RTG10","RTG13","RTG14","RTG15","RTG16","RTG19","RTG20","RTG21","RTG22","RAT1","RAT2","RAT3","RAT4"],
       "IGNORE_ELECTRODES":["RFG9"]
     },
@@ -2708,7 +3052,9 @@
       "AgeOnset":"11-20",
       "AgeSurgery":"21-30",
       "SeizureOnset":"LTL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"LATL",
       "Events":{
         "Ictal":
         {
@@ -2789,6 +3135,17 @@
             "SeizurePhenotype":"B",
             "SEIZURE_ONSET_ELECTRODES":["ATS1","ATS2","ATS3","ATS4"],
             "STATUS": "ALL_DROPOUT"
+          },
+          "1000":
+          {
+            "FILE":"Study022-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -2804,6 +3161,9 @@
       "AgeOnset":"1",
       "AgeSurgery":"16",
       "SeizureOnset":"LOL",
+      "Lesion Status":"Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Cohort":"",
       "Events":{
         "Ictal":
@@ -2851,11 +3211,22 @@
             "SeizureEnd":123737.815999,
             "SeizurePhenotype":"",
             "SEIZURE_ONSET_ELECTRODES":["LTG10","LTG11","LTG17","LTG18","LTG19","LTG25","PD1","PD2","PD3","PD4"]
+          },
+          "1000":
+          {
+            "FILE":"Study023-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study023/aim1/Study023_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["LTG58","LTG59"],
       "IGNORE_ELECTRODES":["LTG31"]
     },
@@ -2866,6 +3237,9 @@
       "AgeOnset":"9",
       "AgeSurgery":"9",
       "SeizureOnset":"LFL",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"Other",
       "Cohort":"",
       "Events":{
         "Ictal":
@@ -2979,11 +3353,22 @@
             "SeizureEnd":107957.355405,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LMT3","LMT7"]
+          },
+          "1000":
+          {
+            "FILE":"Study026-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study026/aim1/Study026_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["LFG33","LFG34","LFG35","LFG36","LFG37","LFG38","LFG39","LFG40","LFG41","LFG42","LFG43","LFG44","LFG45","LFG46","LFG47","LFG48","LFP1","LFP2","LFP3","LFP4","LFP5","LFP6","LFP7","LFP8"],
       "IGNORE_ELECTRODES":["LFG39","LFG43","LFG44","LFG50","LFG51","LFG55","LFG60"]
     },
@@ -2994,7 +3379,9 @@
       "AgeOnset":"4",
       "AgeSurgery":"5",
       "SeizureOnset":"LFPL",
-      "Cohort":"DEVELOPMENT",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"Other",
       "Events":{
         "Ictal":
         {
@@ -3054,6 +3441,17 @@
             "SeizureEnd":142780.007,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LPG51","LPG52","LPG53"]
+          },
+          "1000":
+          {
+            "FILE":"Study028-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -3069,7 +3467,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"??",
       "SeizureOnset":"RTL",
-      "Cohort":"VALIDATION",
+      "Lesion Status":"Non-Lesional",
+      "Pathology":"Gliosis",
+      "Resection Type":"LATL",
       "Events":{
         "Ictal":
         {
@@ -3105,6 +3505,17 @@
             "SeizureEnd":384764.11,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["AIT1","AIT2","AIT3","AIT4","PIT1","PIT2","PIT3","PIT4"]
+          },
+          "1000":
+          {
+            "FILE":"Study029-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
@@ -3115,11 +3526,14 @@
     },
     "Study033":
     {
-      "Outcome": "??",
+      "Outcome": "ILAE5",
       "Sex":"??",
       "AgeOnset":"??",
       "AgeSurgery":"??",
       "SeizureOnset":"??",
+      "Lesion Status":"Lesional",
+      "Pathology":"MCD",
+      "Resection Type":"Other",
       "Cohort":"",
       "Events":{
         "Ictal":
@@ -3222,11 +3636,22 @@
             "SeizureEnd":251841.712000,
             "SeizurePhenotype":"A",
             "SEIZURE_ONSET_ELECTRODES":["LTG1","LTG10"]
+          },
+          "1000":
+          {
+            "FILE":"Study033-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study033/aim1/Study033_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["LG19","LG20","LG21","LG22","LG23","LG27","LG28","LG29","LG30","LG31","LG35","LG36","LG37","LG38","LG39","LG43","LG44","LG45","LG46","LG47","LG51","LG52","LG53","LG54","LG55"],
       "IGNORE_ELECTRODES":[]
     },
@@ -3237,6 +3662,9 @@
       "AgeOnset":"51-60",
       "AgeSurgery":"51-60",
       "SeizureOnset":"LFTL",
+      "Lesion Status":"???",
+      "Pathology":"Gliosis",
+      "Resection Type":"LATL+",
       "Cohort":"",
       "Events":{
         "Ictal":
@@ -3339,11 +3767,22 @@
             "SeizureEnd":103889.84,
             "SeizurePhenotype":"C",
             "SEIZURE_ONSET_ELECTRODES":["AD4"]
+          },
+          "1000":
+          {
+            "FILE":"Study038-interictal-block-1.mat",
+            "SeizureType":"??interictal??",
+            "EMU_Report_Event_Number":"-1",
+            "SeizureEEC":-1,
+            "SeizureUEO":-1,
+            "SeizureEnd":-1,
+            "SeizurePhenotype":"E",
+            "SEIZURE_ONSET_ELECTRODES":[]
           }
         }
       },
       "RESECTION_IMAGE":"",
-      "ELECTRODE_LABELS":"??",
+      "ELECTRODE_LABELS":"/gdrive/public/USERS/lkini/aim1/results/Study038/aim1/Study038_electrode_labels.csv",
       "MANUAL_RESECTED_ELECTRODES":["LG9","LG10","LG11","LG12","LG17","LG18","LG19","LG20","LG25","LG26","LG27","LG28","STS1","STS2","STS3","STS4","STS5","STS6","STS7","ITS1","ITS2","ITS3","ITS4","ITS5","ITS6","ITS7"],
       "IGNORE_ELECTRODES":["STS8","PD4"]
     },
@@ -3354,6 +3793,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"5",
       "SeizureOnset":"LFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"multiple foci of microscopic cortical dysplasia",
       "Lesional":"N",
       "Cohort":"",
@@ -3398,6 +3840,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"11",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"multifocal cortical dysplasia, diffuse gliosis",
       "Lesional":"N",
       "Cohort":"",
@@ -3424,6 +3869,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"6",
       "SeizureOnset":"LFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"extensive multifocal cortical dysplasia",
       "Lesional":"N",
       "Cohort":"",
@@ -3462,6 +3910,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"3",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"multifocal cystic degeneration consistent w  old infarction",
       "Lesional":"N",
       "Cohort":"",
@@ -3536,6 +3987,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"11",
       "SeizureOnset":"RTL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"focal cortical dysplasia type Ib",
       "Lesional":"N",
       "Cohort":"",
@@ -3568,6 +4022,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"8",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"mild malformations of cortical development (MMCD)",
       "Lesional":"Y",
       "Cohort":"",
@@ -3600,6 +4057,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"5",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"focal cortical dysplasia type IIa",
       "Lesional":"Y",
       "Cohort":"",
@@ -3626,6 +4086,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"15",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"focal cortical dysplasia type IIa",
       "Lesional":"N",
       "Cohort":"",
@@ -3658,6 +4121,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"11",
       "SeizureOnset":"RTL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"infiltrating ganglioglioma, extensive cortical dysplasia",
       "Lesional":"Y",
       "Cohort":"",
@@ -3708,6 +4174,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"5",
       "SeizureOnset":"LTL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"severe cortical dysplasia with gloss and giant neurons",
       "Lesional":"N",
       "Cohort":"",
@@ -3746,6 +4215,9 @@
       "AgeOnset":"??",
       "AgeSurgery":"12",
       "SeizureOnset":"RFL",
+      "Lesion Status":"???",
+      "Pathology":"???",
+      "Resection Type":"???",
       "Pathology":"focal cortical dysplasia type IIb",
       "Lesional":"Y",
       "Cohort":"",

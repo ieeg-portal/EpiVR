@@ -42,16 +42,16 @@ def _helper_compute_multiband_connectivity(job):
             if(n1 == n2):
                 continue
             if (data_clip[:,n1]==data_clip[:,n2]).all():
-                adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+                adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_veryhigh = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
                 adj_broadband_CC = np.nan*np.ones((N,N))
-                return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC)
+                return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC, adj_veryhigh)
 
     if(np.isnan(data_clip).any()):
-        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_veryhigh = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
     elif (data_mean==0).any():
-        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_veryhigh = (np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)),np.nan*np.ones((N,N)))
     else:
-        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma = multiband_conn(data_clip, Fs)
+        adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_veryhigh = multiband_conn(data_clip, Fs)
 
     # Compute broadband connectivity
     if(np.isnan(data_clip).any()):
@@ -61,9 +61,9 @@ def _helper_compute_multiband_connectivity(job):
     else:
         adj_broadband_CC = broadband_conn(data_clip, Fs)
 
-    return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_broadband_CC)
+    return (epoch,adj_alphatheta, adj_beta, adj_lowgamma, adj_highgamma, adj_veryhigh, adj_broadband_CC)
 
-def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
+def compute_multiband_connectivity(patient_id, epoch_length=1, data=data, force_flag=False):
     """
     Function for computing multiband connectivity adjacency matrices
     Parameters
@@ -76,6 +76,9 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
 
         data: dict
             Dictionary of data loaded from DATA.json (or TEST_DATA.json during unit tests). Default is DATA.json.
+
+        force_flag: bool
+            Boolean to force run adjacency matrix computation even if it already exists (e.g. in case ECoG data has changed, epoch length has changed)
     Returns
     -------
         None
@@ -98,15 +101,16 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             labels.append(ignored_node_label)
 
     # Load ictal clips and get data as T x N for T = epoch_length (seconds) * fs
-    n_proc = 10
+    n_proc = 60
     pool = Pool(n_proc)
     for event_type, events in data['PATIENTS'][patient_id]['Events'].items():
         for event_id in events.keys():
             print 'Computing multiband connectivity for clip %s'%event_id
-            if(os.path.isfile('%s/%s/aim3/%s.Ictal.%s.multiband.npz'%(comp_dir,patient_id,patient_id,event_id))):
+            if(os.path.isfile('%s/%s/aim3/%s.Ictal.%s.multiband.npz'%(comp_dir,patient_id,patient_id,event_id))) and not force_flag:
                 continue
 
             fn = os.path.join(data_dir, patient_id, 'eeg', events[event_id]['FILE'])
+            print fn
             channels = []
 
             # Get channels, ECoG Data, Fsx
@@ -140,6 +144,7 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
             all_adj_beta = np.zeros((evData.shape[1],evData.shape[1],epochs))
             all_adj_lowgamma = np.zeros((evData.shape[1],evData.shape[1],epochs))
             all_adj_highgamma = np.zeros((evData.shape[1],evData.shape[1],epochs))
+            all_adj_veryhigh = np.zeros((evData.shape[1],evData.shape[1],epochs))
             all_adj_broadband_CC = np.zeros((evData.shape[1],evData.shape[1],epochs))
 
             # Get smaller window if ictal clip has dropout issues
@@ -174,12 +179,13 @@ def compute_multiband_connectivity(patient_id, epoch_length=1, data=data):
                 all_adj_beta[:,:,epoch] = return_list[epoch-start_epoch][2]
                 all_adj_lowgamma[:,:,epoch] = return_list[epoch-start_epoch][3]
                 all_adj_highgamma[:,:,epoch] = return_list[epoch-start_epoch][4]
-                all_adj_broadband_CC[:,:,epoch] = return_list[epoch-start_epoch][5]
+                all_adj_veryhigh[:,:,epoch] = return_list[epoch-start_epoch][5]
+                all_adj_broadband_CC[:,:,epoch] = return_list[epoch-start_epoch][6]
 
             # Save with appropriate name
             print 'Writing adjacency matrices for patient %s event %s %s'%(patient_id,event_type,event_id)
             adj_fn = os.path.join(comp_dir,patient_id,'aim3','%s.%s.%s.multiband.npz'%(patient_id,event_type,event_id))
-            np.savez(open(adj_fn,'w'), all_adj_alphatheta=all_adj_alphatheta, all_adj_beta=all_adj_beta, all_adj_lowgamma=all_adj_lowgamma, all_adj_highgamma=all_adj_highgamma, epoch_length=epoch_length, all_adj_broadband_CC=all_adj_broadband_CC)
+            np.savez(open(adj_fn,'w'), all_adj_alphatheta=all_adj_alphatheta, all_adj_beta=all_adj_beta, all_adj_lowgamma=all_adj_lowgamma, all_adj_highgamma=all_adj_highgamma, all_adj_veryhigh=all_adj_veryhigh, epoch_length=epoch_length, all_adj_broadband_CC=all_adj_broadband_CC,labels=labels)
     # pool.close()
     # pool.join()
 

@@ -24,15 +24,11 @@ if __name__ == '__main__':
         epoch_length = int(sys.argv[2]) # seconds
     except IndexError:
         epoch_length = 1
-    try:
-        run_null = int(sys.argv[3])
-    except IndexError:
-        run_null = 0
 
     try:
-        starting_null_id = int(sys.argv[4])-1
+        force_flag = int(sys.argv[3])
     except IndexError:
-        starting_null_id = 0
+        force_flag = 0
 
     # Check if connectivity already exists
     count_conn = 0
@@ -46,32 +42,20 @@ if __name__ == '__main__':
             count_conn += 1
 
     # Check if all connectivity adjacency matrices have been computed
-    if(len(glob.glob('%s/%s/aim3/*multiband*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
+    if(len(glob.glob('%s/%s/aim3/*multiband*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn) or force_flag:
         # Compute multi band connectivity and store adjacency matricies
         # blah
         # pass
         compute_multiband_connectivity(patient_id, epoch_length)
 
     # Check if all node-level virtual resections have been computed
-    if(len(glob.glob('%s/%s/aim3/*noderes*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
+    if(len(glob.glob('%s/%s/aim3/*noderes*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn) or force_flag:
         # Compute node-level virtual resection
         nodal_virtual_resection(patient_id, data=data)
 
-    # # Check if all node-level virtual resections have been computed
-    # if(len(glob.glob('%s/%s/aim3/*nodenull*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) != count_conn):
-    #     for event_type, events in data['PATIENTS'][patient_id]['Events'].items():
-    #         for event_id in events.keys():
-    #             try:
-    #                 if(events[event_id]['STATUS'] == 'ALL_DROPOUT'):
-    #                     continue # unusable clip
-    #             except KeyError:
-    #                 pass
-    #             # Compute node-level null models of virtual resection
-    #             null_nodal_virtual_resection(patient_id, event_type, event_id, data=data)
-
     # Keep dilating and eroding resection zone to capture percentage of network nodes
-    for dilate_radius in [0, -5, 5, 10, -10, 15, -15, 20, -20]:
-    # for dilate_radius in [0]:
+    # for dilate_radius in [0, -5, 5, 10, -10, 15, -15, 20, -20]:
+    for dilate_radius in [0]:
         # Check if already exists
         unique_idx = []
         for fn in glob.glob(os.path.expanduser('%s/%s/aim3/*pipedef*'%(data['COMP_DIR'],patient_id))):
@@ -84,33 +68,15 @@ if __name__ == '__main__':
                     unique_idx.append((uid,event_type,event_id))
             except KeyError:
                 continue
-        if(len(unique_idx) == 0):
+        if(len(unique_idx) == 0) or force_flag or len(glob.glob('%s/%s/aim3/*cres*1000*'%(os.path.expanduser(data['COMP_DIR']),patient_id))) == 0:
         # if dilate_radius < 0:
             print dilate_radius
             # Compute virtual resection to get c_{res}(t)
             unique_idx = virtual_resection(patient_id, dilate_radius, data)
 
-        # Compute null models for virtual resection to get c_{null}(t)
-        if(run_null):
-            for unique_id, event_type, event_id in unique_idx:
-                print 'Running null for patient %s, event id %s, unique_id %s'%(patient_id, event_id, unique_id)
-                start = time.time()
-                null_virtual_resection(patient_id, unique_id, event_type, event_id, dilate_radius, data, starting_null_id=starting_null_id)
-                print 'Time Took for 1 event for null: '
-                print time.time() - start
-
-        # Generate figures for result
-        # unique_idx = [('9b266cab-c6cd-4b6d-88aa-098f1f8d9a26','Ictal','1'),('9b266cab-c6cd-4b6d-88aa-098f1f8d9a26','Ictal','2'),('9b266cab-c6cd-4b6d-88aa-098f1f8d9a26','Ictal','3')]
-        for unique_id, event_type, event_id in unique_idx:
-            # plot_experiment(patient_id,unique_id)
-            print unique_id, event_type, event_id
-            pass
-
-
-
     # Compute control centrality of SOZ
     # Check if already exists
-    if not len(glob.glob(os.path.expanduser('%s/%s/aim3/*sozres*'%(data['COMP_DIR'],patient_id)))):
+    if not len(glob.glob(os.path.expanduser('%s/%s/aim3/*sozres*'%(data['COMP_DIR'],patient_id)))) or force_flag:
         # Compute virtual resection to get c_{res}(t)
         unique_idx = soz_virtual_resection(patient_id, data)
 
