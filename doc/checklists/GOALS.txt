@@ -1,0 +1,1 @@
+scalability, parallel computation, traceability, resuming from error standstill, running once new data in uploaded or manifest files are updated, turn key operations
