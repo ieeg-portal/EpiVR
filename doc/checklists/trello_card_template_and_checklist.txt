@@ -1,5 +1,13 @@
 ##template##
+Task: A thorough description of the task, why it is needed, and where it fits in to the project
+
+Inputs: The files or data structures which are needed to feed in to the task 
+
+Outputs: The files or data structures which the task should produce
+
 
 ##checklist##
-add deadline
+use simple but clear title
+add deadline (typically 2-4 days)
 assign people
+add appropriate labels
