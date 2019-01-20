@@ -1,9 +1,9 @@
 ##template##
 Task: A thorough description of the task, why it is needed, and where it fits in to the project
 
-Inputs: The files or data structures which are needed to feed in to the task 
+Inputs: The files or data structures which are needed to feed in to the task (give example in parenthesis)
 
-Outputs: The files or data structures which the task should produce
+Outputs: The files or data structures which the task should produce (give example in parenthesis)
 
 
 ##checklist##
