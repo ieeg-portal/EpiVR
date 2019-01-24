@@ -1,0 +1,12 @@
+{
+  "PATIENT": "HUP064",
+  "Outcome": "1.4",
+  "Sex":"M",
+  "AgeOnset":"3",
+  "AgeSurgery":"21",
+  "SeizureOnset":"LFL",
+  "Lesion Status":"Lesional",
+  "Pathology":"MCD",
+  "Resection Type":"Other",
+  "Implant Type":"ECoG"
+}

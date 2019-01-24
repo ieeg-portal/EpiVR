@@ -1,0 +1,18 @@
+{
+  "PATIENT": "HUP064",
+  "Ictal":
+  {
+    "1":
+    {
+      "FILE":"HUP064-short-ictal-block-1.mat",
+      "SeizureType":"CPS+GTC",
+      "EMU_Report_Event_Number":"1",
+      "SeizureEEC":632657.000,
+      "SeizureUEO":632666.73,
+      "SeizureEnd":632764.000,
+      "SEIZURE_ONSET_ELECTRODES":["LG23","LG31"],
+      "IGNORE_ELECTRODES":["EKG1","EKG2","RR","Rate","X1","X2","X3","X4"],
+      "SeizurePhenotype":"A"
+    }
+  }
+}
