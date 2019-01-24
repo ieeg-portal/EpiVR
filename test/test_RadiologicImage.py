@@ -33,16 +33,8 @@ Alterations:
     TCA 1/23/19 - initialized class & wrote unit test
 """
 
+import RadiologicImage as ri
 
-class RadiologicImage:
-    def __init__(self, radiologic_type, contrast, date_of_acquisition,
-                 image_dimensions, image_resolution):
-        self.radiologic_type = radiologic_type
-        self.contrast = contrast
-        self.date_of_acquisition = date_of_acquisition
-        self.image_dimensions = image_dimensions
-        self.image_resolution = image_resolution
-
-    def unitTest(self):
-        for property, value in vars(self).items():
-            print(property, ": ", value)
+ex = ri.RadiologicImage("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
+for property, value in vars(ex).items():
+    print(property, ": ", value)
