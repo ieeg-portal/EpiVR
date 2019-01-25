@@ -34,11 +34,13 @@ Alterations:
 from RadiologicImage import RadiologicImage as ri
 import pytest
 
-def test_ri_goodInput():
+
+def test_ri_good_input():
     ex = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
     assert ex.contrast == 'T1'
 
-def test_ri_badType():
+
+def test_ri_bad_type():
     with pytest.raises(ValueError, match=r'.* is not a valid image type..*'):
         ex = ri("Garbage", "T1", "20000123", ["x", "y", "z"],
-                            [2, 2, 2])
+                [2, 2, 2])
