@@ -33,8 +33,14 @@ Alterations:
     TCA 1/23/19 - initialized class & wrote unit test
 """
 
-import RadiologicImage as ri
+from RadiologicImage import RadiologicImage as ri
+import pytest
 
-ex = ri.RadiologicImage("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
-for property, value in vars(ex).items():
-    print(property, ": ", value)
+def test_ri_goodInput():
+    ex = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
+    assert ex.contrast == 'T1'
+
+def test_ri_badType():
+    with pytest.raises(ValueError, match=r'.* is not a valid image type..*'):
+        ex = ri("Garbage", "T1", "20000123", ["x", "y", "z"],
+                            [2, 2, 2])

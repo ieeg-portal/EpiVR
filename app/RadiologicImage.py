@@ -35,8 +35,19 @@ Alterations:
 
 
 class RadiologicImage:
+
+    # standards for data
+    TYPE = ('MRI', 'CT', 'PET', 'SPECT', 'XRAY')
+
     def __init__(self, radiologic_type, contrast, date_of_acquisition,
                  image_dimensions, image_resolution):
+
+        # enforce entry standards
+        if radiologic_type not in self.TYPE:
+            raise ValueError('%s is not a valid image type. Valid Types: %s' %
+                             (radiologic_type,  self.TYPE))
+
+        # apply input values to attributes of class instance
         self.radiologic_type = radiologic_type
         self.contrast = contrast
         self.date_of_acquisition = date_of_acquisition
