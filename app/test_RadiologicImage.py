@@ -25,8 +25,6 @@ Todo:
     * image resolution: should we mandate a scale, such as measurements must be
      in mm? (think about PET being on cm scale)
     * get date of acquisition from from image manifest
-    * consider limiting radiologic_type
-    Ex: RADIOLOGICY_TYPE_OPTIONS = ['MRI','CT','PET','SPECT','XRAY']
     * Consider using datetime instead of str for date of acquisition
 
 Alterations:
