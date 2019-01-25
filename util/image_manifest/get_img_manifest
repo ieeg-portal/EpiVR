@@ -4,7 +4,7 @@
             given subject and outputs a csv file listing the date, contrast,
             and filepath. The images should be organized into directories
             where the directory name is the date the image was collected.
-            There must be a subdirectory 'img' containing all the nifti
+            There must be a subdirectory 'nii' containing all the nifti
             files. Note that this function only searches for .nii and
             .nii.gz files.
 
