@@ -23,7 +23,7 @@ import csv
 
 def get_img_manifest(input_path):
     # open a csv file for writing the data out
-    with open('image_manifest.csv', mode='w', newline='') as img_mani:
+    with open('image_manifest.csv', mode='w') as img_mani:
         img_mani = csv.writer(img_mani, delimiter=',', quotechar='"')
 
         for date in os.listdir(input_path):  # loop through dir

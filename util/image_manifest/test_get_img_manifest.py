@@ -18,7 +18,7 @@
 """
 
 import csv
-from image_manifest import get_img_manifest
+import get_img_manifest
 
 get_img_manifest.get_img_manifest(
     r'/gdrive/public/USERS/lkini/3T_Subjects/HUP116/img')
