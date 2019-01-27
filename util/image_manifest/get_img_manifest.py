@@ -34,10 +34,19 @@ def get_img_manifest(input_path):
                     filepath = os.path.join(datepath, file)
                     # only get nifti files
                     if file.endswith('.nii.gz') or file.endswith('.nii'):
-                        contrast = file.split('_')  # use _ as delimiter
-                        contrast = contrast[1:-1]  # remove ends
-                        contrast = '_'.join(contrast)  # rejoin w/o ends
-                        img_mani.writerow([date, contrast, filepath])
+                        filepath_components = file.split('_')  # use _ as delimiter
+                        modality_type = filepath_components[1:-1]  # remove ends
+                        modality_type = '_'.join(modality_type)  # rejoin w/o ends
+                        if contrast.startswith('FLAIR') or contrast.startswith('T1') or contrast.startswith('T2') or contrast.startswith('DWI'):
+                            modality = 'MRI'
+                            modality_type = contrast.split('_')[0]
+                        elif contrast.startswith('PET'):
+                            modality = 'PET'
+                            modality_type = 'FDG' # assume all lohiths imaging data has only FDG PET
+                        elif contrast.startswith('CT'):
+                            modality = 'CT'
+                            modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
+                        img_mani.writerow([date, modality, modality_type, filepath])
     return img_mani
 
 
