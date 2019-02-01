@@ -42,7 +42,3 @@ class RadiologicImage:
         self.date_of_acquisition = date_of_acquisition
         self.image_dimensions = image_dimensions
         self.image_resolution = image_resolution
-
-    def unitTest(self):
-        for property, value in vars(self).items():
-            print(property, ": ", value)
