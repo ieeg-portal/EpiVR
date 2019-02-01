@@ -25,16 +25,27 @@ Todo:
     * image resolution: should we mandate a scale, such as measurements must be
      in mm? (think about PET being on cm scale)
     * get date of acquisition from from image manifest
-    * consider limiting radiologic_type
-    Ex: RADIOLOGICY_TYPE_OPTIONS = ['MRI','CT','PET','SPECT','XRAY']
     * Consider using datetime instead of str for date of acquisition
 
 Alterations:
     TCA 1/23/19 - initialized class & wrote unit test
 """
 
-import RadiologicImage as ri
+from RadiologicImage import RadiologicImage as ri
+import pytest
 
-ex = ri.RadiologicImage("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
-for property, value in vars(ex).items():
-    print(property, ": ", value)
+
+# test creating class with valid input
+def test_ri_good_input():
+    ex = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
+    assert ex.radiologic_type == "MRI"
+    assert ex.contrast == "T1"
+    assert ex.date_of_acquisition == "20000123"
+    assert ex.image_dimensions == ["x", "y", "z"]
+    assert ex.image_resolution == [2, 2, 2]
+
+
+# test that incorrect user type raises ValueError
+def test_ri_bad_type():
+    with pytest.raises(ValueError, match=r'.* is not a valid image type..*'):
+        ex = ri("Garbage", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
