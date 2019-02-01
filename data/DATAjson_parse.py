@@ -1,6 +1,6 @@
 """DATAjson_parse.py
 
-This function is designed to parse the DATA.json file and generate seperate
+This function is designed to parse the DATA.json file and generate separate
 annotations.json and clinical.json files for each patient. Currently the
 code makes a directory for each patient and outputs the files there. You may
 want to update to change the output methodology.
@@ -50,15 +50,15 @@ for patient in data['PATIENTS']:
             subfields = {
                     'FILE': current_event['FILE'],
                     'SeizureType': current_event['SeizureType'],
-                    'EMU_Report_Event_Number':
-                        current_event['EMU_Report_Event_Number'],
+                    'EMU_Report_Event_Number': current_event['EMU_Report_Event\
+                        _Number'],
                     'SeizureEEC': current_event['SeizureEEC'],
                     'SeizureUEO': current_event['SeizureUEO'],
                     'SeizureEnd': current_event['SeizureEnd'],
-                    'SEIZURE_ONSET_ELECTRODES':
-                        current_event['SEIZURE_ONSET_ELECTRODES'],
-                    'IGNORE_ELECTRODES':
-                        data['PATIENTS'][patient]['IGNORE_ELECTRODES'],
+                    'SEIZURE_ONSET_ELECTRODES': current_event['SEIZURE_ONSET_E\
+                        LECTRODES'],
+                    'IGNORE_ELECTRODES': data['PATIENTS'][patient]['IGNORE_ELE\
+                        CTRODES'],
                     'SeizurePhenotype': current_event['SeizurePhenotype'],
                 }
             if event == 1000:
