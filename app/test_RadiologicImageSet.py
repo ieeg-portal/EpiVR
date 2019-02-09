@@ -62,7 +62,7 @@ def test_ris_acquisition_date_format_filter():
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
         image_set = ris([image1, image2, image3])
-        image_set.filter_by_acquisition_date('01/23/00')  # 01/23/00 is not a proper string format for date
+        image_set.filter_by_acquisition_date(012300)  # The integer 012300 is not a proper string format for date
     with pytest.raises(ValueError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
