@@ -40,7 +40,10 @@ class RadiologicImageSet:
         if type(radiologic_image_list) is not list and type(radiologic_image_list) is not RadiologicImage:
             raise ValueError('%s is not a valid set of radiology images.')
 
-        self.radiology_images = radiologic_image_list
+        if type(radiologic_image_list) is RadiologicImage:
+            self.radiology_images = [radiologic_image_list]  # Only one RadiologicImage passed
+        else:
+            self.radiology_images = radiologic_image_list
 
     def copy(self):
         """
@@ -65,9 +68,8 @@ class RadiologicImageSet:
         if radiology_type not in RadiologicImage.TYPE:
             raise TypeError('Radiology type %s is a not a proper image type.' % radiology_type)
         filtered_ris = self.copy()
-        for radiology_image in self.radiology_images:
-            if radiology_image.radiologic_type != radiology_type:
-                filtered_ris.radiology_images.pop(radiology_image)
+        filtered_ris.radiology_images = [radiology_image for radiology_image in self.radiology_images if
+                                         radiology_image.radiologic_type == radiology_type]
         return filtered_ris
 
     def filter_by_contrast(self, contrast):
@@ -89,9 +91,8 @@ class RadiologicImageSet:
         if type(contrast) != 'str':
             raise TypeError('Image Contrast passed to filter_by_contrast is not a string.')
         filtered_ris = self.copy()
-        for radiology_image in self.radiology_images:
-            if radiology_image.contrast != contrast:
-                filtered_ris.radiology_images.pop(radiology_image)
+        filtered_ris.radiology_images = [radiology_image for radiology_image in self.radiology_images if
+                                         radiology_image.contrast == contrast]
         return filtered_ris
 
     def filter_by_acquisition_date(self, acquisition_date):
@@ -117,9 +118,8 @@ class RadiologicImageSet:
                 'Acquisition date passed to filter_by_acquisition_date should follow YYYYMMDD date format.')
 
         filtered_ris = self.copy()
-        for radiology_image in self.radiology_images:
-            if radiology_image.acquisition_date != acquisition_date:
-                filtered_ris.radiology_images.pop(radiology_image)
+        filtered_ris.radiology_images = [radiology_image for radiology_image in self.radiology_images if
+                                         radiology_image.acquisition_date == acquisition_date]
         return filtered_ris
 
     def filter_by_event(self):
