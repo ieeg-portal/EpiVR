@@ -49,6 +49,7 @@ def test_ri_good_input():
     assert ex.date_of_acquisition == "20000123"
     assert ex.image_dimensions == ["x", "y", "z"]
     assert ex.image_resolution == [2, 2, 2]
+    assert ex.image_units == ['mm', 'mm', 'mm']
 
 
 # test that incorrect user type raises ValueError

@@ -1,2 +1,4 @@
 python-dotenv==0.10.1
 coverage==4.5.2
+pytest==2.8.5
+pytest-cov==2.6.1
