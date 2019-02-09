@@ -113,7 +113,7 @@ class RadiologicImageSet:
         """
         if type(acquisition_date) != str:
             raise TypeError('Acquisition date passed to filter_by_acquisition_date is not a string.')
-        if len(acquisition_date) != 8 and not acquisition_date.isdigit():
+        if len(acquisition_date) != 8 or not acquisition_date.isdigit():
             raise ValueError(
                 'Acquisition date passed to filter_by_acquisition_date should follow YYYYMMDD date format.')
 
