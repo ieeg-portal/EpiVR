@@ -22,7 +22,7 @@ def test_ri_good_input():
     assert image_set.radiology_images == [image1, image2, image3]
     assert image_set.filter_by_radiology_type('MRI').radiology_images == image_set.radiology_images
     assert image_set.filter_by_contrast('T2').radiology_images == filtered_set2.radiology_images
-    assert image_set.filter_by_acquisition_date('20000123') == image_set.radiology_images
+    assert image_set.filter_by_acquisition_date('20000123').radiology_images == image_set.radiology_images
 
 
 # test filter_by_radiology_type raises error on inappropriate radiology type
