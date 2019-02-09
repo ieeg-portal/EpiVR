@@ -10,7 +10,7 @@ import pytest
 
 
 # test creating class with valid input
-def test_ri_good_input():
+def test_ris_good_input():
     image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
     image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
     image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
