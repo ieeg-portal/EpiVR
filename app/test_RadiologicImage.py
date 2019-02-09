@@ -21,5 +21,5 @@ def test_ri_good_input():
 
 # test that incorrect user type raises ValueError
 def test_ri_bad_type():
-    with pytest.raises(ValueError, match=r'.* is not a valid image type..*'):
+    with pytest.raises(TypeError, match=r'.* is not a valid image type..*'):
         ex = ri("Garbage", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
