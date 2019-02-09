@@ -32,12 +32,12 @@ def test_ris_radiology_type_filter():
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
         image_set = ris([image1, image2, image3])
-        image_set.filter_by_radiology_type('SPECT')
+        image_set.filter_by_radiology_type('NIRS')
 
 
 # test filter_by_contrast raises error on inappropriate contrast
 def test_ris_contrast_filter():
-    with pytest.raises(TypeError, match=r'*contrast is not a string*'):
+    with pytest.raises(TypeError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
@@ -47,7 +47,7 @@ def test_ris_contrast_filter():
 
 # test filter_by_acquisition_date raises error on non-string acquisition date
 def test_ris_acquisition_date_str_filter():
-    with pytest.raises(TypeError, match=r'*date is not a string*'):
+    with pytest.raises(TypeError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
