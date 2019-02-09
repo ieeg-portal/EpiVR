@@ -88,7 +88,7 @@ class RadiologicImageSet:
             TypeError: If contrast is not a string
 
         """
-        if type(contrast) != 'str':
+        if type(contrast) != str:
             raise TypeError('Image Contrast passed to filter_by_contrast is not a string.')
         filtered_ris = self.copy()
         filtered_ris.radiology_images = [radiology_image for radiology_image in self.radiology_images if
@@ -111,7 +111,7 @@ class RadiologicImageSet:
             ValueError: If acquisition_date is not the appropriate format.
 
         """
-        if type(acquisition_date) != 'str':
+        if type(acquisition_date) != str:
             raise TypeError('Acquisition date passed to filter_by_acquisition_date is not a string.')
         if len(acquisition_date) != 8 and not acquisition_date.isdigit():
             raise ValueError(
