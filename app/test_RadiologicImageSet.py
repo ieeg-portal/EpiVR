@@ -27,7 +27,7 @@ def test_ri_good_input():
 
 # test filter_by_radiology_type raises error on inappropriate radiology type
 def test_ris_radiology_type_filter():
-    with pytest.raises(TypeError, match=r'*not a proper image type*'):
+    with pytest.raises(TypeError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
@@ -57,13 +57,13 @@ def test_ris_acquisition_date_str_filter():
 
 # test filter_by_acquisition_date raises error on incorrectly formatted acquisition date
 def test_ris_acquisition_date_format_filter():
-    with pytest.raises(TypeError, match=r'*should follow YYYYMMDD date format*'):
+    with pytest.raises(TypeError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
         image_set = ris([image1, image2, image3])
         image_set.filter_by_acquisition_date('01/23/00')  # 01/23/00 is not a proper string format for date
-    with pytest.raises(TypeError, match=r'*should follow YYYYMMDD date format*'):
+    with pytest.raises(ValueError):
         image1 = ri("MRI", "T1", "20000123", ["x", "y", "z"], [2, 2, 2])
         image2 = ri("MRI", "T2", "20000123", ["x", "y", "z"], [0.5, 0.5, 4])
         image3 = ri("MRI", "T1+GAD", "20000123", ["x", "y", "z"], [1, 1, 1.5])
