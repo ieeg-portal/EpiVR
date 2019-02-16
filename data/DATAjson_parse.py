@@ -28,9 +28,9 @@ import os
 with open('DATA.json') as f:
     data = json.load(f)
 
-# loop through each pateint and generate annotations.json & clinical.json
+# loop through each patient and generate annotations.json & clinical.json
 for patient in data['PATIENTS']:
-    try:  # try/except allows code to run dispite not processing CHOP data
+    try:  # try/except allows code to run despite not processing CHOP data
 
         ann = dict()  # setup annotation variable and populate
         ann['patient'] = patient
@@ -48,19 +48,19 @@ for patient in data['PATIENTS']:
         for event in my_events:
             current_event = current_patient[str(event)]
             subfields = {
-                    'FILE': current_event['FILE'],
-                    'SeizureType': current_event['SeizureType'],
-                    'EMU_Report_Event_Number': current_event['EMU_Report_Event\
+                'FILE': current_event['FILE'],
+                'SeizureType': current_event['SeizureType'],
+                'EMU_Report_Event_Number': current_event['EMU_Report_Event\
                         _Number'],
-                    'SeizureEEC': current_event['SeizureEEC'],
-                    'SeizureUEO': current_event['SeizureUEO'],
-                    'SeizureEnd': current_event['SeizureEnd'],
-                    'SEIZURE_ONSET_ELECTRODES': current_event['SEIZURE_ONSET_E\
+                'SeizureEEC': current_event['SeizureEEC'],
+                'SeizureUEO': current_event['SeizureUEO'],
+                'SeizureEnd': current_event['SeizureEnd'],
+                'SEIZURE_ONSET_ELECTRODES': current_event['SEIZURE_ONSET_E\
                         LECTRODES'],
-                    'IGNORE_ELECTRODES': data['PATIENTS'][patient]['IGNORE_ELE\
+                'IGNORE_ELECTRODES': data['PATIENTS'][patient]['IGNORE_ELE\
                         CTRODES'],
-                    'SeizurePhenotype': current_event['SeizurePhenotype'],
-                }
+                'SeizurePhenotype': current_event['SeizurePhenotype'],
+            }
             if event == 1000:
                 ann['Interictal']['1'] = subfields
             else:
@@ -68,17 +68,17 @@ for patient in data['PATIENTS']:
 
         # set up clinical variable
         clin = {
-                'PATIENT': patient,
-                'Outcome': data['PATIENTS'][patient]['Outcome'],
-                'Sex': data['PATIENTS'][patient]['Sex'],
-                'AgeOnset': data['PATIENTS'][patient]['AgeOnset'],
-                'AgeSurgery': data['PATIENTS'][patient]['AgeSurgery'],
-                'SeizureOnset': data['PATIENTS'][patient]['SeizureOnset'],
-                'Lesion Status': data['PATIENTS'][patient]['Lesion Status'],
-                'Pathology': data['PATIENTS'][patient]['Pathology'],
-                'Resection Type': data['PATIENTS'][patient]['Resection Type'],
-                'Implant Type': 'ECoG'
-            }
+            'PATIENT': patient,
+            'Outcome': data['PATIENTS'][patient]['Outcome'],
+            'Sex': data['PATIENTS'][patient]['Sex'],
+            'AgeOnset': data['PATIENTS'][patient]['AgeOnset'],
+            'AgeSurgery': data['PATIENTS'][patient]['AgeSurgery'],
+            'SeizureOnset': data['PATIENTS'][patient]['SeizureOnset'],
+            'Lesion Status': data['PATIENTS'][patient]['Lesion Status'],
+            'Pathology': data['PATIENTS'][patient]['Pathology'],
+            'Resection Type': data['PATIENTS'][patient]['Resection Type'],
+            'Implant Type': 'ECoG'
+        }
 
         # Write out .json files
         os.mkdir(patient)
