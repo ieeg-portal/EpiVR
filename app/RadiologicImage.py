@@ -37,6 +37,7 @@ Todo:
 
 Alterations:
     TCA 1/23/19 - initialized class & wrote unit test
+    TCA 1/25/19 - updated unit test to pytest format, added TYPE restrictions
 """
 
 
