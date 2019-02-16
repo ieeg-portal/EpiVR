@@ -20,12 +20,14 @@ Attributes:
         (Ex: "MRI","CT","PET")
     contrast (str): Pulse sequence
         (Ex: "T1","T2")
-    date_of_acquisition (str): Date should come from image_manifest.json
+    acquisition_date (str): Date should come from image_manifest.json
         (Ex: "20000123")
-    image_dimensions (str): Dimensions in human interpretable form
+    image_dimensions (list of str): Dimensions in human interpretable form
         (Ex: ["x","y","z"], ["x","y","time"], etc.)
-    image_resolution (int): Scale of each correspond dimension, currently in mm
+    image_resolution (int): Scale of each corresponding dimension
         (Ex: [2,2,2])
+    image_units (list): Units of each corresponding dimension
+        (Ex: ['mm', 'cm', 'mm'])
 
 Todo:
     * image resolution: should we mandate a scale, such as measurements must be
@@ -40,21 +42,41 @@ Alterations:
 
 
 class RadiologicImage:
-
     # standards for data
     TYPE = ('MRI', 'CT', 'PET', 'SPECT', 'XRAY')
+    UNITS = ('mm', 'cm', 'm', 'in', 'ft', 's', 'sec', 'min', 'hr')
 
-    def __init__(self, radiologic_type, contrast, date_of_acquisition,
-                 image_dimensions, image_resolution):
+    def __init__(self, radiologic_type, contrast, acquisition_date,
+                 image_dimensions, image_resolution, image_units=None):
+        """
+
+        :param radiologic_type:
+        :param contrast:
+        :param acquisition_date:
+        :param image_dimensions:
+        :param image_resolution:
+        :param image_units:
+        """
 
         # enforce entry standards
         if radiologic_type not in self.TYPE:
-            raise ValueError('%s is not a valid image type. Valid Types: %s' %
-                             (radiologic_type,  self.TYPE))
+            raise TypeError('%s is not a valid image type. Valid Types: %s' %
+                            (radiologic_type, self.TYPE))
 
         # apply input values to attributes of class instance
         self.radiologic_type = radiologic_type
         self.contrast = contrast
-        self.date_of_acquisition = date_of_acquisition
+        self.acquisition_date = acquisition_date
         self.image_dimensions = image_dimensions
         self.image_resolution = image_resolution
+
+        # Autopopulate to mm units if not passed in during instantiation
+        if image_units is None:
+            image_units = ['mm'] * len(self.image_dimensions)
+        # Check image units meet standards and save property to instance
+        if len(image_units) != len(self.image_dimensions):
+            raise TypeError('The length of image dimension units should match the number of dimensions.')
+        for image_unit in image_units:
+            if image_unit not in self.UNITS:
+                raise TypeError('The unit %s is not a proper unit of measurement.' % image_unit)
+        self.image_units = image_units

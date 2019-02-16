@@ -37,12 +37,13 @@ def get_img_manifest(input_path):
                         filepath_components = file.split('_')  # use _ as delimiter
                         modality_type = filepath_components[1:-1]  # remove ends
                         modality_type = '_'.join(modality_type)  # rejoin w/o ends
-                        if modality_type.startswith('FLAIR') or modality_type.startswith('T1') or modality_type.startswith('T2') or modality_type.startswith('DWI'):
+                        if modality_type.startswith('FLAIR') or modality_type.startswith(
+                                'T1') or modality_type.startswith('T2') or modality_type.startswith('DWI'):
                             modality = 'MRI'
                             modality_type = modality_type.split('_')[0]
                         elif modality_type.startswith('PET'):
                             modality = 'PET'
-                            modality_type = 'FDG' # assume all lohiths imaging data has only FDG PET
+                            modality_type = 'FDG'  # assume all currently available imaging data are only FDG PET
                         elif modality_type.startswith('CT'):
                             modality = 'CT'
                             modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'

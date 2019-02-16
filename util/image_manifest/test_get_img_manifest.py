@@ -17,6 +17,7 @@
 
 """
 
+import os
 import csv
 import get_img_manifest
 
@@ -26,3 +27,6 @@ csvfile = open("image_manifest.csv", "r")
 reader = csv.reader(csvfile)
 for row in reader:
     print(row)
+
+# Clean up test assets generated
+os.system('rm image_manifest.csv')
