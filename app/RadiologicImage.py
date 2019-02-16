@@ -39,17 +39,18 @@ Alterations:
     TCA 1/23/19 - initialized class & wrote unit test
     TCA 1/25/19 - updated unit test to pytest format, added TYPE restrictions
 """
-
+import os
 
 class RadiologicImage:
     # standards for data
     TYPE = ('MRI', 'CT', 'PET', 'SPECT', 'XRAY')
     UNITS = ('mm', 'cm', 'm', 'in', 'ft', 's', 'sec', 'min', 'hr')
 
-    def __init__(self, radiologic_type, contrast, acquisition_date,
+    def __init__(self, image_location, radiologic_type, contrast, acquisition_date,
                  image_dimensions, image_resolution, image_units=None):
         """
 
+        :param image_location:
         :param radiologic_type:
         :param contrast:
         :param acquisition_date:
@@ -59,6 +60,9 @@ class RadiologicImage:
         """
 
         # enforce entry standards
+        if not os.path.exists(os.path.expanduser(image_location)) or not os.path.isfile(
+                os.path.expanduser(image_location)):
+            raise IOError('%s is not a valid image location.')
         if radiologic_type not in self.TYPE:
             raise TypeError('%s is not a valid image type. Valid Types: %s' %
                             (radiologic_type, self.TYPE))
