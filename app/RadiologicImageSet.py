@@ -12,24 +12,13 @@ we should be easily able to filter a group radiology image instances based on MR
 
 Example:
     import RadiologicImageSet as ris
-    image1 = ri.RadiologicImage("MRI", "T1", "20000123", ["x","y","z"], [2,2,2])
-    image2 = ri.RadiologicImage("MRI", "T2", "20000123", ["x","y","z"], [0.5,0.5,4])
-    image3 = ri.RadiologicImage("MRI", "T1+GAD", "20000123", ["x","y","z"], [1,1,1.5])
+    image1 = ri.RadiologicImage("path/to/mri1.nii.gz", "MRI", "T1", "20000123", ["x","y","z"], [2,2,2])
+    image2 = ri.RadiologicImage("path/to/mri2.nii.gz", "MRI", "T2", "20000123", ["x","y","z"], [0.5,0.5,4])
+    image3 = ri.RadiologicImage("path/to/mri3.nii.gz", "MRI", "T1+GAD", "20000123", ["x","y","z"], [1,1,1.5])
     ex = ris.RadiologicImageSet([image1, image2, image3])
 
 Attributes:
-    *** (***): ***
-        (Ex: ***)
-    radiologic_type (str): The imaging modality for your data
-        (Ex: "MRI","CT","PET")
-    contrast (str): Pulse sequence
-        (Ex: "T1","T2")
-    date_of_acquisition (str): Date should come from image_manifest.json
-        (Ex: "20000123")
-    image_dimensions (str): Dimensions in human interpretable form
-        (Ex: ["x","y","z"], ["x","y","time"], etc.)
-    image_resolution (int): Scale of each correspond dimension, currently in mm
-        (Ex: [2,2,2])
+    radiologic_image_list (list): List of RadiologicImage instances or just one RadiologicImage instance
 """
 from RadiologicImage import RadiologicImage
 

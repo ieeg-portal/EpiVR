@@ -33,22 +33,20 @@ from RadiologicImage import RadiologicImage
 
 class ComputedImage:
     # standards for data
-    TYPE = ('MRI', 'CT', 'PET', 'SPECT', 'XRAY')
-    COMP_TYPE = ('RegisteredImage', 'SegmentationImage', 'TensorImage', 'TemplateImage')
+    TYPE = ('MRI', 'CT', 'PET', 'SPECT', 'XRAY', 'NA')  # NA means not applicable
+    COMP_TYPE = ('RegistrationImage', 'SegmentationImage', 'TensorImage', 'TemplateImage')
     UNITS = ('mm', 'cm', 'm', 'in', 'ft', 's', 'sec', 'min', 'hr')
 
-    def __init__(self, image_location, reference_radiologic_image, computed_type, command_used_to_generate=None,
-                 computation_properties=None):
-        """
-
-        :param reference_radiologic_image:
-        :param computed_type:
-        """
+    def __init__(self, image_location, reference_radiologic_image, computed_type, radiologic_type, contrast,
+                 command_used_to_generate=None, computation_properties=None):
 
         # enforce entry standards
         if not os.path.exists(os.path.expanduser(image_location)) or not os.path.isfile(
                 os.path.expanduser(image_location)):
             raise IOError('%s is not a valid image location.' % image_location)
+        if radiologic_type not in self.TYPE:
+            raise TypeError('%s is not a valid image type. Valid Types: %s' %
+                            (radiologic_type, self.TYPE))
         if not isinstance(reference_radiologic_image, RadiologicImage):
             raise TypeError('Input %s is not a valid reference radiology image.' % reference_radiologic_image)
         if computed_type not in self.COMP_TYPE:
@@ -61,6 +59,8 @@ class ComputedImage:
         self.image_location = image_location
         self.reference_radiologic_image = reference_radiologic_image
         self.computed_type = computed_type
+        self.radiologic_type = radiologic_type
+        self.contrast = contrast
         if command_used_to_generate is None:
             self.command_used_to_generate = ''
         else:
