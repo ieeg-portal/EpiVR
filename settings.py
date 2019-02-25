@@ -10,3 +10,4 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path, verbose=True)
 
 COMP_DIR = os.getenv("COMP_DIR")
+DATA_DIR = os.getenv("DATA_DIR")
