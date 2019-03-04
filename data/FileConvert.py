@@ -33,6 +33,9 @@ def npz2mat(filename):
 
 def mat2npz(filename):
 
-    data = scipy.io.loadmat(filename)
-    fileout = filename[:-3] + 'npz'  # append with proper suffix
-    np.save(fileout, data)
+    data = scipy.io.loadmat(filename)  # load in
+    data.pop('__header__')  # remove irrelevant variables from dict (loadmat)
+    data.pop('__version__')
+    data.pop('__globals__')
+    fileout = filename[:-4]  # get filename without suffix
+    np.savez(fileout, **data)
