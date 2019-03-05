@@ -57,6 +57,8 @@ def get_img_manifest(input_path, output_path):
                         elif modality_type.startswith('CT'):
                             modality = 'CT'
                             modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
+                        else:
+                            raise NotImplementedError
                         img_mani.writerow([date, modality, modality_type, filepath])
     return img_mani
 
