@@ -10,7 +10,7 @@ if not os.path.isdir('tmp'):
 get_img_manifest.get_img_manifest(
     r'/gdrive/public/USERS/lkini/3T_Subjects/HUP116/img',
     'tmp')
-csvfile = open("image_manifest.csv", "r")
+csvfile = open("tmp/image_manifest.csv", "r")
 reader = csv.reader(csvfile)
 for row in reader:
     print(row)
