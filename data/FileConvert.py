@@ -6,9 +6,10 @@
 
 """fileConvert
 
-fileconvert is a series of simple function for transfer of data between
-programming languages. Currently it can be used to generate .mat files or to
-load in .mat files into python
+FileConvert is a series of simple functions for transferring data between
+programming languages. Currently it can be used to generate:
+.mat -> .npz
+.npz -> .mat
 
 Example:
     import fileConvert as fc
