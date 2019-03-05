@@ -31,7 +31,7 @@ def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/Vir
     patient_id = input_path.split('/')[-2]
 
     # open a csv file for writing the data out
-    with open(os.path.join(output_path, 'image_manifest.csv'), mode='w') as img_mani:
+    with open(os.path.join(output_path, patient_id, 'image_manifest.csv'), mode='w') as img_mani:
         img_mani = csv.writer(img_mani, delimiter=',', quotechar='"')
 
         img_mani.writerow(["Date", "Modality", "Type of contrast", "Path"])
