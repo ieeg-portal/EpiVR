@@ -39,7 +39,7 @@ def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/Vir
         for date in os.listdir(input_path):  # loop through dir
             if os.path.isdir(os.path.join(input_path, date)):  # only if dir
                 datepath = os.path.join(input_path, date)  # get full path
-                if date == 'orig':
+                if 'orig' in date:
                     continue
                 else:
                     datepath = os.path.join(datepath, 'nii')  # add nii subdir
@@ -62,6 +62,8 @@ def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/Vir
                                 modality = 'CT'
                                 modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
                             else:
+                                print filepath, modality_type
+                                continue
                                 raise NotImplementedError
                             img_mani.writerow([date, modality, modality_type, filepath])
     return img_mani
