@@ -27,6 +27,9 @@ def get_img_manifest(input_path, output_path):
     if not os.path.exists(output_path) or not os.path.exists(input_path):
         raise OSError('Make sure input path %s and output path %s exist' % (input_path, output_path))
 
+    # Get patient ID
+    patient_id = input_path.split('/')[-2]
+
     # open a csv file for writing the data out
     with open(os.path.join(output_path, 'image_manifest.csv'), mode='w') as img_mani:
         img_mani = csv.writer(img_mani, delimiter=',', quotechar='"')
@@ -38,7 +41,7 @@ def get_img_manifest(input_path, output_path):
                 datepath = os.path.join(input_path, date)  # get full path
                 datepath = os.path.join(datepath, 'nii')  # add nii subdir
                 for file in os.listdir(datepath):  # get all images present
-                    filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/', file)
+                    filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/%s' % patient_id, file)
                     # only get nifti files
                     if file.endswith('.nii.gz') or file.endswith('.nii'):
                         filepath_components = file.split('_')  # use _ as delimiter
