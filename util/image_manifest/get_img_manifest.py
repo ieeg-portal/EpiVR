@@ -39,7 +39,7 @@ def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/Vir
         for date in os.listdir(input_path):  # loop through dir
             if os.path.isdir(os.path.join(input_path, date)):  # only if dir
                 datepath = os.path.join(input_path, date)  # get full path
-                if datepath == 'orig':
+                if date == 'orig':
                     for advanced_imaging_modality in os.listdir(datepath):  # get all images present
                         if advanced_imaging_modality == 'diffusion':
                             continue
