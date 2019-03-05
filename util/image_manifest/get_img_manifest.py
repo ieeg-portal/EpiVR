@@ -39,27 +39,54 @@ def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/Vir
         for date in os.listdir(input_path):  # loop through dir
             if os.path.isdir(os.path.join(input_path, date)):  # only if dir
                 datepath = os.path.join(input_path, date)  # get full path
-                datepath = os.path.join(datepath, 'nii')  # add nii subdir
-                for file in os.listdir(datepath):  # get all images present
-                    filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/%s/img' % patient_id, file)
-                    # only get nifti files
-                    if file.endswith('.nii.gz') or file.endswith('.nii'):
-                        filepath_components = file.split('_')  # use _ as delimiter
-                        modality_type = filepath_components[1:-1]  # remove ends
-                        modality_type = '_'.join(modality_type)  # rejoin w/o ends
-                        if modality_type.startswith('FLAIR') or modality_type.startswith(
-                                'T1') or modality_type.startswith('T2') or modality_type.startswith('DWI'):
-                            modality = 'MRI'
-                            modality_type = modality_type.split('_')[0]
-                        elif modality_type.startswith('PET'):
-                            modality = 'PET'
-                            modality_type = 'FDG'  # assume all currently available imaging data are only FDG PET
-                        elif modality_type.startswith('CT'):
-                            modality = 'CT'
-                            modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
-                        else:
-                            raise NotImplementedError
-                        img_mani.writerow([date, modality, modality_type, filepath])
+                if datepath == 'orig':
+                    for advanced_imaging_modality in os.listdir(datepath):  # get all images present
+                        for file in os.listdir(
+                                os.path.join(datepath, advanced_imaging_modality, 'nii')):  # get all images present
+                            filepath = os.path.join(
+                                '/gdrive/public/DATA/Human_Data/VirtualResection/%s/img' % patient_id, file)
+                            # only get nifti files
+                            if file.endswith('.nii.gz') or file.endswith('.nii'):
+                                filepath_components = file.split('_')  # use _ as delimiter
+                                modality_type = filepath_components[1:-1]  # remove ends
+                                modality_type = '_'.join(modality_type)  # rejoin w/o ends
+                                if modality_type.startswith('FLAIR') or modality_type.startswith(
+                                        'T1') or modality_type.startswith('T2') or modality_type.startswith('DWI'):
+                                    modality = 'MRI'
+                                    modality_type = modality_type.split('_')[0]
+                                elif modality_type.startswith('PET'):
+                                    modality = 'PET'
+                                    # assume all currently available imaging data are only FDG PET
+                                    modality_type = 'FDG'
+                                elif modality_type.startswith('CT'):
+                                    modality = 'CT'
+                                    modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
+                                else:
+                                    raise NotImplementedError
+                                img_mani.writerow([date, modality, modality_type, filepath])
+                else:
+                    datepath = os.path.join(datepath, 'nii')  # add nii subdir
+                    for file in os.listdir(datepath):  # get all images present
+                        filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/%s/img' % patient_id,
+                                                file)
+                        # only get nifti files
+                        if file.endswith('.nii.gz') or file.endswith('.nii'):
+                            filepath_components = file.split('_')  # use _ as delimiter
+                            modality_type = filepath_components[1:-1]  # remove ends
+                            modality_type = '_'.join(modality_type)  # rejoin w/o ends
+                            if modality_type.startswith('FLAIR') or modality_type.startswith(
+                                    'T1') or modality_type.startswith('T2') or modality_type.startswith('DWI'):
+                                modality = 'MRI'
+                                modality_type = modality_type.split('_')[0]
+                            elif modality_type.startswith('PET'):
+                                modality = 'PET'
+                                modality_type = 'FDG'  # assume all currently available imaging data are only FDG PET
+                            elif modality_type.startswith('CT'):
+                                modality = 'CT'
+                                modality_type = 'TO BE MANUALLY FILLED OUT AT A LATER TIME'
+                            else:
+                                raise NotImplementedError
+                            img_mani.writerow([date, modality, modality_type, filepath])
     return img_mani
 
 
@@ -69,6 +96,7 @@ def main():
         get_img_manifest(sys.argv[1], sys.argv[2])
     except IndexError:
         get_img_manifest(sys.argv[1])
+
 
 # Standard boilerplate to call the main() function to begin
 # the program.
