@@ -10,7 +10,9 @@
 
         Args:
             input_path (str): The path location containing the Nifti files
-            based on /gdrive/public/USERS/lkini/3T_Subjects/HUP*/img/
+                based on /gdrive/public/USERS/lkini/3T_Subjects/HUP*/img/
+            output_path (str): The path location in which to output the image manifest file
+                based on /gdrive/public/DATA/Human_Data/VirtualResection
 
         Returns:
             csv_file (object): date, contrast, full_path_location
@@ -21,9 +23,12 @@ import sys
 import csv
 
 
-def get_img_manifest(input_path):
+def get_img_manifest(input_path, output_path):
+    if not os.path.exists(output_path) or not os.path.exists(input_path):
+        raise OSError('Make sure input path %s and output path %s exist' % (input_path, output_path))
+
     # open a csv file for writing the data out
-    with open('image_manifest.csv', mode='w') as img_mani:
+    with open(os.path.join(output_path, 'image_manifest.csv'), mode='w') as img_mani:
         img_mani = csv.writer(img_mani, delimiter=',', quotechar='"')
 
         for date in os.listdir(input_path):  # loop through dir
