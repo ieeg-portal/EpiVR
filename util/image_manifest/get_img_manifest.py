@@ -23,7 +23,7 @@ import sys
 import csv
 
 
-def get_img_manifest(input_path, output_path):
+def get_img_manifest(input_path, output_path='/gdrive/public/DATA/Human_Data/VirtualResection/'):
     if not os.path.exists(output_path) or not os.path.exists(input_path):
         raise OSError('Make sure input path %s and output path %s exist' % (input_path, output_path))
 
@@ -65,8 +65,10 @@ def get_img_manifest(input_path, output_path):
 
 # Gather our code in a main() function
 def main():
-    get_img_manifest(sys.argv[1])
-
+    try:
+        get_img_manifest(sys.argv[1], sys.argv[2])
+    except IndexError:
+        get_img_manifest(sys.argv[1])
 
 # Standard boilerplate to call the main() function to begin
 # the program.
