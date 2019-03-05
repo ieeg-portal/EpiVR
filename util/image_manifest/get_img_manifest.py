@@ -41,7 +41,7 @@ def get_img_manifest(input_path, output_path):
                 datepath = os.path.join(input_path, date)  # get full path
                 datepath = os.path.join(datepath, 'nii')  # add nii subdir
                 for file in os.listdir(datepath):  # get all images present
-                    filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/%s' % patient_id, file)
+                    filepath = os.path.join('/gdrive/public/DATA/Human_Data/VirtualResection/%s/img' % patient_id, file)
                     # only get nifti files
                     if file.endswith('.nii.gz') or file.endswith('.nii'):
                         filepath_components = file.split('_')  # use _ as delimiter
