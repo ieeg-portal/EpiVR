@@ -31,6 +31,8 @@ def get_img_manifest(input_path, output_path):
     with open(os.path.join(output_path, 'image_manifest.csv'), mode='w') as img_mani:
         img_mani = csv.writer(img_mani, delimiter=',', quotechar='"')
 
+        img_mani.writerow(["Date", "Modality", "Type of contrast", "Path"])
+
         for date in os.listdir(input_path):  # loop through dir
             if os.path.isdir(os.path.join(input_path, date)):  # only if dir
                 datepath = os.path.join(input_path, date)  # get full path
