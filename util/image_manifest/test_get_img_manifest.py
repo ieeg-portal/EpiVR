@@ -16,4 +16,4 @@ for row in reader:
     print(row)
 
 # Clean up test assets generated
-os.system('rm tmp/image_manifest.csv')
+os.system('rm -r tmp/')
