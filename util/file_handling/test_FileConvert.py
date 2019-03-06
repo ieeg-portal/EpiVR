@@ -22,3 +22,9 @@ def test_mat2npz():
     fc.mat2npz('test_mat2npz.mat')
     data = np.load('test_mat2npz.npz')
     assert data['A'][1][1] == 0.34011903728438
+
+def test_mat2npz_v73():
+
+    fc.mat2npz('test_mat2npz_v73.mat')
+    data = np.load('test_mat2npz_v73.npz')
+    assert data['A'][1][1] == 0.34011903728438
