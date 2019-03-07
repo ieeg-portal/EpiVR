@@ -12,20 +12,20 @@ import pytest
 
 def test_npz2mat():
 
-    fc.npz2mat('test_npz2mat.npz')
-    data = scipy.io.loadmat('test_npz2mat.mat')
+    fc.npz2mat('tests/data/test_npz2mat.npz')
+    data = scipy.io.loadmat('tests/data/test_npz2mat.mat')
     assert data['A'][1][1] == 0.34011903728438
 
 
 def test_mat2npz():
 
-    fc.mat2npz('test_mat2npz.mat')
-    data = np.load('test_mat2npz.npz')
+    fc.mat2npz('tests/data/test_mat2npz.mat')
+    data = np.load('tests/data/test_mat2npz.npz')
     assert data['A'][1][1] == 0.34011903728438
 
 
 def test_mat2npz_v73():
 
-    fc.mat2npz_v73('test_mat2npz_v73.mat')
-    data = np.load('test_mat2npz_v73.npz')
+    fc.mat2npz_v73('tests/data/test_mat2npz_v73.mat')
+    data = np.load('tests/data/test_mat2npz_v73.npz')
     assert data['A'][1][1] == 0.34011903728438
