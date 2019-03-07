@@ -2,3 +2,5 @@ python-dotenv==0.10.1
 coverage==4.5.2
 pytest==4.2.0
 pytest-cov==2.6.1
+numpy==1.16.0
+scipy==1.2.0
