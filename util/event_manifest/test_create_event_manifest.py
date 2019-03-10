@@ -9,6 +9,7 @@ import pytest
 if not os.path.isdir('tmp'):
     os.makedirs('tmp')
     os.makedirs('tmp/HUP116')
+    os.makedirs('tmp/sample_pt')
 create_event_manifest.create_event_manifest(
     r'/gdrive/public/USERS/lkini/3T_Subjects/HUP116/img',
     'tmp')
