@@ -23,10 +23,9 @@ with pytest.raises(OSError):
         r'/blah',
         'tmp')
 
-with pytest.raises(KeyError):
-    create_event_manifest.create_event_manifest(
-        r'tests/data/sample_pt/img',
-        'tmp')
+create_event_manifest.create_event_manifest(
+    r'tests/data/sample_pt/img',
+    'tmp')
 
 # Clean up test assets generated
 os.system('rm -r tmp/')
