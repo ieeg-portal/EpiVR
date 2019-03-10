@@ -46,7 +46,7 @@ def create_event_manifest(input_path, output_path='/gdrive/public/DATA/Human_Dat
                 ('PATIENT_POSTIMPLANT_CT_DATE', 'Implant Date', 'Date of implant surgery based on when CT was taken'),
                 ('PATIENT_RESECTION_DATE', 'Resection Date', '')]:
                 try:
-                    event_date = event_data[event]
+                    event_date = event_data[event_key]
                 except KeyError:
                     continue
                 img_mani.writerow([event_date, event, event_description])
