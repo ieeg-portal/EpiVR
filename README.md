@@ -1,4 +1,4 @@
-# CODE REFACTOR IN PROGRESS
+# CODE INSTRUCTIONS for VIRTUAL RESECTION
 Create virtualenv virtual environment and install the necessary requisites using the following:
 ```virtualenv .env && source .env/bin/activate && pip install -r requirements.txt```
 
